@@ -146,7 +146,7 @@ export default function About() {
   }
 
   const handleShare = (article) => {
-    const shareText = `EcoAcción Global - "${lang === 'en' ? article.titleEn || article.title : article.title}" (${article.location})`
+    const shareText = `EcoAcción Global - "${lang !== 'es' ? article.titleEn || article.title : article.title}" (${article.location})`
     navigator.clipboard.writeText(`${shareText}\nLeído en: ${window.location.href}`)
     alert('¡Enlace de noticia copiado al portapapeles!')
   }
@@ -262,12 +262,12 @@ export default function About() {
 
                     {/* Title */}
                     <h3 className="text-lg md:text-xl font-bold leading-snug line-clamp-2 text-gray-900 dark:text-white hover:text-green-600 dark:hover:text-green-400 transition-colors">
-                      {lang === 'en' ? item.titleEn || item.title : item.title}
+                      {lang !== 'es' ? item.titleEn || item.title : item.title}
                     </h3>
 
                     {/* Summary */}
                     <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 font-light leading-relaxed">
-                      {lang === 'en' ? item.summaryEn || item.summary : item.summary}
+                      {lang !== 'es' ? item.summaryEn || item.summary : item.summary}
                     </p>
                   </div>
 
@@ -355,7 +355,7 @@ export default function About() {
                       {t(`feed.${activeArticle.category}`)}
                     </span>
                     <h3 className="text-xl sm:text-3xl font-extrabold leading-tight">
-                      {lang === 'en' ? activeArticle.titleEn || activeArticle.title : activeArticle.title}
+                      {lang !== 'es' ? activeArticle.titleEn || activeArticle.title : activeArticle.title}
                     </h3>
                   </div>
                 </div>
@@ -392,7 +392,7 @@ export default function About() {
 
                   {/* Text Content */}
                   <div className="text-base sm:text-lg leading-relaxed font-light text-gray-700 dark:text-gray-300 space-y-4 whitespace-pre-line select-text selection:bg-green-500/30 selection:text-green-950">
-                    {lang === 'en' ? activeArticle.contentEn || activeArticle.content : activeArticle.content}
+                    {lang !== 'es' ? activeArticle.contentEn || activeArticle.content : activeArticle.content}
                   </div>
                 </div>
 

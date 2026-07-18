@@ -118,12 +118,12 @@ export default function Hero() {
 
               {/* Title */}
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight md:leading-none text-white drop-shadow-md">
-                {lang === 'en' ? current.titleEn || current.title : current.title}
+                {lang !== 'es' ? current.titleEn || current.title : current.title}
               </h1>
 
               {/* Summary */}
               <p className="text-lg md:text-xl text-gray-300 font-light leading-relaxed max-w-3xl drop-shadow-sm">
-                {lang === 'en' ? current.summaryEn || current.summary : current.summary}
+                {lang !== 'es' ? current.summaryEn || current.summary : current.summary}
               </p>
 
               {/* Meta */}

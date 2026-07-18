@@ -101,7 +101,7 @@ export default function Counters() {
 
                 {/* Title */}
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300">
-                  {lang === 'en' ? stat.titleEn || stat.title : stat.title}
+                  {lang !== 'es' ? stat.titleEn || stat.title : stat.title}
                 </h3>
 
                 {/* Incremental Speed Badge */}

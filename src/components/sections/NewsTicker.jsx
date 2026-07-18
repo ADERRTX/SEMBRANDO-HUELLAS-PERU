@@ -56,7 +56,7 @@ export default function NewsTicker() {
             <span key={`${item.id}-${idx}`} className="flex items-center gap-2">
               <span className="text-yellow-300">★</span>
               <span>
-                {lang === 'en' ? item.titleEn || item.title : item.title}
+                {lang !== 'es' ? item.titleEn || item.title : item.title}
               </span>
               <span className="text-white/60 font-normal">
                 ({item.location})
@@ -68,7 +68,7 @@ export default function NewsTicker() {
             <span key={`${item.id}-dup-${idx}`} className="flex items-center gap-2">
               <span className="text-yellow-300">★</span>
               <span>
-                {lang === 'en' ? item.titleEn || item.title : item.title}
+                {lang !== 'es' ? item.titleEn || item.title : item.title}
               </span>
               <span className="text-white/60 font-normal">
                 ({item.location})

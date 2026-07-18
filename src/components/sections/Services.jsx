@@ -132,7 +132,7 @@ export default function Services() {
                       {t(`feed.${item.category}`)}
                     </span>
                     <h4 className="text-sm font-bold text-gray-900 dark:text-white leading-tight">
-                      {lang === 'en' ? item.titleEn || item.title : item.title}
+                      {lang !== 'es' ? item.titleEn || item.title : item.title}
                     </h4>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
                       📍 {item.location} • 📅 {item.date}
