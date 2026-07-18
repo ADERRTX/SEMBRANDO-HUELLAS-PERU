@@ -145,7 +145,7 @@ export default function Services() {
                     </button>
                   </div>
                 </Popup>
-              </>
+              </Marker>
             ))}
           </MapContainer>
         </motion.div>

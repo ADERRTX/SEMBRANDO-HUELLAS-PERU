@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { motion } from 'x-motion' // Wait, import from 'framer-motion' instead
-import { motion as framerMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { HiOutlineScale, HiTrendingUp, HiGlobe, HiSun } from 'react-icons/hi'
 import { globalStats } from '../../data/news'
 import { useT, useLanguage } from '../../contexts/LanguageContext'
@@ -77,7 +76,7 @@ export default function Counters() {
           {stats.map((stat, idx) => {
             const Icon = icons[stat.id] || HiGlobe
             return (
-              <framerMotion.div
+              <motion.div
                 key={stat.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -109,7 +108,7 @@ export default function Counters() {
                 <span className="mt-4 inline-flex items-center px-2.5 py-0.5 rounded-full text-3xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">
                   {stat.rate > 0 ? `+${stat.rate}/s` : 'Real-time'}
                 </span>
-              </framerMotion.div>
+              </motion.div>
             )
           })}
         </div>
