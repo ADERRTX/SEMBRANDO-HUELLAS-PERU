@@ -22,17 +22,17 @@ const itemVariants = {
 const quickLinks = NAV_LINKS.filter((l) => l.href !== '#hero')
 
 const socialLinks = [
-  { icon: FaFacebook, href: 'https://facebook.com/ecoaccionglobal', label: 'Facebook' },
-  { icon: FaInstagram, href: 'https://instagram.com/ecoaccionglobal', label: 'Instagram' },
-  { icon: FaYoutube, href: 'https://youtube.com/@ecoaccionglobal', label: 'YouTube' },
-  { icon: FaTiktok, href: 'https://tiktok.com/@ecoaccionglobal', label: 'TikTok' },
+  { icon: FaFacebook, href: 'https://facebook.com/sembradohuellasperu', label: 'Facebook' },
+  { icon: FaInstagram, href: 'https://instagram.com/sembradohuellasperu', label: 'Instagram' },
+  { icon: FaYoutube, href: 'https://youtube.com/@sembradohuellasperu', label: 'YouTube' },
+  { icon: FaTiktok, href: 'https://tiktok.com/@sembradohuellasperu', label: 'TikTok' },
 ]
 
 export default function Footer() {
   const t = useT()
   return (
-    <footer className="relative bg-gradient-to-br from-green-900 via-green-800 to-emerald-900 text-white overflow-hidden">
-      <div className="absolute inset-0 opacity-10">
+    <footer className="relative bg-navy dark:bg-gray-950 text-white overflow-hidden">
+      <div className="absolute inset-0 opacity-5">
         <div className="absolute top-10 left-10 w-72 h-72 bg-green-500 rounded-full blur-3xl" />
         <div className="absolute bottom-10 right-10 w-96 h-96 bg-emerald-400 rounded-full blur-3xl" />
       </div>
@@ -46,19 +46,24 @@ export default function Footer() {
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
           <motion.div variants={itemVariants} className="sm:col-span-2 lg:col-span-1">
-            <h3 className="text-2xl font-bold mb-3 text-green-300">
-              {SITE_CONFIG.shortName}
-            </h3>
-            <p className="text-green-100/80 leading-relaxed text-sm mb-4">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-emerald-400 flex items-center justify-center shadow-lg shadow-green-500/20">
+                <span className="text-white font-bold text-lg">SH</span>
+              </div>
+              <h3 className="text-xl font-bold text-white">
+                {SITE_CONFIG.shortName}
+              </h3>
+            </div>
+            <p className="text-gray-400 leading-relaxed text-sm mb-4">
               {SITE_CONFIG.tagline}
             </p>
-            <p className="text-green-100/60 text-xs leading-relaxed">
+            <p className="text-gray-500 text-xs leading-relaxed">
               {SITE_CONFIG.description}
             </p>
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-green-300 mb-4">
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-green-400 mb-4">
               {t('footer.quick_links')}
             </h4>
             <ul className="space-y-2.5">
@@ -66,7 +71,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="text-green-100/70 hover:text-green-300 transition-colors text-sm duration-200"
+                    className="text-gray-400 hover:text-green-400 transition-colors text-sm duration-200"
                   >
                     {link.label}
                   </a>
@@ -76,28 +81,28 @@ export default function Footer() {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-green-300 mb-4">
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-green-400 mb-4">
               {t('footer.contact_title')}
             </h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <span className="block text-green-100/50 text-xs">{t('footer.email')}</span>
+                <span className="block text-gray-500 text-xs">{t('footer.email')}</span>
                 <a
                   href={`mailto:${SITE_CONFIG.email}`}
-                  className="text-green-100/80 hover:text-green-300 transition-colors duration-200"
+                  className="text-gray-300 hover:text-green-400 transition-colors duration-200"
                 >
                   {SITE_CONFIG.email}
                 </a>
               </li>
               <li>
-                <span className="block text-green-100/50 text-xs">{t('footer.location')}</span>
-                <span className="text-green-100/80">{SITE_CONFIG.location}</span>
+                <span className="block text-gray-500 text-xs">{t('footer.location')}</span>
+                <span className="text-gray-300">{SITE_CONFIG.location}</span>
               </li>
             </ul>
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-green-300 mb-4">
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-green-400 mb-4">
               {t('footer.follow_us')}
             </h4>
             <div className="flex gap-3">
@@ -109,7 +114,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.15, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className="p-2.5 rounded-full bg-white/10 hover:bg-green-500/30 border border-white/10 hover:border-green-400/40 text-green-100/80 hover:text-green-300 transition-all duration-200"
+                  className="p-2.5 rounded-full bg-white/5 hover:bg-green-500/20 border border-white/10 hover:border-green-400/30 text-gray-400 hover:text-green-400 transition-all duration-200"
                   aria-label={social.label}
                 >
                   <social.icon className="w-4 h-4" />
@@ -123,7 +128,7 @@ export default function Footer() {
           variants={itemVariants}
           className="mt-12 pt-6 border-t border-white/10 text-center"
         >
-          <p className="text-green-100/50 text-xs">
+          <p className="text-gray-500 text-xs">
             &copy; {new Date().getFullYear()} {SITE_CONFIG.name}. {t('footer.copyright')}
           </p>
         </motion.div>

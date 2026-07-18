@@ -1,12 +1,14 @@
 export const SITE_CONFIG = {
-  name: 'EcoAcción Global',
-  shortName: 'EcoAcción',
-  tagline: 'El portal global de noticias ambientales y ecología en tiempo real.',
+  name: 'Sembrando Huellas Perú',
+  shortName: 'Sembrando Huellas',
+  tagline: 'Noticias ambientales y tecnología verde del mundo entero.',
   description:
-    'Noticiero global interactivo con cobertura de temas ecológicos, medio ambiente, conservación bioambiental y liderazgo ambiental a nivel mundial.',
-  email: 'prensa@ecoaccionglobal.org',
-  facebook: 'EcoAcción Global',
-  location: 'Ginebra, Suiza / Redacción Global',
+    'Portal líder de noticias ambientales y tecnología verde. Cobertura global de medio ambiente, conservación, energía renovable y tecnología ecológica.',
+  email: 'info@sembradohuellasperu.org',
+  facebook: 'Sembrando Huellas Perú',
+  location: 'Pucallpa, Ucayali, Perú',
+  phone: '+51 61 123 456',
+  website: 'https://sembradohuellasperu.org',
 }
 
 export const NAV_LINKS = [
@@ -15,18 +17,79 @@ export const NAV_LINKS = [
   { label: 'Mapa', href: '#mapa' },
   { label: 'Eco-Líderes', href: '#lideres' },
   { label: 'Estadísticas', href: '#estadisticas' },
+  { label: 'Tecnología Verde', href: '#ecotech' },
   { label: 'Encuesta', href: '#encuesta' },
   { label: 'Publicar', href: '#publicar' },
   { label: 'Contacto', href: '#contacto' },
 ]
 
 export const COLORS = {
-  greenDeep: '#064e3b', // Deep emerald green
-  greenLight: '#10b981', // Emerald light
-  greenLeaf: '#059669', // Emerald leaf
-  greenMoss: '#0f766e', // Teal green
-  greenPale: '#d1fae5', // Light green tint
-  earth: '#78350f', // Warm earth amber
-  gold: '#fbbf24', // Warm gold
-  cream: '#f0fdf4', // Soft mint white
+  greenDeep: '#065f46',
+  greenLight: '#10b981',
+  greenLeaf: '#059669',
+  greenMoss: '#0f766e',
+  greenPale: '#d1fae5',
+  earth: '#78350f',
+  gold: '#f59e0b',
+  cream: '#f0fdf4',
+  accentRed: '#dc2626',
+  navy: '#0f172a',
+  navyLight: '#1e293b',
 }
+
+export const ECO_TECH_SOLUTIONS = [
+  {
+    id: 'solar',
+    title: 'Energía Solar Comunitaria',
+    description: 'Paneles solares adaptados para comunidades amazónicas, reduciendo dependencia de combustibles fósiles.',
+    icon: 'HiOutlineSun',
+    stats: { label: 'Reducción CO₂', value: '45%' },
+    gradient: 'from-yellow-500 to-amber-400',
+    tags: ['Solar', 'Comunidades', 'Energía Limpia'],
+  },
+  {
+    id: 'drones',
+    title: 'Drones de Reforestación',
+    description: 'Tecnología de dispersión aérea de semillas para reforestar zonas de difícil acceso en la selva.',
+    icon: 'HiOutlineChip',
+    stats: { label: 'Hectáreas Reforestadas', value: '12,000+' },
+    gradient: 'from-blue-500 to-cyan-400',
+    tags: ['Drones', 'Reforestación', 'IA'],
+  },
+  {
+    id: 'water',
+    title: 'Monitoreo de Calidad del Agua',
+    description: 'Sensores IoT instalados en ríos amazónicos para detectar contaminación en tiempo real.',
+    icon: 'HiOutlineEye',
+    stats: { label: 'Ríos Monitoreados', value: '28' },
+    gradient: 'from-cyan-500 to-blue-400',
+    tags: ['IoT', 'Agua', 'Sensores'],
+  },
+  {
+    id: 'biochar',
+    title: 'Biochar y Captura de Carbono',
+    description: 'Producción de biocarbón para mejorar suelos agrícolas y secuestrar carbono atmosférico.',
+    icon: 'HiOutlineFire',
+    stats: { label: 'Toneladas CO₂ Capturadas', value: '3,200' },
+    gradient: 'from-orange-500 to-red-400',
+    tags: ['Biochar', 'Carbono', 'Suelos'],
+  },
+  {
+    id: 'app',
+    title: 'App EcoGuardián',
+    description: 'Aplicación móvil que permite a las comunidades reportar actividades ilegales y monitorear biodiversidad.',
+    icon: 'HiOutlinePhone',
+    stats: { label: 'Usuarios Activos', value: '8,500+' },
+    gradient: 'from-green-500 to-emerald-400',
+    tags: ['App', 'Comunidad', 'Monitoreo'],
+  },
+  {
+    id: 'biotech',
+    title: 'Biotecnología Amazónica',
+    description: 'Investigación de microorganismos nativos para biorremediación de suelos contaminados.',
+    icon: 'HiOutlineSparkles',
+    stats: { label: 'Especies Estudiadas', value: '340+' },
+    gradient: 'from-purple-500 to-pink-400',
+    tags: ['Biotecnología', 'Investigación', 'Bioremediación'],
+  },
+]

@@ -45,7 +45,7 @@ export default function Loader() {
           key="loader"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.5, ease: 'easeInOut' } }}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-gradient-to-br from-green-900 via-emerald-800 to-green-900"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-navy dark:bg-gray-950"
         >
           <div className="relative flex items-center justify-center">
             <motion.div
@@ -71,6 +71,19 @@ export default function Loader() {
           >
             {t('loader.loading')}
           </motion.p>
+          <motion.div
+            className="mt-3 flex items-center gap-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
+          >
+            <div className="w-6 h-6 rounded bg-gradient-to-br from-green-500 to-emerald-400 flex items-center justify-center">
+              <span className="text-white font-bold text-xs">SH</span>
+            </div>
+            <span className="text-green-400/50 text-xs tracking-wider">
+              Sembrando Huellas Perú
+            </span>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>

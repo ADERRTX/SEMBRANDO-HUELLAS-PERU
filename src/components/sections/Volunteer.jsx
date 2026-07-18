@@ -194,7 +194,7 @@ export default function Volunteer() {
                   })}
 
                   <div className="pt-6 border-t border-gray-100 dark:border-gray-800/80 flex justify-between items-center text-xs text-gray-500">
-                    <span>EcoAcción Poll Network</span>
+                    <span>Sembrando Huellas Perú</span>
                     <span>
                       {t('poll.total_votes')}: <strong className="font-bold text-gray-700 dark:text-gray-300">{getTotalVotes().toLocaleString()}</strong>
                     </span>

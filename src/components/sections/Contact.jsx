@@ -18,10 +18,10 @@ L.Icon.Default.mergeOptions({
 })
 
 const socialLinks = [
-  { icon: FaFacebook, href: 'https://facebook.com/ecoaccionglobal', label: 'Facebook' },
-  { icon: FaInstagram, href: 'https://instagram.com/ecoaccionglobal', label: 'Instagram' },
-  { icon: FaYoutube, href: 'https://youtube.com/@ecoaccionglobal', label: 'YouTube' },
-  { icon: FaTiktok, href: 'https://tiktok.com/@ecoaccionglobal', label: 'TikTok' },
+  { icon: FaFacebook, href: 'https://facebook.com/sembradohuellasperu', label: 'Facebook' },
+  { icon: FaInstagram, href: 'https://instagram.com/sembradohuellasperu', label: 'Instagram' },
+  { icon: FaYoutube, href: 'https://youtube.com/@sembradohuellasperu', label: 'YouTube' },
+  { icon: FaTiktok, href: 'https://tiktok.com/@sembradohuellasperu', label: 'TikTok' },
 ]
 
 function validateEmail(email) {
@@ -72,7 +72,7 @@ export default function Contact() {
 
     setSending(true)
     try {
-      const res = await fetch('https://formsubmit.co/ajax/prensa@ecoaccionglobal.org', {
+      const res = await fetch('https://formsubmit.co/ajax/info@sembradohuellasperu.org', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -213,17 +213,17 @@ export default function Contact() {
           >
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 space-y-6">
               <ContactInfo icon={HiMail} title={t('contact.email_label')}>
-                <a href="mailto:prensa@ecoaccionglobal.org" className="text-green-100/70 text-sm hover:text-green-300 transition-colors">
-                  prensa@ecoaccionglobal.org
+                <a href="mailto:info@sembradohuellasperu.org" className="text-green-100/70 text-sm hover:text-green-300 transition-colors">
+                  info@sembradohuellasperu.org
                 </a>
               </ContactInfo>
 
               <ContactInfo icon={HiPhone} title={t('contact.phone_label')}>
-                <p className="text-green-100/70 text-sm">+41 22 730 81 11</p>
+                <p className="text-green-100/70 text-sm">+51 61 123 456</p>
               </ContactInfo>
 
               <ContactInfo icon={HiLocationMarker} title={t('contact.location_label')}>
-                <p className="text-green-100/70 text-sm">Ginebra, Suiza / Redacción Central</p>
+                <p className="text-green-100/70 text-sm">Pucallpa, Ucayali, Perú</p>
               </ContactInfo>
 
               <ContactInfo icon={HiGlobeAlt} title={t('contact.social_label')}>
@@ -246,15 +246,15 @@ export default function Contact() {
               </ContactInfo>
             </div>
 
-            <div className="rounded-2xl overflow-hidden shadow-lg h-56 border border-white/10 [&_.leaflet-container]:!h-full [&_.leaflet-control-zoom]:!hidden">
-              <MapContainer center={[46.2044, 6.1432]} zoom={12} scrollWheelZoom={false} className="w-full h-full">
+              <div className="rounded-2xl overflow-hidden shadow-lg h-56 border border-white/10 [&_.leaflet-container]:!h-full [&_.leaflet-control-zoom]:!hidden">
+              <MapContainer center={[-8.38, -74.55]} zoom={12} scrollWheelZoom={false} className="w-full h-full">
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Marker position={[46.2044, 6.1432]}>
+                <Marker position={[-8.38, -74.55]}>
                   <Popup>
-                    Redacción Central de EcoAcción Global <br /> Ginebra, Suiza
+                    Sembrando Huellas Perú <br /> Pucallpa, Ucayali
                   </Popup>
                 </Marker>
               </MapContainer>

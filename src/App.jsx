@@ -9,13 +9,13 @@ import ScrollToTop from './components/layout/ScrollToTop'
 import Footer from './components/layout/Footer'
 
 const Hero = lazy(() => import('./components/sections/Hero'))
-const About = lazy(() => import('./components/sections/About')) // NewsFeed
-const Services = lazy(() => import('./components/sections/Services')) // NewsMap
-const Timeline = lazy(() => import('./components/sections/Timeline')) // EcoLeaders
-const Counters = lazy(() => import('./components/sections/Counters')) // EcoStats
-const Programs = lazy(() => import('./components/sections/Programs')) // PublishNews
-const Volunteer = lazy(() => import('./components/sections/Volunteer')) // EcoPoll
-const Games = lazy(() => import('./components/games/GamesHub'))
+const About = lazy(() => import('./components/sections/About'))
+const Services = lazy(() => import('./components/sections/Services'))
+const Timeline = lazy(() => import('./components/sections/Timeline'))
+const Counters = lazy(() => import('./components/sections/Counters'))
+const Programs = lazy(() => import('./components/sections/Programs'))
+const Volunteer = lazy(() => import('./components/sections/Volunteer'))
+const EcoTech = lazy(() => import('./components/sections/EcoTech'))
 const Contact = lazy(() => import('./components/sections/Contact'))
 
 function SectionFallback() {
@@ -52,7 +52,7 @@ export default function App() {
         <LazySection component={Counters} />
         <LazySection component={Programs} />
         <LazySection component={Volunteer} />
-        <LazySection component={Games} />
+        <LazySection component={EcoTech} />
         <LazySection component={Contact} />
       </main>
       <Footer />
