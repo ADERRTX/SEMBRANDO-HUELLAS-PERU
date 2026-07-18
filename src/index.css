@@ -3,14 +3,27 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-green-deep: #14532d;
-  --color-green-light: #22c55e;
-  --color-green-leaf: #4CAF50;
-  --color-green-moss: #2d6a4f;
-  --color-green-pale: #d8f3dc;
-  --color-earth: #5c4033;
-  --color-gold: #d4a373;
-  --color-cream: #fefae0;
+  /* Custom Green-Tech Palette */
+  --color-green-deep: #064e3b;
+  --color-green-light: #00f5d4; /* Electric Mint */
+  --color-green-leaf: #10b981;  /* Emerald */
+  --color-green-moss: #0d9488;  /* Tech Teal */
+  --color-green-pale: #ccfbf1;  /* Soft Ice/Mint */
+  --color-earth: #374151;       /* Dark Tech Gray (replacing brown earth for a cleaner look) */
+  --color-gold: #38bdf8;        /* Cyber Blue (replacing brown gold) */
+  --color-cream: #f0fdfa;       /* Clean mint/white */
+  
+  /* Overriding standard Tailwind colors to blend green with cyan/electric mint */
+  --color-green-400: #34d399;
+  --color-green-500: #10b981;
+  --color-green-600: #059669;
+  --color-green-700: #047857;
+  
+  --color-emerald-400: #00f5d4; /* Neon Mint/Cyan */
+  --color-emerald-500: #06b6d4; /* High-tech Cyan */
+  --color-emerald-600: #0891b2;
+  --color-emerald-700: #0e7490;
+  
   --font-poppins: 'Poppins', sans-serif;
   --font-inter: 'Inter', sans-serif;
 }

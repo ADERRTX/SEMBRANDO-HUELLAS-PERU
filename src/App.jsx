@@ -15,7 +15,6 @@ const Timeline = lazy(() => import('./components/sections/Timeline')) // EcoLead
 const Counters = lazy(() => import('./components/sections/Counters')) // EcoStats
 const Programs = lazy(() => import('./components/sections/Programs')) // PublishNews
 const Volunteer = lazy(() => import('./components/sections/Volunteer')) // EcoPoll
-const Games = lazy(() => import('./components/games/GamesHub'))
 const Contact = lazy(() => import('./components/sections/Contact'))
 
 function SectionFallback() {
@@ -52,7 +51,6 @@ export default function App() {
         <LazySection component={Counters} />
         <LazySection component={Programs} />
         <LazySection component={Volunteer} />
-        <LazySection component={Games} />
         <LazySection component={Contact} />
       </main>
       <Footer />
