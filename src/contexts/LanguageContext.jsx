@@ -15,7 +15,17 @@ export function LanguageProvider({ children }) {
     try { localStorage.setItem('shp-lang', code) } catch {}
   }, [])
 
-  const value = useMemo(() => ({ lang, changeLang }), [lang, changeLang])
+  const t = useCallback((key) => {
+    const keys = key.split('.')
+    let val = translations[lang]
+    for (const k of keys) {
+      if (val == null) return key
+      val = val[k]
+    }
+    return val ?? key
+  }, [lang])
+
+  const value = useMemo(() => ({ lang, language: lang, changeLang, setLanguage: changeLang, t, translations }), [lang, changeLang, t])
 
   return (
     <LanguageContext.Provider value={value}>
