@@ -62,11 +62,18 @@ const SPLASH_NEWS = [
   { icon: '🏔️', text: 'Iceberg gigante se desprende en Antártida' },
 ];
 
+const SPLASH_IMAGES = [
+  'https://scontent.fhuu1-1.fna.fbcdn.net/v/t39.30808-6/486066411_654905987143172_8099298023845151870_n.jpg?stp=dst-jpg_tt6&cstp=mx1634x619&ctp=s1634x619&_nc_cat=102&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeHwt9tWmXYaLSgdvwt_-CgcbV-75y_po_htX7vnL-mj-DLs7bZ2Zk9tCfUahm-ow4Dna45ILVWZSU42mpW0W59_&_nc_ohc=qXcpzyIbXKIQ7kNvwGsamjw&_nc_oc=Adq57eoSj6JQG__I_rpv6neoodVNPNSfktxSUiP-YASStDa0z54TAQmbNPfhII4oopPkBTGJjlqujopgsfPZI6aO&_nc_zt=23&_nc_ht=scontent.fhuu1-1.fna&_nc_gid=s0cvMseeEtn9ZHPMfkhPuQ&_nc_ss=7d2a8&oh=00_AQCFIYkcqZENebYYxb5c7jotGFuVbV4C6wg02LxaPk4kDA&oe=6A648078',
+  'https://scontent.fhuu1-1.fna.fbcdn.net/v/t39.30808-6/480348818_629016476398790_2581453088780682508_n.jpg?stp=dst-jpg_tt6&cstp=mx2000x741&ctp=s2000x741&_nc_cat=103&ccb=1-7&_nc_sid=86c6b0&_nc_eui2=AeGeYCizSMHUZ-TcNvm2k9SKawbEbspvUtRrBsRuym9S1I6SpCQikkmd2cHInsl1EmJhG2qkTB42A9iJW5R_ELQQ&_nc_ohc=sciv7pcD-PwQ7kNvwH6pP0-&_nc_oc=Adr70C3OY_hnsDt7p_0a0Fh2UVeYUv_IEhTeKVvOVHeQiZkNhR3BqbiNLlFFG6whQBlCTV8JjYHML4Lj_Me29h2B&_nc_zt=23&_nc_ht=scontent.fhuu1-1.fna&_nc_gid=V8tQe-SJb0gE01Q7USa-Ww&_nc_ss=7d2a8&oh=00_AQBmUDMOVap_GBBBBS9AzhvutSgXHTfIgDuqFK8-Gj9eKg&oe=6A647251',
+  'https://scontent.fhuu1-1.fna.fbcdn.net/v/t39.99422-6/748746057_1784175795956648_8241147108804401739_n.png?stp=dst-jpg_tt6&cstp=mx1924x1097&ctp=s1924x1097&_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGo9Kv4wMtkNMp_PgdEgQ2ztILpNVXIFK20guk1VcgUrTShMz6gwVDsyxY8ni6sD8z5HKRvuZn5VdaDONd4M2Aa&_nc_ohc=ZYtawRKlJLcQ7kNvwEZFkr4&_nc_oc=Adp0D6zkZ08q1NQx_oH3A67MIl0CVI83ec_zMtm72bjuxK7VknT9hpLYJ1nOXMJ_WdjvEaK-d0w62JOG2A3G2pDl&_nc_zt=14&_nc_ht=scontent.fhuu1-1.fna&_nc_gid=d5Hv0wouo9zX1Q4TTzxY3A&_nc_ss=7d2a8&oh=00_AQDeQ6I99PclVmdGZsgMFxNKTFdZMJ0gS4322gH0WZdnWQ&oe=6A646BDE',
+];
+
 export default function App() {
   const [splash, setSplash] = useState(true);
   const [splashPhase, setSplashPhase] = useState(0);
   const [newsIndex, setNewsIndex] = useState(0);
   const [splashLogoIdx, setSplashLogoIdx] = useState(0);
+  const [bgImageIdx, setBgImageIdx] = useState(0);
   const splashLogos = ['/logo-sh.png', '/logo-full.png'];
 
   useEffect(() => {
@@ -93,9 +100,27 @@ export default function App() {
     return () => clearInterval(iv);
   }, [splash]);
 
+  useEffect(() => {
+    if (!splash) return;
+    const iv = setInterval(() => {
+      setBgImageIdx((prev) => (prev + 1) % SPLASH_IMAGES.length);
+    }, 800);
+    return () => clearInterval(iv);
+  }, [splash]);
+
   if (splash) {
     return (
       <div className={`logo-splash phase-${splashPhase}`}>
+        <div className="splash-bg-images">
+          {SPLASH_IMAGES.map((src, i) => (
+            <div
+              key={i}
+              className={`splash-bg-img ${i === bgImageIdx ? 'active' : ''}`}
+              style={{ backgroundImage: `url(${src})` }}
+            />
+          ))}
+          <div className="splash-bg-overlay" />
+        </div>
         <div className="splash-bg-particles">
           {[...Array(20)].map((_, i) => (
             <span key={i} className="splash-particle" style={{ '--i': i }} />

@@ -29,7 +29,7 @@ export const NAV_LINKS = [
   { key: 'contacto', icon: 'fas fa-envelope', href: '#contacto' },
 ];
 
-export const NACIONALES = ['Lima', 'Ucayali', 'Cusco', 'Arequipa', 'Iquitos'];
+export const NACIONALES = ['Brasil', 'Colombia', 'Ecuador', 'Bolivia', 'Venezuela'];
 
 export const HERO_SLIDES = [
   {
