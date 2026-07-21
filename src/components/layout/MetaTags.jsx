@@ -1,12 +1,12 @@
 import { Helmet } from 'react-helmet-async'
 
-const defaultTitle = 'EcoAcción Global — Portal de Noticias Ambientales y Ecología'
-const defaultDescription = 'Noticiero interactivo mundial con cobertura diaria de temas ecológicos, medio ambiente, conservación bioambiental y liderazgo ecológico.'
+const defaultTitle = 'Sembrando Huellas Perú — Innovación Ambiental y Tecnología Verde'
+const defaultDescription = 'Organización líder en educación ambiental, tecnología verde y conservación biocultural en la Amazonía peruana.'
 const defaultImage = '/og-image.jpg'
-const url = 'https://ecoaccionglobal.org'
+const url = 'https://sembradohuellasperu.org'
 
 export default function MetaTags({ title, description, image }) {
-  const fullTitle = title ? `${title} | EcoAcción Global` : defaultTitle
+  const fullTitle = title ? `${title} | Sembrando Huellas Perú` : defaultTitle
 
   return (
     <Helmet>

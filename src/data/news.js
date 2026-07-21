@@ -1,5 +1,5 @@
-// Base de datos inicial para EcoAcción Global
-// Categorías: 'ecologico', 'medioambiente', 'conservacion', 'liderazgo'
+// Base de datos inicial para Sembrando Huellas Perú
+// Categorías: 'ecologico', 'medioambiente', 'conservacion', 'liderazgo', 'tecnologia'
 
 export const initialNews = [
   {
@@ -79,7 +79,7 @@ This accelerated evolutionary adaptation is occurring in response to massive ble
   },
   {
     id: 4,
-    category: 'medioambiente',
+    category: 'tecnologia',
     title: 'La Unión Europea Acelera la Red de Carga Solar para Autos Eléctricos',
     titleEn: 'European Union Accelerates Solar Charging Network for Electric Vehicles',
     summary: 'Bruselas financia un megaproyecto de autopistas equipadas con paneles solares capaces de cargar camiones en movimiento.',
@@ -98,7 +98,7 @@ With this project, the EU plans to cut transport greenhouse gas emissions by 60%
     date: '2026-07-15',
     location: 'Bruselas, Bélgica',
     coordinates: [50.8503, 4.3517],
-    image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1200&q=80',
     views: 8900,
     likes: 540
   },
@@ -111,7 +111,7 @@ With this project, the EU plans to cut transport greenhouse gas emissions by 60%
     summaryEn: 'The new 2.2-kilometer plastic extraction barrier triples collection efficiency without harming marine life.',
     content: `El joven inventor e ingeniero ambiental Boyan Slat anunció el exitoso despliegue del Sistema 03 de "The Ocean Cleanup" en la gigantesca acumulación de plásticos del Océano Pacífico. El sistema es una barrera flotante de 2.2 kilómetros de longitud que actúa como una costa artificial, concentrando los residuos plásticos arrastrados por las corrientes.
 
-El Sistema 03 incorpora tecnologías mejoradas para evitar la captura accidental de vida marina, incluyendo salidas de escape activas y cámaras con inteligencia artificial que monitorean el comportamiento de peces y tortugas en tiempo real. 
+El Sistema 03 incorpora tecnologías mejoradas para evitar la captura accidental de vida marina, incluyendo salidas de escape activas y cámaras con inteligencia artificial que monitorean el comportamiento de peces y tortugas en tiempo real.
 
 "Nuestra meta es limpiar el 90% del plástico flotante para 2040. Con el Sistema 03, estamos un paso gigante más cerca de lograrlo", afirmó Slat. Los residuos plásticos recuperados son transportados a puertos seguros para ser reciclados y transformados en productos duraderos, financiando parcialmente la operación continua.`,
     contentEn: `Young inventor and environmental engineer Boyan Slat announced the successful deployment of "The Ocean Cleanup" System 03 in the massive Great Pacific Garbage Patch. The system is a 2.2-kilometer floating barrier acting as an artificial coastline, concentrating plastic waste driven by currents.
@@ -148,20 +148,20 @@ This ecological rebirth is due to "Biocultural Corridors" allowing felines to ro
     date: '2026-07-13',
     location: 'Sundarbans, India',
     coordinates: [21.9497, 89.1833],
-    image: 'https://images.unsplash.com/photo-1602491453631-e2a5ad90a131?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1535338454528-1b6e8f7a4b38?auto=format&fit=crop&w=1200&q=80',
     views: 11200,
     likes: 689
   },
   {
     id: 7,
-    category: 'ecologico',
+    category: 'tecnologia',
     title: 'Científicos del Ártico Descubren Bacterias que Degradan Plásticos en Temperaturas Extremas',
     titleEn: 'Arctic Scientists Discover Plastic-Degrading Bacteria in Extreme Temperatures',
     summary: 'Microorganismos nativos de Svalbard abren la puerta al reciclaje de baja energía sin necesidad de calor industrial.',
     summaryEn: 'Svalbard native microorganisms open the door to low-energy recycling without industrial heat.',
-    content: `Durante una expedición científica en el archipiélago de Svalbard, Noruega, microbiólogos descubrieron cepas bacterianas adaptadas al frío capaces de digerir plásticos del tipo poliuretano y polietileno a temperaturas de tan solo 15 °C. 
+    content: `Durante una expedición científica en el archipiélago de Svalbard, Noruega, microbiólogos descubrieron cepas bacterianas adaptadas al frío capaces de digerir plásticos del tipo poliuretano y polietileno a temperaturas de tan solo 15 °C.
 
-A diferencia de las bacterias degradadoras de plástico descubiertas anteriormente, que requieren temperaturas superiores a los 30 °C para activarse (lo que implica un elevado consumo energético), estos microbios árticos funcionan de manera óptima en climas fríos. 
+A diferencia de las bacterias degradadoras de plástico descubiertas anteriormente, que requieren temperaturas superiores a los 30 °C para activarse (lo que implica un elevado consumo energético), estos microbios árticos funcionan de manera óptima en climas fríos.
 
 Este descubrimiento biotecnológico promete revolucionar el tratamiento de residuos y los procesos de biorremediación en vertederos de todo el mundo, ofreciendo una ruta limpia y de baja emisión para combatir la plaga mundial del plástico.`,
     contentEn: `During a scientific expedition in the Svalbard archipelago, Norway, microbiologists discovered cold-adapted bacterial strains capable of digesting polyurethane and polyethylene plastics at temperatures as low as 15°C.
@@ -173,7 +173,7 @@ This biotechnological discovery promises to revolutionize waste treatment and bi
     date: '2026-07-12',
     location: 'Svalbard, Noruega',
     coordinates: [78.9273, 11.9416],
-    image: 'https://images.unsplash.com/photo-1517783999520-f068d7431a60?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1200&q=80',
     views: 14300,
     likes: 802
   },
@@ -186,7 +186,7 @@ This biotechnological discovery promises to revolutionize waste treatment and bi
     summaryEn: 'The Central American country dispenses with fossil fuels thanks to an integrated system of water, wind, sun, and geothermal heat.',
     content: `Costa Rica ha vuelto a dar cátedra ambiental al mundo al registrar 300 días consecutivos alimentando todo su territorio exclusivamente con fuentes de energía limpias y renovables. La matriz eléctrica del país se basó principalmente en energía hidroeléctrica, complementada por generación geotérmica de sus volcanes, parques eólicos y campos solares.
 
-El Instituto Costarricense de Electricidad destacó que este logro demuestra que la descarbonización total del sector eléctrico no solo es viable, sino económicamente estable y beneficiosa a largo plazo. 
+El Instituto Costarricense de Electricidad destacó que este logro demuestra que la descarbonización total del sector eléctrico no solo es viable, sino económicamente estable y beneficiosa a largo plazo.
 
 "Es un mensaje de esperanza y liderazgo para todo el planeta", comentó el ministro de Energía. El país avanza ahora en la descarbonización de su parque automotor público y de carga pesada.`,
     contentEn: `Costa Rica has once again delivered an environmental lesson to the world by recording 300 consecutive days powering its entire territory exclusively with clean, renewable energy sources. The country's power grid relied mainly on hydroelectric power, complemented by geothermal generation from its volcanoes, wind farms, and solar arrays.
@@ -198,9 +198,59 @@ The Costa Rican Institute of Electricity highlighted that this achievement prove
     date: '2026-07-11',
     location: 'San José, Costa Rica',
     coordinates: [9.9281, -84.0907],
-    image: 'https://images.unsplash.com/photo-1535083783855-76ae62b2914e?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1200&q=80',
     views: 16500,
     likes: 1105
+  },
+  {
+    id: 9,
+    category: 'tecnologia',
+    title: 'Inteligencia Artificial Detecta Especies en Peligro en la Selva Amazónica en Tiempo Real',
+    titleEn: 'AI Detects Endangered Species in Amazon Rainforest in Real Time',
+    summary: 'Red de cámaras con IA instaladas en la cuenca amazónica identifica automáticamente 2,400 especies de fauna silvestre.',
+    summaryEn: 'AI-powered camera network in the Amazon basin automatically identifies 2,400 wildlife species.',
+    content: `Un consorcio internacional de biólogos y ingenieros de datos ha instalado una red de 500 cámaras trampa equipadas con inteligencia artificial en puntos estratégicos de la cuenca amazónica, abarcando Brasil, Perú, Colombia y Ecuador. El sistema, denominado "EcoVision AI", utiliza redes neuronales entrenadas con millones de imágenes para identificar automáticamente especies de mamíferos, aves, reptiles y anfibios.
+
+En sus primeros seis meses de operación, el sistema ha registrado más de 2.3 millones de avistamientos, identificando 2,400 especies distintas, incluyendo 47 avistamientos raros de especies que se creían extintas en la región. La tecnología permite a los guardabosques y científicos monitorear la biodiversidad sin necesidad de presencia humana constante, reduciendo costos operativos en un 70%.
+
+"La IA se está convirtiendo en el ojo invisible que protege la selva", explicó la Dra. María González, directora del proyecto. Los datos se comparten en tiempo real con agencias gubernamentales y organizaciones de conservación para tomar decisiones rápidas ante amenazas como la tala ilegal.`,
+    contentEn: `An international consortium of biologists and data engineers has installed a network of 500 AI-powered camera traps at strategic points across the Amazon basin, spanning Brazil, Peru, Colombia, and Ecuador. The system, named "EcoVision AI," uses neural networks trained on millions of images to automatically identify mammal, bird, reptile, and amphibian species.
+
+In its first six months of operation, the system has recorded over 2.3 million sightings, identifying 2,400 distinct species, including 47 rare sightings of species believed to be regionally extinct. The technology enables rangers and scientists to monitor biodiversity without constant human presence, reducing operational costs by 70%.
+
+"AI is becoming the invisible eye that protects the rainforest," explained Dr. María González, project director. Data is shared in real time with government agencies and conservation organizations for rapid decision-making against threats like illegal logging.`,
+    author: 'Lucas Fernández',
+    date: '2026-07-10',
+    location: 'Cuenca Amazónica',
+    coordinates: [-3.4653, -62.2159],
+    image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80',
+    views: 21300,
+    likes: 1580
+  },
+  {
+    id: 10,
+    category: 'tecnologia',
+    title: 'Drones de Refuerzo Genético Vuelan Sobre el Amazonas para Salvar Especies Amenazadas',
+    titleEn: 'Genetic Reinforcement Drones Fly Over the Amazon to Save Threatened Species',
+    summary: 'Universidades brasileñas desarrollan drones que transportan gametos de especies en peligro para aumentar la diversidad genética.',
+    summaryEn: 'Brazilian universities develop drones that carry gametes of endangered species to increase genetic diversity.',
+    content: `Investigadores de la Universidad de São Paulo y el Instituto Nacional de Amazonas (INPA) han desarrollado una flota de drones biotecnológicos capaces de transportar gametos (óvulos y espermatozoides) de especies de anfibios y peces amenazados entre poblaciones aisladas por la deforestación. El proyecto, bautizado "BioDrone Amazônia", utiliza cápsulas criogénicas miniaturizadas que mantienen la viabilidad celular durante vuelos de hasta 40 kilómetros.
+
+La tecnología ha permitido la fertilización exitosa de 12 especies de ranas que habitan en fragmentos de bosque separados por áreas deforestadas, aumentando la diversidad genética de poblaciones vulnerables en un 35%. Actualmente se está expandiendo el sistema para peces de río amenazados por represas hidroeléctricas.
+
+"La tecnología de drones puede superar barreras físicas que separan poblaciones aisladas, dándoles una segunda oportunidad de supervivencia genética", explicó el Dr. Carlos Eduardo, líder del proyecto.`,
+    contentEn: `Researchers from the University of São Paulo and the National Institute of Amazonas (INPA) have developed a fleet of biotechnological drones capable of transporting gametes (eggs and sperm) of threatened amphibian and fish species between populations isolated by deforestation. The project, named "BioDrone Amazônia," uses miniaturized cryogenic capsules that maintain cell viability during flights of up to 40 kilometers.
+
+The technology has enabled successful fertilization of 12 frog species living in forest fragments separated by deforested areas, increasing genetic diversity of vulnerable populations by 35%. The system is now being expanded for river fish threatened by hydroelectric dams.
+
+"Drones technology can overcome physical barriers separating isolated populations, giving them a second chance at genetic survival," explained Dr. Carlos Eduardo, project leader.`,
+    author: 'Ana Beatriz Santos',
+    date: '2026-07-09',
+    location: 'Manaus, Brasil',
+    coordinates: [-3.1190, -60.0217],
+    image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80',
+    views: 17800,
+    likes: 1320
   }
 ];
 
@@ -274,7 +324,7 @@ export const globalStats = [
     value: 12450,
     prefix: '',
     suffix: ' t',
-    rate: 0.15, // Aumento de toneladas por segundo en la simulación
+    rate: 0.15,
     decimals: 2,
     color: 'text-blue-500'
   },
@@ -296,7 +346,7 @@ export const globalStats = [
     value: 4562890,
     prefix: '',
     suffix: '',
-    rate: 3.2, // Árboles por segundo
+    rate: 3.2,
     decimals: 0,
     color: 'text-emerald-500'
   },

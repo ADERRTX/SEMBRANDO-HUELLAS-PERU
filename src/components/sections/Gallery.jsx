@@ -1,414 +1,120 @@
-import { useState, useCallback, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { HiX, HiChevronLeft, HiChevronRight, HiPlay, HiPhotograph, HiFilm } from 'react-icons/hi'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Autoplay, A11y } from 'swiper/modules'
-import 'swiper/css'
-import { galleryImages } from '../../data'
-import { useT } from '../../contexts/LanguageContext'
+import { useState } from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
 
+const galleryImages = [
+  { id: 1, src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80', title: 'Bosque Tropical', titleEn: 'Tropical Forest', category: 'flora' },
+  { id: 2, src: 'https://images.unsplash.com/photo-1474511320723-9a56873571b7?auto=format&fit=crop&w=800&q=80', title: 'León Africano', titleEn: 'African Lion', category: 'fauna' },
+  { id: 3, src: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80', title: 'Coral Reef', titleEn: 'Coral Reef', category: 'marine' },
+  { id: 4, src: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=800&q=80', title: 'Océano Profundo', titleEn: 'Deep Ocean', category: 'marine' },
+  { id: 5, src: 'https://images.unsplash.com/photo-1444464666168-49d633b86797?auto=format&fit=crop&w=800&q=80', title: 'Aves en Vuelo', titleEn: 'Birds in Flight', category: 'fauna' },
+  { id: 6, src: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=800&q=80', title: 'Energía Solar', titleEn: 'Solar Energy', category: 'environment' },
+  { id: 7, src: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=800&q=80', title: 'Flora Medicinal', titleEn: 'Medicinal Plants', category: 'flora' },
+  { id: 8, src: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80', title: 'Montañas Verdes', titleEn: 'Green Mountains', category: 'environment' },
+  { id: 9, src: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=800&q=80', title: 'Desierto de Flores', titleEn: 'Desert Flowers', category: 'flora' },
+  { id: 10, src: 'https://images.unsplash.com/photo-1504450874802-0ba2bcd659e0?auto=format&fit=crop&w=800&q=80', title: 'Reptil Verde', titleEn: 'Green Reptile', category: 'fauna' },
+  { id: 11, src: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?auto=format&fit=crop&w=800&q=80', title: 'Mariposa Monarca', titleEn: 'Monarch Butterfly', category: 'fauna' },
+  { id: 12, src: 'https://images.unsplash.com/photo-1517483000871-1dbf64a6e1c6?auto=format&fit=crop&w=800&q=80', title: 'Bosque Nevado', titleEn: 'Snowy Forest', category: 'flora' },
+];
 
+const videoData = [
+  { id: 'v1', thumbnail: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=80', title: 'La Vida en la Amazonía', titleEn: 'Life in the Amazon', duration: '12:34' },
+  { id: 'v2', thumbnail: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80', title: 'Corales del Mundo', titleEn: 'World Corals', duration: '8:21' },
+  { id: 'v3', thumbnail: 'https://images.unsplash.com/photo-1474511320723-9a56873571b7?auto=format&fit=crop&w=600&q=80', title: 'Grandes Felinos', titleEn: 'Big Cats', duration: '15:47' },
+  { id: 'v4', thumbnail: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=600&q=80', title: 'Energías Renovables', titleEn: 'Renewable Energy', duration: '10:09' },
+];
 
-function LeafDecoration() {
-  return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      <motion.svg className="absolute -top-10 -left-10 w-40 h-40 text-green-200/20" viewBox="0 0 100 100" fill="currentColor"
-        animate={{ rotate: [0, 5, 0, -5, 0] }} transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}>
-        <path d="M50 0C50 0 70 15 75 35C80 55 70 75 50 85C30 75 20 55 25 35C30 15 50 0 50 0Z" />
-      </motion.svg>
-      <motion.svg className="absolute top-20 right-10 w-24 h-24 text-green-300/15" viewBox="0 0 100 100" fill="currentColor"
-        style={{ rotate: 45 }} animate={{ y: [0, -8, 0], rotate: [45, 50, 45] }} transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1 }}>
-        <path d="M50 0C50 0 70 15 75 35C80 55 70 75 50 85C30 75 20 55 25 35C30 15 50 0 50 0Z" />
-      </motion.svg>
-      <motion.svg className="absolute bottom-32 left-1/4 w-32 h-32 text-emerald-200/10" viewBox="0 0 100 100" fill="currentColor"
-        style={{ rotate: -12 }} animate={{ rotate: [-12, -5, -12], x: [0, 4, 0] }} transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 2 }}>
-        <path d="M50 0C50 0 70 15 75 35C80 55 70 75 50 85C30 75 20 55 25 35C30 15 50 0 50 0Z" />
-      </motion.svg>
-      <motion.svg className="absolute -bottom-5 right-1/3 w-28 h-28 text-green-200/15" viewBox="0 0 100 100" fill="currentColor"
-        style={{ rotate: 60 }} animate={{ rotate: [60, 68, 60], scale: [1, 1.05, 1] }} transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}>
-        <path d="M50 0C50 0 70 15 75 35C80 55 70 75 50 85C30 75 20 55 25 35C30 15 50 0 50 0Z" />
-      </motion.svg>
-    </div>
-  )
-}
-
-function VideoThumbnail({ videoSrc, poster }) {
-  const [thumbnail, setThumbnail] = useState(poster || null)
-  const [capturing, setCapturing] = useState(!poster)
-
-  useEffect(() => {
-    if (poster) { setThumbnail(poster); setCapturing(false); return }
-    if (!videoSrc) return
-    const video = document.createElement('video')
-    video.preload = 'metadata'; video.muted = true; video.crossOrigin = 'anonymous'; video.playsInline = true
-    let cancelled = false
-    video.onloadeddata = () => { if (!cancelled) video.currentTime = Math.min(0.5, (video.duration || 1) / 2) }
-    video.onseeked = () => {
-      if (cancelled) return
-      try {
-        const canvas = document.createElement('canvas')
-        canvas.width = 640; canvas.height = 480
-        canvas.getContext('2d').drawImage(video, 0, 0, 640, 480)
-        setThumbnail(canvas.toDataURL('image/jpeg', 0.8))
-        setCapturing(false)
-      } catch {}
-      video.remove()
-    }
-    video.onerror = () => { if (!cancelled) setCapturing(false); video.remove() }
-    video.src = videoSrc; video.load()
-    return () => { cancelled = true; video.remove() }
-  }, [videoSrc, poster])
-
-  if (capturing) return <div className="absolute inset-0 bg-gray-800 animate-pulse flex items-center justify-center"><div className="w-8 h-8 border-2 border-white/30 border-t-white/80 rounded-full animate-spin" /></div>
-  if (thumbnail) return <img src={thumbnail} alt="" className="absolute inset-0 w-full h-full object-cover" />
-  return <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center"><HiPlay className="text-white/20 text-6xl" /></div>
-}
-
-function MediaCard({ item, layout: cardLayout, onClick }) {
-  const t = useT()
-  const isVideo = item.video || item.youtubeId
-  const categoryLabel = item.category === 'Lanzamiento de proyecto' ? t('gallery.lanzamiento')
-    : item.category === 'Impactos en medios de comunicación digitales' ? t('gallery.digitales') : t('gallery.televisivos')
-  const aspect = cardLayout?.aspect || 'aspect-[4/3]'
-
-  return (
-    <motion.div layout className="group relative rounded-[20px] overflow-hidden bg-gray-100 shadow-lg hover:shadow-2xl transition-shadow duration-500 cursor-pointer h-full" onClick={onClick}
-      whileHover={{ y: -4, scale: 1.01 }} transition={{ duration: 0.35, ease: 'easeOut' }}>
-      <div className={`relative ${aspect} overflow-hidden`}>
-        {isVideo ? (
-          <>
-            <VideoThumbnail videoSrc={item.video} poster={item.poster} />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <motion.div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-lg border border-white/40 flex items-center justify-center shadow-xl"
-                whileHover={{ scale: 1.15 }} transition={{ duration: 0.25 }}>
-                <div className="w-0 h-0 border-l-[16px] border-l-white border-y-[10px] border-y-transparent ml-1" />
-              </motion.div>
-            </div>
-          </>
-        ) : (
-          <>
-            <img src={item.src} alt={item.alt} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" loading="lazy" />
-          </>
-        )}
-
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
-
-        <div className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-sm border border-white/20 text-white text-[11px] font-medium leading-none">
-          {categoryLabel}
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0 p-4 z-10 translate-y-1 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-          <h4 className="text-white text-sm font-bold drop-shadow-lg leading-tight line-clamp-1">{item.title || item.alt}</h4>
-          {item.date && <p className="text-white/70 text-xs mt-0.5 font-medium drop-shadow">{item.date}</p>}
-          {item.desc && <p className="text-white/50 text-xs mt-1 line-clamp-2 drop-shadow">{item.desc}</p>}
-        </div>
-      </div>
-    </motion.div>
-  )
-}
-
-function getGridLayout(index) {
-  if (index === 0) return { cols: 'md:col-span-2 md:row-span-2', aspect: 'aspect-[4/3] md:aspect-[16/9]', priority: true }
-  if (index % 7 === 0) return { cols: 'md:col-span-2', aspect: 'aspect-[16/9]' }
-  if (index % 5 === 0) return { cols: 'md:col-span-1', aspect: 'aspect-[1/1]' }
-  if (index % 3 === 0) return { cols: 'md:col-span-1', aspect: 'aspect-[3/2]' }
-  return { cols: 'md:col-span-1', aspect: 'aspect-[4/3]' }
-}
-
-function HeroSection({ item, onOpen }) {
-  if (!item) return null
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.7 }}
-      className="relative w-full rounded-[24px] overflow-hidden cursor-pointer mb-16 shadow-xl group"
-      onClick={onOpen}
-    >
-      <div className="aspect-[21/9] md:aspect-[3/1] relative overflow-hidden">
-        <img src={item.src} alt={item.alt} className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" loading="lazy" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
-          <span className="text-green-300 text-xs font-semibold uppercase tracking-widest">{item.category}</span>
-          <h3 className="text-white text-2xl md:text-4xl font-bold mt-2 max-w-2xl leading-tight">{item.title || item.alt}</h3>
-          {item.desc && <p className="text-white/60 text-sm md:text-base mt-3 max-w-xl line-clamp-2">{item.desc}</p>}
-          {item.date && <p className="text-white/40 text-xs mt-2">{item.date}</p>}
-        </div>
-        <div className="absolute top-5 right-5 w-12 h-12 rounded-full bg-white/20 backdrop-blur-lg border border-white/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
-          <HiPhotograph className="text-white text-xl" />
-        </div>
-      </div>
-    </motion.div>
-  )
-}
-
-function Modal({ items, index, onClose, onIndexChange }) {
-  const current = items[index]
-  const [videoError, setVideoError] = useState(false)
-  const [zoomed, setZoomed] = useState(false)
-  const isVideo = current?.video
-  const isYoutube = current?.youtubeId
-
-  useEffect(() => {
-    const handleKey = (e) => {
-      if (e.key === 'Escape') onClose()
-      if (e.key === 'ArrowLeft' && index > 0) onIndexChange(index - 1)
-      if (e.key === 'ArrowRight' && index < items.length - 1) onIndexChange(index + 1)
-    }
-    window.addEventListener('keydown', handleKey)
-    return () => window.removeEventListener('keydown', handleKey)
-  }, [onClose, index, items.length, onIndexChange])
-
-  useEffect(() => { setZoomed(false); setVideoError(false) }, [index])
-
-  if (!current) return null
-
-  const youtubeUrl = isYoutube ? `https://www.youtube.com/embed/${current.youtubeId}?autoplay=1&rel=0&modestbranding=1` : null
-
-  return (
-    <motion.div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-2xl p-4"
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
-      <motion.div className="relative w-full max-w-6xl max-h-[90vh] rounded-2xl overflow-hidden bg-black shadow-2xl shadow-black/50"
-        initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
-        transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-        onClick={(e) => e.stopPropagation()}>
-        <button onClick={onClose} className="absolute top-4 right-4 z-30 w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-black/80 transition-colors shadow-lg">
-          <HiX className="text-xl" />
-        </button>
-
-        {index > 0 && (
-          <button onClick={() => onIndexChange(index - 1)} className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-black/50 backdrop-blur-lg border border-white/20 text-white flex items-center justify-center hover:bg-black/70 transition-colors shadow-lg" aria-label="Anterior">
-            <HiChevronLeft className="text-xl" />
-          </button>
-        )}
-        {index < items.length - 1 && (
-          <button onClick={() => onIndexChange(index + 1)} className="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-black/50 backdrop-blur-lg border border-white/20 text-white flex items-center justify-center hover:bg-black/70 transition-colors shadow-lg" aria-label="Siguiente">
-            <HiChevronRight className="text-xl" />
-          </button>
-        )}
-
-        {youtubeUrl ? (
-          <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-            <iframe src={youtubeUrl} title={current.title || current.alt} className="absolute inset-0 w-full h-full" allow="autoplay; encrypted-media" allowFullScreen />
-          </div>
-        ) : isVideo && !videoError ? (
-          <video controls autoPlay className="w-full max-h-[85vh] bg-black mx-auto" poster={current.poster || undefined} onError={() => setVideoError(true)}>
-            <source src={current.video} type="video/mp4" />
-          </video>
-        ) : current.src ? (
-          <div className="flex items-center justify-center overflow-auto max-h-[85vh]">
-            <img src={current.src} alt={current.alt}
-              className={`transition-all duration-300 ease-out cursor-zoom-in ${zoomed ? 'scale-150 cursor-zoom-out' : 'scale-100'}`}
-              onClick={() => setZoomed(!zoomed)} />
-          </div>
-        ) : (
-          <div className="w-full aspect-video bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-            <HiPlay className="text-white/20 text-8xl" />
-          </div>
-        )}
-
-        <div className="absolute bottom-0 left-0 right-0 z-20 p-6 bg-gradient-to-t from-black/90 via-black/60 to-transparent pointer-events-none">
-          <p className="text-white text-lg font-semibold">{current.title || current.alt}</p>
-          <p className="text-white/50 text-sm mt-1">{current.category}</p>
-          {current.desc && <p className="text-white/40 text-sm mt-2 max-w-2xl">{current.desc}</p>}
-        </div>
-
-        <div className="absolute top-4 left-4 z-30 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white text-xs font-medium">
-          {index + 1} / {items.length}
-        </div>
-      </motion.div>
-    </motion.div>
-  )
-}
-
-function NetflixCarousel({ items, onOpen }) {
-  const swiperRef = useRef(null)
-  if (items.length === 0) return null
-
-  return (
-    <div className="relative group/carousel">
-      <Swiper modules={[Autoplay, A11y]} onSwiper={(s) => { swiperRef.current = s }}
-        autoplay={{ delay: 4000, disableOnInteraction: false, pauseOnMouseEnter: true }}
-        slidesPerView="auto" spaceBetween={12} speed={600} className="!overflow-visible !px-1">
-        {items.map((item, i) => (
-          <SwiperSlide key={item.alt} className="!w-[260px] md:!w-[300px]">
-            <MediaCard item={item} onClick={() => onOpen(i)} />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-
-      <button onClick={() => swiperRef.current?.slidePrev()}
-        className="absolute left-0 top-0 bottom-0 z-20 w-14 opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-black/40 to-transparent flex items-center justify-start pl-2">
-        <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors">
-          <HiChevronLeft className="text-white text-xl" />
-        </div>
-      </button>
-
-      <button onClick={() => swiperRef.current?.slideNext()}
-        className="absolute right-0 top-0 bottom-0 z-20 w-14 opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-300 bg-gradient-to-l from-black/40 to-transparent flex items-center justify-end pr-2">
-        <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors">
-          <HiChevronRight className="text-white text-xl" />
-        </div>
-      </button>
-    </div>
-  )
-}
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.04 } },
-  exit: { opacity: 0, transition: { duration: 0.2 } },
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
-}
+const categories = ['all', 'flora', 'fauna', 'marine', 'environment'];
 
 export default function Gallery() {
-  const t = useT()
+  const { t, lang } = useLanguage();
+  const [activeTab, setActiveTab] = useState('photos');
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(null);
 
-  const categories = [
-    { id: 'lanzamiento', title: t('gallery.lanzamiento'), category: 'Lanzamiento de proyecto' },
-    { id: 'digitales', title: t('gallery.digitales'), category: 'Impactos en medios de comunicación digitales' },
-    { id: 'televisivos', title: t('gallery.televisivos'), category: 'Impactos en medios de comunicación televisivos' },
-  ]
-  const [modalOpen, setModalOpen] = useState(false)
-  const [modalIndex, setModalIndex] = useState(0)
-  const [modalItems, setModalItems] = useState([])
-  const [activeFilter, setActiveFilter] = useState(null)
-
-  const sectionRefs = useRef({})
-
-  const openModal = useCallback((items, index) => {
-    setModalItems(items); setModalIndex(index); setModalOpen(true)
-  }, [])
-
-  const closeModal = useCallback(() => setModalOpen(false), [])
-
-  const handleIndexChange = useCallback((newIndex) => {
-    setModalIndex(newIndex)
-  }, [])
-
-  const getItems = useCallback((category) => {
-    return galleryImages.filter((img) => img.category === category)
-  }, [])
-
-  const handleFilterClick = useCallback((btn) => {
-    setActiveFilter(btn.category)
-    if (btn.category) {
-      setTimeout(() => {
-        const el = sectionRefs.current[btn.category]
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }, 100)
-    }
-  }, [])
-
-  const filterButtons = [
-    { label: t('gallery.todos'), category: null },
-    { label: t('gallery.lanzamiento'), category: 'Lanzamiento de proyecto' },
-    { label: t('gallery.digitales'), category: 'Impactos en medios de comunicación digitales' },
-    { label: t('gallery.televisivos'), category: 'Impactos en medios de comunicación televisivos' },
-  ]
-
-  const currentItems = activeFilter === null ? galleryImages : getItems(activeFilter)
-  const showGrid = activeFilter === null
-
-  const totalFotos = galleryImages.filter(i => i.src && !i.video && !i.youtubeId).length
-  const totalVideos = galleryImages.filter(i => i.video || i.youtubeId).length
+  const filteredImages = activeCategory === 'all' ? galleryImages : galleryImages.filter((img) => img.category === activeCategory);
 
   return (
-    <section id="gallery" className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-gray-50 to-white">
-      <LeafDecoration />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
-        <motion.div className="text-center mb-14"
-          initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6 }}>
-          <h2 className="text-5xl md:text-7xl font-bold text-gray-900 leading-tight">{t('gallery.title')}</h2>
-          <div className="w-[100px] h-1 bg-green-500 mx-auto rounded-full mt-5" />
-        </motion.div>
-
-        <HeroSection
-          item={galleryImages[0]}
-          onOpen={() => openModal(galleryImages, 0)}
-        />
-
-        <motion.div className="text-center mb-6"
-          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-          viewport={{ once: true }} transition={{ duration: 0.5 }}>
-          <p className="text-gray-400 text-sm flex items-center justify-center gap-4">
-            <span className="flex items-center gap-1.5"><HiPhotograph className="text-green-500" /> {totalFotos} {t('gallery.fotos')}</span>
-            <span className="w-1 h-1 rounded-full bg-gray-300" />
-            <span className="flex items-center gap-1.5"><HiFilm className="text-green-500" /> {totalVideos} {t('gallery.videos')}</span>
-          </p>
-        </motion.div>
-
-        <motion.div className="flex flex-wrap justify-center gap-3 mb-14"
-          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }} transition={{ duration: 0.5, delay: 0.2 }}>
-          {filterButtons.map((btn) => (
-            <button key={btn.label} onClick={() => handleFilterClick(btn)}
-              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
-                activeFilter === btn.category
-                  ? 'bg-green-600 text-white shadow-md shadow-green-200 scale-105'
-                  : 'bg-white text-gray-700 border border-gray-200 hover:border-green-300 hover:text-green-700'
-              }`}>
-              {btn.label}
-            </button>
-          ))}
-        </motion.div>
-
-        <AnimatePresence mode="wait">
-          {showGrid ? (
-            <motion.div key="todos" variants={containerVariants} initial="hidden" animate="visible" exit="exit"
-              className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {currentItems.map((item, i) => {
-                const layout = getGridLayout(i)
-                return (
-                  <motion.div key={item.alt} variants={itemVariants} className={`${layout.cols}`}>
-                    <MediaCard item={item} layout={layout} onClick={() => openModal(currentItems, i)} />
-                  </motion.div>
-                )
-              })}
-            </motion.div>
-          ) : (
-            <motion.div key={activeFilter} variants={containerVariants} initial="hidden" animate="visible" exit="exit">
-              {categories.filter((s) => s.category === activeFilter).map((section) => {
-                const items = getItems(section.category)
-                if (items.length === 0) return null
-                return (
-                  <div key={section.id} ref={(el) => { sectionRefs.current[section.category] = el }} className="scroll-mt-24">
-                    <div className="flex items-end gap-4 mb-6">
-                      <div>
-                        <h3 className="text-2xl md:text-3xl font-bold text-gray-900">{section.title}</h3>
-                        <div className="w-12 h-0.5 bg-green-500 mt-2 rounded-full" />
-                      </div>
-                    </div>
-                    {items.length > 4 ? (
-                      <NetflixCarousel items={items} onOpen={(i) => openModal(items, i)} />
-                    ) : (
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {items.map((item, i) => (
-                          <MediaCard key={item.alt} item={item} onClick={() => openModal(items, i)} />
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
-            </motion.div>
-          )}
-        </AnimatePresence>
+    <section id="galeria" className="news-section">
+      <div className="section-header">
+        <div className="section-title-group">
+          <div className="section-icon"><i className="fas fa-images" /></div>
+          <h2 className="section-title">{t('gallery.title')}</h2>
+        </div>
       </div>
 
-      <AnimatePresence>
-        {modalOpen && (
-          <Modal items={modalItems} index={modalIndex} onClose={closeModal} onIndexChange={handleIndexChange} />
-        )}
-      </AnimatePresence>
+      <div className="flex justify-center gap-3 mb-8">
+        <button onClick={() => setActiveTab('photos')} className={`px-7 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === 'photos' ? 'bg-[var(--primary)] text-white shadow-lg' : 'bg-[var(--bg-secondary)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] border border-[var(--border-color)]'}`}>
+          📷 {t('gallery.photos')}
+        </button>
+        <button onClick={() => setActiveTab('videos')} className={`px-7 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === 'videos' ? 'bg-[var(--primary)] text-white shadow-lg' : 'bg-[var(--bg-secondary)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] border border-[var(--border-color)]'}`}>
+          🎬 {t('gallery.videos')}
+        </button>
+      </div>
+
+      {activeTab === 'photos' && (
+        <>
+          <div className="flex flex-wrap justify-center gap-2 mb-6">
+            {categories.map((cat) => (
+              <button key={cat} onClick={() => setActiveCategory(cat)} className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${activeCategory === cat ? 'bg-[var(--primary)] text-white' : 'bg-[var(--bg-secondary)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] border border-[var(--border-color)]'}`}>
+                {cat === 'all' ? t('gallery.all') : cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </button>
+            ))}
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '16px' }}>
+            {filteredImages.map((img) => (
+              <div key={img.id} onClick={() => setSelectedImage(img)} style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden', cursor: 'pointer', border: '1px solid var(--border-color)', transition: 'var(--transition)' }}>
+                <img src={img.src} alt={lang === 'en' ? img.titleEn : img.title} style={{ width: '100%', height: '200px', objectFit: 'cover', display: 'block' }} loading="lazy" />
+                <div style={{ padding: '12px' }}>
+                  <p style={{ fontWeight: 600, fontSize: '0.9rem' }}>{lang === 'en' ? img.titleEn : img.title}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {activeTab === 'videos' && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
+          {videoData.map((vid) => (
+            <div key={vid.id} onClick={() => setSelectedVideo(vid)} className="video-card">
+              <div className="video-thumbnail">
+                <img src={vid.thumbnail} alt={lang === 'en' ? vid.titleEn : vid.title} style={{ width: '100%', height: '180px', objectFit: 'cover' }} loading="lazy" />
+                <div className="video-play-btn small"><i className="fas fa-play" /></div>
+                <span className="video-duration">{vid.duration}</span>
+              </div>
+              <div className="video-info">
+                <h4>{lang === 'en' ? vid.titleEn : vid.title}</h4>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Image lightbox */}
+      {selectedImage && (
+        <div onClick={() => setSelectedImage(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.9)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+          <img src={selectedImage.src} alt={selectedImage.title} style={{ maxWidth: '90%', maxHeight: '90vh', borderRadius: '8px' }} />
+        </div>
+      )}
+
+      {/* Video lightbox */}
+      {selectedVideo && (
+        <div onClick={() => setSelectedVideo(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.9)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+          <div style={{ maxWidth: '800px', width: '90%', background: 'var(--bg-primary)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }} onClick={(e) => e.stopPropagation()}>
+            <div style={{ position: 'relative', paddingBottom: '56.25%', background: '#000' }}>
+              <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={selectedVideo.thumbnail} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />
+                <div className="video-play-btn large" style={{ position: 'absolute' }}><i className="fas fa-play" /></div>
+              </div>
+            </div>
+            <div style={{ padding: '20px' }}>
+              <h3 style={{ fontFamily: 'var(--font-primary)', fontWeight: 700 }}>{lang === 'en' ? selectedVideo.titleEn : selectedVideo.title}</h3>
+              <p style={{ color: 'var(--text-muted)', marginTop: '8px' }}>{selectedVideo.duration}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
-  )
+  );
 }

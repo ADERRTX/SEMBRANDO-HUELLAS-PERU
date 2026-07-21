@@ -1,32 +1,393 @@
 export const SITE_CONFIG = {
-  name: 'EcoAcción Global',
-  shortName: 'EcoAcción',
-  tagline: 'El portal global de noticias ambientales y ecología en tiempo real.',
-  description:
-    'Noticiero global interactivo con cobertura de temas ecológicos, medio ambiente, conservación bioambiental y liderazgo ambiental a nivel mundial.',
-  email: 'prensa@ecoaccionglobal.org',
-  facebook: 'EcoAcción Global',
-  location: 'Ginebra, Suiza / Redacción Global',
-}
+  name: 'Sembrando Huellas Perú',
+  tagline: 'Protegiendo nuestro planeta, una noticia a la vez',
+  description: 'El Magazine Digital Líder en Noticias Ambientales Globales',
+  email: 'info@sembrandohuellas.pe',
+  phone: '+51 1 234 5678',
+  location: 'Lima, Perú',
+  logo: '/logo-sh.png',
+  logoFull: '/logo-full.png',
+  social: {
+    facebook: 'https://facebook.com/sembrandohuellasperu',
+    instagram: 'https://instagram.com/sembrandohuellasperu',
+    youtube: 'https://youtube.com/@sembrandohuellasperu',
+    tiktok: 'https://tiktok.com/@sembrandohuellasperu',
+    twitter: 'https://twitter.com/shuellasperu',
+    whatsapp: 'https://wa.me/5112345678',
+  },
+};
 
 export const NAV_LINKS = [
-  { label: 'Inicio', href: '#hero' },
-  { label: 'Noticias', href: '#noticias' },
-  { label: 'Mapa', href: '#mapa' },
-  { label: 'Eco-Líderes', href: '#lideres' },
-  { label: 'Estadísticas', href: '#estadisticas' },
-  { label: 'Encuesta', href: '#encuesta' },
-  { label: 'Publicar', href: '#publicar' },
-  { label: 'Contacto', href: '#contacto' },
-]
+  { key: 'inicio', icon: 'fas fa-home', href: '#inicio' },
+  { key: 'medioambiente', icon: 'fas fa-leaf', href: '#medioambiente' },
+  { key: 'flora_fauna', icon: 'fas fa-paw', href: '#flora-fauna' },
+  { key: 'economia', icon: 'fas fa-chart-line', href: '#economia' },
+  { key: 'videos', icon: 'fas fa-video', href: '#videos' },
+  { key: 'ciencia', icon: 'fas fa-flask', href: '#ciencia' },
+  { key: 'kids', icon: 'fas fa-child', href: '#ninos' },
+  { key: 'galeria', icon: 'fas fa-images', href: '#galeria' },
+  { key: 'contacto', icon: 'fas fa-envelope', href: '#contacto' },
+];
+
+export const NACIONALES = ['Brasil', 'Colombia', 'Ecuador', 'Bolivia', 'Venezuela'];
+
+export const HERO_SLIDES = [
+  {
+    category: 'AMAZONIA',
+    title: 'La Deforestación del Amazonas Brasileño Alcanza Niveles Históricos en 2026',
+    excerpt: 'Satélites de la NASA registran la pérdida de 12,000 km² de bosque en solo seis meses, alarmando a la comunidad científica internacional.',
+    author: 'Carlos Mendoza',
+    time: 'Hace 2 horas',
+    views: '24,300',
+    gradient: 'linear-gradient(135deg, #0a3d0a 0%, #1a5c1a 50%, #0d4d0d 100%)',
+    image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=1400&q=80',
+  },
+  {
+    category: 'ARTICO',
+    title: 'El Hielo del Ártico se Reduce a su Nivel Más Bajo Registrado',
+    excerpt: 'La extensión del hielo marino ártico alcanza un mínimo récord, acelerando el derretimiento del permafrost y la liberación de metano.',
+    author: 'María Fernanda López',
+    time: 'Hace 4 horas',
+    views: '19,850',
+    gradient: 'linear-gradient(135deg, #1a3a5c 0%, #2d5a87 50%, #1a4a6c 100%)',
+    image: 'https://images.unsplash.com/photo-1517483000871-1dbf64a6e1c6?auto=format&fit=crop&w=1400&q=80',
+  },
+  {
+    category: 'AFRICA',
+    title: 'Sequías Severas Amenazan la Vida Salvaje del Serengeti en Tanzania',
+    excerpt: 'La peor sequía en tres décadas pone en peligro a millones de animales migratorios en uno de los ecosistemas más importantes del mundo.',
+    author: 'Dr. Roberto Sánchez',
+    time: 'Hace 6 horas',
+    views: '14,750',
+    gradient: 'linear-gradient(135deg, #2d1a5c 0%, #4a2d87 50%, #3a1a6c 100%)',
+    image: 'https://images.unsplash.com/photo-1474511320723-9a56873571b7?auto=format&fit=crop&w=1400&q=80',
+  },
+  {
+    category: 'OCÉANOS',
+    title: 'Blanqueamiento Masivo de Coral en la Gran Barrera de Australia',
+    excerpt: 'El 70% de los corales de la Gran Barrera sufren blanqueamiento severo por el aumento de temperatura oceánica, declarando emergencia ecológica.',
+    author: 'Ana Torres',
+    time: 'Hace 1 hora',
+    views: '22,100',
+    gradient: 'linear-gradient(135deg, #5c1a1a 0%, #872d2d 50%, #6c1a1a 100%)',
+    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1400&q=80',
+  },
+  {
+    category: 'ANTARTIDA',
+    title: 'Desprendimiento Histórico del Hielo en la Antártida Occidental',
+    excerpt: 'Un iceberg del tamaño de Creta se desprende del glaciar Thwaites, el llamado "glaciar del Juicio Final", elevando el nivel del mar global.',
+    author: 'Dr. Alejandro Vargas',
+    time: 'Hace 3 horas',
+    views: '18,400',
+    gradient: 'linear-gradient(135deg, #1a4a6c 0%, #3a7ab5 50%, #2a5a8c 100%)',
+    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1400&q=80',
+  },
+  {
+    category: 'ASIA',
+    title: 'Contaminación del Aire en Nueva Delhi Supera 10 Veces el Límite Seguro',
+    excerpt: 'Millones de residentes respiran aire tóxico mientras el smog cubre la capital india durante semanas, declarando emergencia sanitaria.',
+    author: 'Priya Sharma',
+    time: 'Hace 5 horas',
+    views: '16,200',
+    gradient: 'linear-gradient(135deg, #4a3a1a 0%, #7a6a3a 50%, #5a4a2a 100%)',
+    image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1400&q=80',
+  },
+];
+
+export const TICKER_ITEMS = [
+  { text: 'El Amazonas brasileño pierde 12,000 km² de bosque en seis meses', icon: '🌳' },
+  { text: 'Hielo ártico alcanza mínimo histórico: científicos alertan sobre punto de no retorno', icon: '🧊' },
+  { text: 'Gran Barrera de Australia: 70% de corales sufren blanqueamiento masivo', icon: '🪸' },
+  { text: 'Sequías en el Serengeti amenazan la migración de millones de animales', icon: '🦁' },
+  { text: 'Iceberg gigante se desprende en Antártida, elevando nivel del mar', icon: '🏔️' },
+  { text: 'Contaminación en Nueva Delhi supera 10 veces el límite seguro de PM2.5', icon: '💨' },
+  { text: 'Cumbre Global del Clima 2026: 195 países negocian nuevos acuerdos', icon: '🌍' },
+  { text: 'Población de tigres silvestres aumenta un 12% gracias a esfuerzos de conservación', icon: '🐯' },
+];
+
+export const MEDIO_AMBIENTE_NEWS = [
+  {
+    id: 1,
+    title: 'El Amazonas Brasileño Alcanza Ritmo de Deforestación Sin Precedentes',
+    excerpt: 'Imágenes satelitales revelan que la tala ilegal se ha acelerado un 34% en la cuenca amazónica durante el primer semestre de 2026.',
+    category: 'AMAZONIA',
+    author: 'Pedro Guerra',
+    time: '15 min',
+    views: '12,400',
+    image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 2,
+    title: 'Corrientes Oceánicas del Atlántico muestran Desaceleración Drástica',
+    excerpt: 'El sistema de circulación termohalina AMOC se debilita un 15%, amenazando el clima de Europa Occidental y las lluvias en África.',
+    category: 'OCÉANOS',
+    author: 'Dra. Elena Voss',
+    time: '1 hora',
+    views: '9,800',
+    image: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 3,
+    title: 'Glaciares de los Alpes Europeos Perdieron 60% de su Volumen en 30 Años',
+    excerpt: 'Un estudio del IPCC confirma que los glaciares alpinos están desapareciendo a un ritmo alarmante, amenazando el suministro de agua de millones.',
+    category: 'GLACIARES',
+    author: 'Dr. Hans Müller',
+    time: '2 horas',
+    views: '8,200',
+    image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 4,
+    title: 'Calidad del Aire Mejora un 30% en Ciudades Europeas Gracias a Energías Limpias',
+    excerpt: 'La transición energética en Europa reduce significativamente las emisiones de CO2, con Madrid y Barcelona liderando las mejoras.',
+    category: 'AIRE',
+    author: 'Sofia Martínez',
+    time: '3 horas',
+    views: '7,100',
+    image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=800&q=80',
+  },
+];
+
+export const FLORA_FAUNA_NEWS = [
+  {
+    id: 1,
+    title: 'Población de Tigres Silvestres Aumenta un 12% en Asia Thanks a Conservación',
+    excerpt: 'Tras décadas de esfuerzo, los tigres en la selva de Sumatra muestran signos de recuperación gracias a corredores biológicos protegidos.',
+    category: 'CONSERVACION',
+    author: 'Dra. Laura Vásquez',
+    time: '45 min',
+    views: '11,300',
+    image: 'https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 2,
+    title: 'Ballenas Jorobadas Registran Récord de Avistamientos en el Pacífico Sur',
+    excerpt: 'Marinos confirman la mayor cantidad de ballenas jorobadas en aguas de Chile y Perú en las últimas dos décadas, señal de recuperación.',
+    category: 'MARINO',
+    author: 'Dr. Miguel Ríos',
+    time: '2 horas',
+    views: '8,900',
+    image: 'https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 3,
+    title: 'El Bosque de Bambú de Chengdu, China, Declara Zona de Protección Total',
+    excerpt: 'El gobierno chino otorga protección absoluta al hábitat del panda gigante tras décadas de esfuerzo de conservación.',
+    category: 'FLORA',
+    author: 'Wei Zhang',
+    time: '30 min',
+    views: '6,500',
+    image: 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 4,
+    title: 'Aves Migratorias de África Encuentran Refugio en Humedales de Europa',
+    excerpt: 'Millones de aves migratorias del Sahara dependen cada vez más de los humedales europeos como escala en su viaje anual.',
+    category: 'AVES',
+    author: 'Dr. Jean-Pierre Duval',
+    time: '3 horas',
+    views: '5,200',
+    image: 'https://images.unsplash.com/photo-1444464666168-49d633b86797?auto=format&fit=crop&w=800&q=80',
+  },
+];
+
+export const VIDEOS_DATA = [
+  {
+    id: 1,
+    title: 'Documental: La Última Frontera del Amazonas Brasileño',
+    excerpt: 'Un recorrido cinematográfico por las comunidades indígenas que defienden el pulmón del mundo contra la deforestación ilegal.',
+    author: 'Carlos Mendoza',
+    time: 'Transmitido hace 3 horas',
+    duration: '12:34',
+    views: '45,200',
+    image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=800&q=80',
+    isLive: true,
+  },
+  {
+    id: 2,
+    title: 'El Hielo Ártico se Derrite: Consecuencias para el Mundo',
+    excerpt: 'Expertos en climatología analizan el impacto del derretimiento del hielo ártico en el nivel del mar y los patrones climáticos globales.',
+    author: 'Dra. Elena Voss',
+    time: 'Hace 1 día',
+    duration: '8:21',
+    views: '12,800',
+    image: 'https://images.unsplash.com/photo-1517483000871-1dbf64a6e1c6?auto=format&fit=crop&w=800&q=80',
+    isLive: false,
+  },
+  {
+    id: 3,
+    title: 'La Migración del Serengeti: El Gran Espectáculo de la Naturaleza',
+    excerpt: 'Seguimos a dos millones de ñus, cebras y gacelas en su travesía de 800 kilómetros a través de Tanzania y Kenia.',
+    author: 'Dr. James Kimani',
+    time: 'Hace 3 días',
+    duration: '5:47',
+    views: '8,450',
+    image: 'https://images.unsplash.com/photo-1474511320723-9a56873571b7?auto=format&fit=crop&w=800&q=80',
+    isLive: false,
+  },
+  {
+    id: 4,
+    title: 'Corales en Peligro: La Lucha por Salvar la Gran Barrera Australiana',
+    excerpt: 'Científicos marinos trabajan día y noche para preservar los corales del blanqueamiento masivo que amenaza este patrimonio de la humanidad.',
+    author: 'Dra. Sophie Turner',
+    time: 'Hace 5 días',
+    duration: '15:02',
+    views: '6,200',
+    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80',
+    isLive: false,
+  },
+];
+
+export const ECONOMIA_NEWS = [
+  {
+    id: 1,
+    title: 'La Unión Europea Impone Aranceles al Carbón y Acelera su Transición Verde',
+    excerpt: 'Bruselas aprueba el paquete climático más ambicioso de la historia con metas de reducción de emisiones del 60% para 2035.',
+    category: 'POLITICA',
+    author: 'Sofia Martínez',
+    time: '30 min',
+    views: '10,500',
+    image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 2,
+    title: 'Fondos Verdes Globales Captan Récord de $50 Mil Millones en Inversión',
+    excerpt: 'La demanda de bonos verces alcanza máximos históricos mientras inversores institucionales buscan alternativas sostenibles.',
+    category: 'INVERSION',
+    author: 'María Fernanda López',
+    time: '1 hora',
+    views: '8,300',
+    image: 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 3,
+    title: 'Chile se Convierte en Mayor Exportador de Hidrógeno Verde de Latinoamérica',
+    excerpt: 'Con 200 MW de capacidad solar en el desierto de Atacama, Chile lidera la producción de hidrógeno verde para mercados asiáticos.',
+    category: 'ENERGIA',
+    author: 'Andrés Fernández',
+    time: '2 horas',
+    views: '7,100',
+    image: 'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 4,
+    title: 'Startups de Economía Circular en África Recaudan $200 Millones',
+    excerpt: 'Empresas de reciclaje y reutilización en Kenia, Nigeria y Sudáfrica atraen inversión internacional récord en tecnología limpia.',
+    category: 'EMPRENDIMIENTO',
+    author: 'David Ochieng',
+    time: '3 horas',
+    views: '5,800',
+    image: 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?auto=format&fit=crop&w=800&q=80',
+  },
+];
+
+export const OPINION_DATA = [
+  {
+    id: 1,
+    title: 'El cambio climático no tiene fronteras: la urgencia de actuar juntos',
+    author: 'Dr. Carlos Mendoza',
+    avatar: 'CM',
+  },
+  {
+    id: 2,
+    title: 'La economía verde no es opcional, es el único camino viable',
+    author: 'María Fernanda López',
+    avatar: 'MF',
+  },
+  {
+    id: 3,
+    title: 'Cada bosque perdido es un futuro que nos arrebatamos como humanidad',
+    author: 'Dr. Roberto Sánchez',
+    avatar: 'RS',
+  },
+  {
+    id: 4,
+    title: 'Las nuevas generaciones merecen un planeta que respirar',
+    author: 'Ana Torres',
+    avatar: 'AT',
+  },
+];
+
+export const TENDENCIAS_DATA = [
+  {
+    id: 1,
+    title: 'Cumbre Global del Clima 2026: Acuerdos históricos alcanzados',
+    tag: '#Clima2026',
+  },
+  {
+    id: 2,
+    title: 'Campaña #SaveTheAmazon viraliza con 50 millones de vistas',
+    tag: '#SaveTheAmazon',
+  },
+  {
+    id: 3,
+    title: 'Nueva ley de plásticos de un solo uso genera debate internacional',
+    tag: '#SinPlásticos',
+  },
+  {
+    id: 4,
+    title: 'Energía eólica offshore supera a la nuclear en Europa',
+    tag: '#EnergíaLimpia',
+  },
+];
+
+export const CIENCIA_NEWS = [
+  {
+    id: 1,
+    title: 'Drones con IA Monitorearán 10 Millones de Hectáreas de Bosque Amazónico',
+    excerpt: 'Un sistema de inteligencia artificial desarrollado en Brasil detecta tala ilegal en tiempo real usando imágenes satelitales de alta resolución.',
+    category: 'TECNOLOGIA',
+    author: 'Ing. David Ramos',
+    time: '45 min',
+    views: '14,200',
+    image: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 2,
+    title: 'Científicos Coreanos Crean Bioplástico Biodegradable a partir de Algas Marinas',
+    excerpt: 'Un equipo de Seúl desarrolla un material plástico que se descompone en 90 días usando algas cosechadas del Pacífico.',
+    category: 'BIOTECNOLOGIA',
+    author: 'Dr. Kim Soo-jin',
+    time: '3 horas',
+    views: '9,400',
+    image: 'https://images.unsplash.com/photo-1559827291-bce885ce7b17?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 3,
+    title: 'Investigadores Austriacos Desarrollan Baterías de Arena para Almacenamiento Solar',
+    excerpt: 'Una nueva tecnología de baterías basada en arena de cuarzo promete revolucionar el almacenamiento de energía renovable a bajo costo.',
+    category: 'ENERGIA',
+    author: 'Dr. Friedrich Bauer',
+    time: '5 horas',
+    views: '6,800',
+    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
+  },
+];
 
 export const COLORS = {
-  greenDeep: '#064e3b', // Deep emerald green
-  greenLight: '#10b981', // Emerald light
-  greenLeaf: '#059669', // Emerald leaf
-  greenMoss: '#0f766e', // Teal green
-  greenPale: '#d1fae5', // Light green tint
-  earth: '#78350f', // Warm earth amber
-  gold: '#fbbf24', // Warm gold
-  cream: '#f0fdf4', // Soft mint white
-}
+  primary: '#1a5c1a',
+  primaryDark: '#0a3d0a',
+  primaryLight: '#2d8a2d',
+  secondary: '#d4a017',
+  secondaryLight: '#f0c040',
+  accent: '#0066cc',
+  danger: '#dc3545',
+};
+
+export const FLORA_DATA = [
+  { key: 'tropical', icon: '🌿', color: 'from-green-600 to-emerald-700' },
+  { key: 'desert', icon: '🌵', color: 'from-amber-500 to-orange-600' },
+  { key: 'aquatic', icon: '🌊', color: 'from-blue-500 to-cyan-600' },
+  { key: 'arctic', icon: '❄️', color: 'from-sky-400 to-blue-500' },
+  { key: 'medicinal', icon: '💊', color: 'from-purple-500 to-violet-600' },
+  { key: 'endangered', icon: '🔴', color: 'from-red-500 to-rose-600' },
+];
+
+export const FAUNA_DATA = [
+  { key: 'mammals', icon: '🦁', color: 'from-amber-600 to-orange-700' },
+  { key: 'birds', icon: '🦅', color: 'from-sky-500 to-blue-600' },
+  { key: 'marine', icon: '🐋', color: 'from-cyan-500 to-teal-600' },
+  { key: 'reptiles', icon: '🐊', color: 'from-green-600 to-emerald-700' },
+  { key: 'insects', icon: '🦋', color: 'from-purple-500 to-pink-600' },
+  { key: 'endangered', icon: '⚠️', color: 'from-red-500 to-rose-600' },
+];

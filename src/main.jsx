@@ -8,6 +8,7 @@ import '@fontsource/inter/600.css'
 import '@fontsource/inter/700.css'
 import '@fontsource/poppins/600.css'
 import '@fontsource/poppins/700.css'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 import App from './App.jsx'
 import './index.css'
 
