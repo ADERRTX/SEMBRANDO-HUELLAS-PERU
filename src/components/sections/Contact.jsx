@@ -27,7 +27,7 @@ export default function Contact() {
     if (Object.keys(newErrors).length > 0) { setErrors(newErrors); return; }
     setSending(true);
     try {
-      const res = await fetch('https://formsubmit.co/ajax/info@sembrandohuellas.pe', {
+      const res = await fetch('https://formsubmit.co/ajax/educaccionyaccionporlaamazonia@gmail.com', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),

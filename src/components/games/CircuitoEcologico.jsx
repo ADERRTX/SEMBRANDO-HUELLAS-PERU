@@ -43,7 +43,7 @@ const ANIMAL_QUESTIONS = [
   { animal: '🦦', nombre: 'Nutria', datos: 'Mamífero acuático que habita en los ríos de la selva.' },
 ]
 
-const ANIMAL_CHOICES = ['🦜', '🐒', '🐢', '🐆', '🦦', '🐊', '🦋', '🐸']
+const ANIMAL_CHOICES = ['🦜', '🐒', '🐢', '🐆', '🦦', '🐊', '🦋', '🐸', '🐟', '🐠', '🐡', '🐙', '🦀', '🦐', '🦑', '🐙']
 
 const TREE_STAGES = ['🌱', '🌿', '🌳']
 

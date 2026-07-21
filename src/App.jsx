@@ -1,9 +1,10 @@
-import { lazy, Suspense, useState, useEffect } from 'react';
+import { lazy, Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import MetaTags from './components/layout/MetaTags';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ScrollToTopBtn from './components/layout/ScrollToTop';
+import AnimalCursor from './components/layout/AnimalCursor';
 const Home = lazy(() => import('./pages/Home'));
 const MedioAmbientePage = lazy(() => import('./pages/MedioAmbientePage'));
 const FloraFaunaPage = lazy(() => import('./pages/FloraFaunaPage'));
@@ -13,6 +14,7 @@ const CienciaPage = lazy(() => import('./pages/CienciaPage'));
 const KidsPage = lazy(() => import('./pages/KidsPage'));
 const GalleryPage = lazy(() => import('./pages/GalleryPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
+const AdminPage = lazy(() => import('./pages/AdminPage'));
 
 function SectionFallback() {
   return (
@@ -48,6 +50,7 @@ function AppRoutes() {
           <Route path="/ninos" element={<KidsPage />} />
           <Route path="/galeria" element={<GalleryPage />} />
           <Route path="/contacto" element={<ContactPage />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </Suspense>
     </>
@@ -68,6 +71,50 @@ const SPLASH_IMAGES = [
   'https://scontent.fhuu1-1.fna.fbcdn.net/v/t39.99422-6/748746057_1784175795956648_8241147108804401739_n.png?stp=dst-jpg_tt6&cstp=mx1924x1097&ctp=s1924x1097&_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGo9Kv4wMtkNMp_PgdEgQ2ztILpNVXIFK20guk1VcgUrTShMz6gwVDsyxY8ni6sD8z5HKRvuZn5VdaDONd4M2Aa&_nc_ohc=ZYtawRKlJLcQ7kNvwEZFkr4&_nc_oc=Adp0D6zkZ08q1NQx_oH3A67MIl0CVI83ec_zMtm72bjuxK7VknT9hpLYJ1nOXMJ_WdjvEaK-d0w62JOG2A3G2pDl&_nc_zt=14&_nc_ht=scontent.fhuu1-1.fna&_nc_gid=d5Hv0wouo9zX1Q4TTzxY3A&_nc_ss=7d2a8&oh=00_AQDeQ6I99PclVmdGZsgMFxNKTFdZMJ0gS4322gH0WZdnWQ&oe=6A646BDE',
 ];
 
+function ScrollLogo() {
+  const logoRef = useRef(null);
+  const rafRef = useRef(null);
+  const lastY = useRef(-1);
+
+  const onScroll = useCallback(() => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      const el = logoRef.current;
+      if (!el) return;
+      const scrollY = window.scrollY;
+      if (Math.abs(scrollY - lastY.current) < 1) return;
+      lastY.current = scrollY;
+
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight <= 0) return;
+      const progress = Math.min(1, scrollY / docHeight);
+
+      const scale = 0.4 + progress * 2.5;
+      const opacity = 0.03 + Math.sin(progress * Math.PI) * 0.07;
+      const blur = 1 + progress * 6;
+
+      el.style.transform = `scale(${scale})`;
+      el.style.opacity = opacity;
+      el.style.filter = `blur(${blur}px)`;
+    });
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [onScroll]);
+
+  return (
+    <div className="global-scroll-logo" ref={logoRef}>
+      <img src="/logo-sh.png" alt="" />
+    </div>
+  );
+}
+
 export default function App() {
   const [splash, setSplash] = useState(true);
   const [splashPhase, setSplashPhase] = useState(0);
@@ -77,10 +124,10 @@ export default function App() {
   const splashLogos = ['/logo-sh.png', '/logo-full.png'];
 
   useEffect(() => {
-    const t1 = setTimeout(() => setSplashPhase(1), 400);
-    const t2 = setTimeout(() => setSplashPhase(2), 1200);
-    const t3 = setTimeout(() => setSplashPhase(3), 2200);
-    const t4 = setTimeout(() => { setSplash(false); }, 3000);
+    const t1 = setTimeout(() => setSplashPhase(1), 600);
+    const t2 = setTimeout(() => setSplashPhase(2), 1800);
+    const t3 = setTimeout(() => setSplashPhase(3), 3300);
+    const t4 = setTimeout(() => { setSplash(false); }, 4500);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
   }, []);
 
@@ -88,7 +135,7 @@ export default function App() {
     if (!splash) return;
     const iv = setInterval(() => {
       setNewsIndex((prev) => (prev + 1) % SPLASH_NEWS.length);
-    }, 600);
+    }, 900);
     return () => clearInterval(iv);
   }, [splash]);
 
@@ -96,7 +143,7 @@ export default function App() {
     if (!splash) return;
     const iv = setInterval(() => {
       setSplashLogoIdx((prev) => (prev + 1) % splashLogos.length);
-    }, 1500);
+    }, 2000);
     return () => clearInterval(iv);
   }, [splash]);
 
@@ -182,6 +229,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="app">
+        <ScrollLogo />
+        <AnimalCursor />
         <MetaTags />
         <Navbar />
         <AppRoutes />
