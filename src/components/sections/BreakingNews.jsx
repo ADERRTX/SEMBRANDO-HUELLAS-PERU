@@ -1,20 +1,28 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
+import { useCountry } from '../../contexts/CountryContext';
+import { PAISES_DATA } from '../../data/countries';
 import NewsModal from '../ui/NewsModal';
 
-const BREAKING_NEWS = {
-  title: 'Congreso aprueba Ley de Protección de Bosques Amazónicos con 105 votos a favor',
-  excerpt: 'La nueva ley establece sanciones más severas para la tala ilegal y crea un fondo de reforestación de 500 millones de soles para la conservación de la Amazonía peruana. Esta norma considera a los bosques amazónicos como patrimonio natural de la nación.',
+const DEFAULT_BREAKING = {
+  title: 'Congreso aprueba Ley de Proteccion de Bosques Amazonicos con 105 votos a favor',
+  excerpt: 'La nueva ley establece sanciones mas severas para la tala ilegal y crea un fondo de reforestacion de 500 millones de soles para la conservacion de la Amazonia peruana.',
   category: 'ULTIMO MINUTO',
-  author: 'Redacción SHP',
+  author: 'Redaccion SHP',
   time: 'En vivo',
   views: '32,500',
   image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=800&q=80',
 };
 
 export default function BreakingNews() {
+  const { country } = useCountry();
   const [selectedNews, setSelectedNews] = useState(null);
 
-  const handleOpen = useCallback(() => setSelectedNews(BREAKING_NEWS), []);
+  const news = useMemo(() => {
+    if (country && PAISES_DATA[country]?.breakingNews) return PAISES_DATA[country].breakingNews;
+    return DEFAULT_BREAKING;
+  }, [country]);
+
+  const handleOpen = useCallback(() => setSelectedNews(news), [news]);
 
   return (
     <>
@@ -26,7 +34,7 @@ export default function BreakingNews() {
             </div>
             <div className="breaking-text">
               <h3>NOTICIA DE ULTIMO MINUTO</h3>
-              <p>Congreso aprueba Ley de Proteccion de Bosques Amazonicos con 105 votos a favor</p>
+              <p>{news.title}</p>
             </div>
             <span className="breaking-btn">Ver Detalles</span>
           </div>

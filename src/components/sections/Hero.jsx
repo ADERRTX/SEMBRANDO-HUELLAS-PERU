@@ -1,17 +1,31 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useCountry } from '../../contexts/CountryContext';
 import { HERO_SLIDES } from '../../constants';
+import { PAISES_DATA } from '../../data/countries';
 import NewsModal from '../ui/NewsModal';
 
 export default function Hero() {
   const { t } = useLanguage();
+  const { country } = useCountry();
   const [current, setCurrent] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [selectedNews, setSelectedNews] = useState(null);
   const [paused, setPaused] = useState(false);
 
-  const next = useCallback(() => setCurrent((c) => (c + 1) % HERO_SLIDES.length), []);
-  const prev = useCallback(() => setCurrent((c) => (c - 1 + HERO_SLIDES.length) % HERO_SLIDES.length), []);
+  const slides = useMemo(() => {
+    if (!country || !PAISES_DATA[country]) return HERO_SLIDES;
+    const paisData = PAISES_DATA[country];
+    const countrySlides = [
+      ...(paisData.medioAmbiente || []).map(n => ({ ...n, category: 'MEDIO AMBIENTE' })),
+      ...(paisData.flora || []).map(n => ({ ...n, category: 'FLORA' })),
+      ...(paisData.fauna || []).map(n => ({ ...n, category: 'FAUNA' })),
+    ];
+    return countrySlides.length > 0 ? countrySlides : HERO_SLIDES;
+  }, [country]);
+
+  const next = useCallback(() => setCurrent((c) => (c + 1) % slides.length), [slides.length]);
+  const prev = useCallback(() => setCurrent((c) => (c - 1 + slides.length) % slides.length), [slides.length]);
 
   useEffect(() => {
     if (paused) return;
@@ -19,7 +33,7 @@ export default function Hero() {
     return () => clearInterval(iv);
   }, [next, paused]);
 
-  const slide = HERO_SLIDES[current];
+  const slide = slides[current];
 
   return (
     <>
@@ -30,7 +44,7 @@ export default function Hero() {
         onMouseLeave={() => setPaused(false)}
       >
         <div className="carousel-container">
-          {HERO_SLIDES.map((s, i) => (
+          {slides.map((s, i) => (
             <div key={i} className={`carousel-slide ${i === current ? 'active' : ''}`}>
               {s.image ? (
                 <div className="slide-image" style={{
@@ -66,7 +80,7 @@ export default function Hero() {
         <button className="carousel-btn next" onClick={() => { next(); }}><i className="fas fa-chevron-right" /></button>
 
         <div className="carousel-indicators">
-          {HERO_SLIDES.map((_, i) => (
+          {slides.map((_, i) => (
             <button
               key={i}
               className={`indicator ${i === current ? 'active' : ''}`}

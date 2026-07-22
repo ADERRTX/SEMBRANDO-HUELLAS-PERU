@@ -4,6 +4,7 @@ import MetaTags from './components/layout/MetaTags';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ScrollToTopBtn from './components/layout/ScrollToTop';
+import { CountryProvider } from './contexts/CountryContext';
 
 const Home = lazy(() => import('./pages/Home'));
 const MedioAmbientePage = lazy(() => import('./pages/MedioAmbientePage'));
@@ -228,14 +229,16 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <div className="app">
-        <ScrollLogo />
-        <MetaTags />
-        <Navbar />
-        <AppRoutes />
-        <Footer />
-        <ScrollToTopBtn />
-      </div>
+      <CountryProvider>
+        <div className="app">
+          <ScrollLogo />
+          <MetaTags />
+          <Navbar />
+          <AppRoutes />
+          <Footer />
+          <ScrollToTopBtn />
+        </div>
+      </CountryProvider>
     </BrowserRouter>
   );
 }

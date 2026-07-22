@@ -1,11 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useCountry } from '../../contexts/CountryContext';
 import { LANGUAGES } from '../../i18n/translations';
-import { SITE_CONFIG, NACIONALES } from '../../constants';
+import { SITE_CONFIG } from '../../constants';
+import { PAISES_DATA, COUNTRY_LIST } from '../../data/countries';
 
 export default function Navbar() {
   const { language, setLanguage, t } = useLanguage();
+  const { country, setCountry } = useCountry();
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -13,6 +16,7 @@ export default function Navbar() {
   const [langSearch, setLangSearch] = useState('');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [countrySearch, setCountrySearch] = useState('');
   const [theme, setTheme] = useState(() => localStorage.getItem('sh_theme') || 'light');
   const [logoIdx, setLogoIdx] = useState(0);
   const langRef = useRef(null);
@@ -72,6 +76,31 @@ export default function Navbar() {
     || LANGUAGES[0];
 
   const isActive = (path) => location.pathname === path ? 'nav-link active' : 'nav-link';
+
+  const filteredCountries = useMemo(() => {
+    if (!countrySearch) return COUNTRY_LIST;
+    const q = countrySearch.toLowerCase();
+    return COUNTRY_LIST.filter((c) => {
+      const data = PAISES_DATA[c];
+      return c.toLowerCase().includes(q) ||
+        (data?.idiomaNombre && data.idiomaNombre.toLowerCase().includes(q)) ||
+        (data?.bandera && data.bandera.includes(q));
+    });
+  }, [countrySearch]);
+
+  const selectCountry = (name) => {
+    if (country === name) {
+      setCountry(null);
+    } else {
+      setCountry(name);
+      const paisData = PAISES_DATA[name];
+      if (paisData?.idioma) {
+        setLanguage(paisData.idioma);
+      }
+    }
+    setDropdownOpen(false);
+    setCountrySearch('');
+  };
 
   return (
     <header className={`main-header ${scrolled ? 'scrolled' : ''} ${hidden ? 'header-hidden' : ''}`} id="mainHeader">
@@ -177,9 +206,35 @@ export default function Navbar() {
                 <i className="fas fa-flag" /> {t('nav.nacionales')} <i className="fas fa-chevron-down" />
               </a>
               <div className={`dropdown-menu ${dropdownOpen ? 'active' : ''}`}>
-                {NACIONALES.map((dep) => (
-                  <a key={dep} href="#" onClick={(e) => e.preventDefault()}>{dep}</a>
-                ))}
+                <div className="lang-search">
+                  <input
+                    type="text"
+                    placeholder="Buscar pais..."
+                    value={countrySearch}
+                    onChange={(e) => setCountrySearch(e.target.value)}
+                  />
+                </div>
+                <div className="lang-list">
+                  {filteredCountries.map((name) => {
+                    const data = PAISES_DATA[name];
+                    return (
+                      <a
+                        key={name}
+                        href="#"
+                        className={`lang-option ${country === name ? 'active' : ''}`}
+                        onClick={(e) => { e.preventDefault(); selectCountry(name); }}
+                      >
+                        <span className="lang-flag">{data?.bandera}</span> {name}
+                        <span style={{ fontSize: '0.75em', opacity: 0.6, marginLeft: 6 }}>{data?.idiomaNombre}</span>
+                      </a>
+                    );
+                  })}
+                </div>
+                {country && (
+                  <a href="#" className="lang-option" style={{ color: 'var(--danger)', fontWeight: 600, borderTop: '1px solid var(--border-color)' }} onClick={(e) => { e.preventDefault(); selectCountry(country); }}>
+                    <i className="fas fa-times" /> Quitar filtro
+                  </a>
+                )}
               </div>
             </li>
             <li>

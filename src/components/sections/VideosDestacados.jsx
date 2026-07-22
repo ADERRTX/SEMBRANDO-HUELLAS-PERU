@@ -1,14 +1,22 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useCountry } from '../../contexts/CountryContext';
 import { VIDEOS_DATA } from '../../constants';
+import { PAISES_DATA } from '../../data/countries';
 import { Link } from 'react-router-dom';
 
 export default function VideosDestacados() {
   const { t } = useLanguage();
+  const { country } = useCountry();
   const [modalVideo, setModalVideo] = useState(null);
 
-  const mainVideo = VIDEOS_DATA[0];
-  const sideVideos = VIDEOS_DATA.slice(1);
+  const videos = useMemo(() => {
+    if (country && PAISES_DATA[country]?.videos) return PAISES_DATA[country].videos;
+    return VIDEOS_DATA;
+  }, [country]);
+
+  const mainVideo = videos[0];
+  const sideVideos = videos.slice(1);
 
   return (
     <>

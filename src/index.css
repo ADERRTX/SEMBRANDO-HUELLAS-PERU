@@ -845,6 +845,13 @@ a {
   padding-left: 25px;
 }
 
+.dropdown-menu a.active {
+  background: var(--primary);
+  color: white;
+  font-weight: 600;
+  border-left: 3px solid var(--secondary);
+}
+
 /* ============================================
    NEWS TICKER
    ============================================ */

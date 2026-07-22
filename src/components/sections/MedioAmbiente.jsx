@@ -1,14 +1,23 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useCountry } from '../../contexts/CountryContext';
 import { MEDIO_AMBIENTE_NEWS } from '../../constants';
+import { PAISES_DATA } from '../../data/countries';
 import { Link } from 'react-router-dom';
 import NewsModal from '../ui/NewsModal';
 
 export default function MedioAmbiente() {
   const { t } = useLanguage();
+  const { country } = useCountry();
   const [selectedNews, setSelectedNews] = useState(null);
-  const featured = MEDIO_AMBIENTE_NEWS[0];
-  const others = MEDIO_AMBIENTE_NEWS.slice(1);
+
+  const newsList = useMemo(() => {
+    if (country && PAISES_DATA[country]?.medioAmbiente) return PAISES_DATA[country].medioAmbiente;
+    return MEDIO_AMBIENTE_NEWS;
+  }, [country]);
+
+  const featured = newsList[0];
+  const others = newsList.slice(1);
 
   const openNews = useCallback((news) => setSelectedNews(news), []);
 
