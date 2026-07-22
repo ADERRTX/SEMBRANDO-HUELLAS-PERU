@@ -8,6 +8,7 @@ export default function Navbar() {
   const { language, setLanguage, t } = useLanguage();
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [langSearch, setLangSearch] = useState('');
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -16,12 +17,18 @@ export default function Navbar() {
   const [logoIdx, setLogoIdx] = useState(0);
   const langRef = useRef(null);
   const ddRef = useRef(null);
+  const lastScrollY = useRef(0);
 
   const logos = [SITE_CONFIG.logoFull, SITE_CONFIG.logo];
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', onScroll);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 50);
+      setHidden(y > lastScrollY.current && y > 80);
+      lastScrollY.current = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
@@ -56,15 +63,18 @@ export default function Navbar() {
 
   const filteredLangs = LANGUAGES.filter(
     (l) => l.label.toLowerCase().includes(langSearch.toLowerCase()) ||
-           l.native.toLowerCase().includes(langSearch.toLowerCase())
+           l.native.toLowerCase().includes(langSearch.toLowerCase()) ||
+           l.flag.includes(langSearch)
   );
 
-  const currentLang = LANGUAGES.find((l) => l.code === language) || LANGUAGES[0];
+  const currentLang = LANGUAGES.find((l) => l.label.includes('Perú') && l.code === language)
+    || LANGUAGES.find((l) => l.code === language)
+    || LANGUAGES[0];
 
   const isActive = (path) => location.pathname === path ? 'nav-link active' : 'nav-link';
 
   return (
-    <header className={`main-header ${scrolled ? 'scrolled' : ''}`} id="mainHeader">
+    <header className={`main-header ${scrolled ? 'scrolled' : ''} ${hidden ? 'header-hidden' : ''}`} id="mainHeader">
       {/* TOP BAR */}
       <div className="header-top">
         <div className="container">
@@ -109,8 +119,8 @@ export default function Navbar() {
             {/* Language Selector */}
             <div className="lang-selector" ref={langRef}>
               <button className="lang-btn" onClick={() => setLangOpen(!langOpen)}>
-                <i className="fas fa-globe" />
-                <span>{currentLang.code.toUpperCase()}</span>
+                <span>{currentLang.flag}</span>
+                <span className="lang-btn-text">{currentLang.label.split('(')[0].trim()}</span>
                 <i className="fas fa-chevron-down" />
               </button>
               <div className={`lang-dropdown ${langOpen ? 'active' : ''}`}>
@@ -123,10 +133,10 @@ export default function Navbar() {
                   />
                 </div>
                 <div className="lang-list">
-                  {filteredLangs.map((lang) => (
+                  {filteredLangs.map((lang, i) => (
                     <div
-                      key={lang.code}
-                      className={`lang-option ${language === lang.code ? 'active' : ''}`}
+                      key={`${lang.code}-${lang.label}`}
+                      className={`lang-option ${language === lang.code && currentLang.label === lang.label ? 'active' : ''}`}
                       onClick={() => { setLanguage(lang.code); setLangOpen(false); setLangSearch(''); }}
                     >
                       <span className="lang-flag">{lang.flag}</span> {lang.label}

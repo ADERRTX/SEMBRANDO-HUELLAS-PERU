@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MEDIO_AMBIENTE_NEWS, FLORA_FAUNA_NEWS, CIENCIA_NEWS, ECONOMIA_NEWS } from '../../constants';
 import NewsModal from '../ui/NewsModal';
 
@@ -17,12 +17,15 @@ const IMPORTANT_NEWS = ALL_NEWS
 const HEADER_WORDS = ['Noticias', 'Ultima Hora', 'Flash', 'Breaking'];
 const HEADER_ICONS = ['fa-fire', 'fa-bolt', 'fa-exclamation-triangle', 'fa-broadcast-tower'];
 
+const SLIDE_INTERVAL = 20000;
+
 export default function BreakingNewsCarousel() {
   const [selectedNews, setSelectedNews] = useState(null);
-  const scrollRef = useRef(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [fadeState, setFadeState] = useState('visible');
   const [headerIdx, setHeaderIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const intervalRef = useRef(null);
 
   useEffect(() => {
     const iv = setInterval(() => {
@@ -31,39 +34,33 @@ export default function BreakingNewsCarousel() {
     return () => clearInterval(iv);
   }, []);
 
-  const checkScroll = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const maxScroll = el.scrollWidth - el.clientWidth;
-    setCanScrollLeft(el.scrollLeft > 5);
-    setCanScrollRight(el.scrollLeft < maxScroll - 5);
-  }, []);
+  const goTo = (idx) => {
+    setFadeState('hidden');
+    setTimeout(() => {
+      setCurrentIdx(idx);
+      setFadeState('visible');
+    }, 300);
+  };
+
+  const next = () => goTo((currentIdx + 1) % IMPORTANT_NEWS.length);
+  const prev = () => goTo((currentIdx - 1 + IMPORTANT_NEWS.length) % IMPORTANT_NEWS.length);
 
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const raf = requestAnimationFrame(() => checkScroll());
-    el.addEventListener('scroll', checkScroll, { passive: true });
-    window.addEventListener('resize', checkScroll);
-    return () => {
-      cancelAnimationFrame(raf);
-      el.removeEventListener('scroll', checkScroll);
-      window.removeEventListener('resize', checkScroll);
-    };
-  }, [checkScroll]);
-
-  const scroll = (dir) => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const cardWidth = el.querySelector('.breaking-carousel-card')?.offsetWidth || 300;
-    const gap = 20;
-    el.scrollBy({ left: dir * (cardWidth + gap), behavior: 'smooth' });
-  };
+    if (paused) return;
+    intervalRef.current = setInterval(next, SLIDE_INTERVAL);
+    return () => clearInterval(intervalRef.current);
+  }, [paused, currentIdx]);
 
   if (IMPORTANT_NEWS.length === 0) return null;
 
+  const news = IMPORTANT_NEWS[currentIdx];
+
   return (
-    <section className="news-section breaking-carousel-section">
+    <section
+      className="news-section breaking-carousel-section"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       <div className="container">
         <div className="section-header">
           <div className="section-title-group">
@@ -76,49 +73,49 @@ export default function BreakingNewsCarousel() {
             </h2>
           </div>
           <div className="carousel-nav-btns">
-            <button
-              className={`carousel-nav-btn ${!canScrollLeft ? 'disabled' : ''}`}
-              onClick={() => scroll(-1)}
-              disabled={!canScrollLeft}
-              aria-label="Desplazar a la izquierda"
-            >
+            <button className="carousel-nav-btn" onClick={prev} aria-label="Anterior">
               <i className="fas fa-chevron-left" />
             </button>
-            <button
-              className={`carousel-nav-btn ${!canScrollRight ? 'disabled' : ''}`}
-              onClick={() => scroll(1)}
-              disabled={!canScrollRight}
-              aria-label="Desplazar a la derecha"
-            >
+            <button className="carousel-nav-btn" onClick={next} aria-label="Siguiente">
               <i className="fas fa-chevron-right" />
             </button>
           </div>
         </div>
       </div>
-      <div className="breaking-carousel-wrapper">
-        <div className="breaking-carousel-track" ref={scrollRef}>
-          {IMPORTANT_NEWS.map((news) => (
-            <article key={news.uniqueId} className="breaking-carousel-card" onClick={() => setSelectedNews(news)}>
-              <div className="card-image">
-                <div className="image-placeholder" style={{
-                  backgroundImage: news.image ? `url(${news.image})` : 'linear-gradient(135deg, #1a5c1a 0%, #2d8a2d 100%)',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                }} />
-                <span className="card-category">{news.section}</span>
-              </div>
-              <div className="card-content">
-                <h3>{news.title}</h3>
-                <p>{news.excerpt}</p>
-                <div className="card-meta">
-                  <span><i className="fas fa-user" /> {news.author}</span>
-                  <span><i className="fas fa-eye" /> {news.views}</span>
-                </div>
-              </div>
-            </article>
+
+      <div className="fade-carousel-container">
+        <div className={`fade-carousel-slide ${fadeState}`} onClick={() => setSelectedNews(news)}>
+          <div
+            className="fade-carousel-image"
+            style={{
+              backgroundImage: news.image
+                ? `url(${news.image})`
+                : 'linear-gradient(135deg, #1a5c1a 0%, #2d8a2d 100%)',
+            }}
+          />
+          <div className="fade-carousel-overlay">
+            <span className="fade-carousel-category">{news.section}</span>
+            <h3 className="fade-carousel-title">{news.title}</h3>
+            <p className="fade-carousel-excerpt">{news.excerpt}</p>
+            <div className="fade-carousel-meta">
+              <span><i className="fas fa-user" /> {news.author}</span>
+              <span><i className="fas fa-eye" /> {news.views}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="fade-carousel-dots">
+          {IMPORTANT_NEWS.map((_, i) => (
+            <button
+              key={i}
+              className={`fade-carousel-dot ${i === currentIdx ? 'active' : ''}`}
+              onClick={() => goTo(i)}
+              aria-label={`Slide ${i + 1}`}
+            />
           ))}
         </div>
       </div>
+
       <NewsModal news={selectedNews} onClose={() => setSelectedNews(null)} />
     </section>
   );

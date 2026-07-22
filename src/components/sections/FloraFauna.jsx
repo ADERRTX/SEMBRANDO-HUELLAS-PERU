@@ -41,7 +41,7 @@ export default function FloraFauna() {
           </article>
         ))}
         <div className="side-cards">
-          {FLORA_FAUNA_NEWS.slice(2).map((news) => (
+          {FLORA_FAUNA_NEWS.slice(2, 6).map((news) => (
             <article key={news.id} className="news-card mini-card" onClick={() => openNews(news)}>
               <span className="card-category">{news.category}</span>
               <h4>{news.title}</h4>

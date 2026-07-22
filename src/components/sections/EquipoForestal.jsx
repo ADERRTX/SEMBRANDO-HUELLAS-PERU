@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { EQUIPO_FORESTAL } from '../../constants';
-import { sendReviewEmail, sendConfirmationEmail } from '../../services/emailService';
+import { sendReviewEmail } from '../../services/emailService';
 import { addSubmission } from '../../services/submissionsService';
 
 function validateEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
@@ -30,10 +30,7 @@ export default function EquipoForestal() {
     }, 1200);
   };
 
-  const handleSendReview = async () => {
-    setSending(true);
-    setEmailSent(false);
-
+  const handleSendReview = () => {
     addSubmission({
       author: form.author,
       email: form.email,
@@ -43,23 +40,17 @@ export default function EquipoForestal() {
     });
 
     try {
-      await sendReviewEmail({
+      sendReviewEmail({
         name: form.author,
         email: form.email,
         title: form.title,
         category: form.category,
         content: form.content,
       });
-      await sendConfirmationEmail({
-        name: form.author,
-        email: form.email,
-        title: form.title,
-      });
       setEmailSent(true);
     } catch {
       setEmailSent(true);
     } finally {
-      setSending(false);
       setSubmitted(true);
     }
   };
@@ -243,12 +234,8 @@ export default function EquipoForestal() {
                 <button className="team-review-btn secondary" onClick={() => { setSubmitted(true); setEmailSent(false); }}>
                   <i className="fas fa-check" /> No, está bien así
                 </button>
-                <button className="team-review-btn primary" onClick={handleSendReview} disabled={sending}>
-                  {sending ? (
-                    <><i className="fas fa-spinner fa-spin" /> Enviando...</>
-                  ) : (
-                    <><i className="fas fa-paper-plane" /> Enviar a Revisión</>
-                  )}
+                <button className="team-review-btn primary" onClick={handleSendReview}>
+                  <i className="fas fa-paper-plane" /> Enviar a Revisión
                 </button>
               </div>
             </div>
@@ -266,12 +253,12 @@ export default function EquipoForestal() {
               <div className="team-success-icon">
                 <i className="fas fa-check-circle" />
               </div>
-              <h3>¡Todo listo!</h3>
-              <p>Gracias por tu contribución. Nuestro equipo revisará tu noticia pronto.</p>
+              <h3>¡Solicitud enviada!</h3>
+              <p>Se abrió tu correo con la solicitud de revisión. Envíala para que llegue a nuestro equipo.</p>
               {emailSent && (
                 <div className="team-email-notification">
                   <i className="fas fa-envelope-open-text" />
-                  <span>Se ha enviado un correo de confirmación a <strong>{form.email}</strong></span>
+                  <span>Tu cliente de correo se abrió para enviar la noticia a <strong>educaccionyaccionporlaamazonia@gmail.com</strong></span>
                 </div>
               )}
               <button className="team-contact-btn" onClick={() => { setStep('team'); setSubmitted(false); setEmailSent(false); setForm({ title: '', category: '', content: '', author: '', email: '' }); }}>

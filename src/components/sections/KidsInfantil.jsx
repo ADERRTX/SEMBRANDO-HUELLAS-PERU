@@ -33,7 +33,10 @@ const allQuizQuestions = [
   { q: '¿Qué es la deforestación?', options: ['Plantar árboles', 'Cortar bosques masivamente', 'Crear parques'], answer: 1, explanation: 'La deforestación es la destrucción de bosques, principal causa de pérdida de biodiversidad y cambio climático.' },
   { q: '¿Cuántos años tarda una botella de plástico en degradarse?', options: ['50 años', '200 años', '450 años'], answer: 2, explanation: 'Una botella de plástico tarda hasta 450 años en degradarse. ¡Por eso es tan importante reciclar!' },
   { q: '¿Qué es un bioma?', options: ['Un tipo de virus', 'Un ecosistema con clima similar', 'Un mineral'], answer: 1, explanation: 'Un bioma es un conjunto de ecosistemas con clima, flora y fauna similares, como el desierto o la selva.' },
-  { q: '¿Cuántas tonelabras de basura llegan al mar cada año?', options: ['1 millón', '8 millones', '20 millones'], answer: 1, explanation: 'Se estima que 8 millones de toneladas de plástico llegan a los océanos cada año, dañando la vida marina.' },
+  { q: '¿Cuántas toneladas de basura llegan al mar cada año?', options: ['1 millón', '8 millones', '20 millones'], answer: 1, explanation: 'Se estima que 8 millones de toneladas de plástico llegan a los océanos cada año, dañando la vida marina.' },
+  { q: '¿Qué es el efecto invernadero?', options: ['Un invernadero real', 'Calentamiento del planeta', 'Un tipo de planta'], answer: 1, explanation: 'Sin él, la Tierra estaría a -18°C, pero demasiado causa calentamiento global.' },
+  { q: '¿Cuántas especies de animales hay en el Amazonas?', options: ['100,000', '500,000', '1,000,000'], answer: 1, explanation: 'La Amazonía alberga más de 500,000 especies, incluyendo peces, aves, mamíferos, reptiles e insectos.' },
+  { q: '¿Qué animal puede regenerar sus extremidades?', options: ['La lagartija', 'El perro', 'El gato'], answer: 0, explanation: 'Las lagartijas pueden regenerar la cola, y algunos anfibios incluso órganos enteros.' },
 ];
 
 const memoryPairs = [
@@ -185,7 +188,7 @@ const videoCategories = [
     color: '#2e7d32',
     videos: [
       { id: 'KJXhkU8BGB4', title: 'La Amazonía: El Pulmón del Mundo', desc: 'Descubre por qué la selva amazónica es vital para todo el planeta.' },
-      { id: 'qE3fB0B0mQ4', title: 'Animales de la Amazonía', desc: 'Conoce losIncreíbles animales que habitan en la selva tropical.' },
+      { id: 'qE3fB0B0mQ4', title: 'Animales de la Amazonía', desc: 'Conoce los Increíbles animales que habitan en la selva tropical.' },
       { id: 'TQ3nW5pFH20', title: '¿Por qué es importante el Amazonas?', desc: 'El río más caudaloso y su ecosistema único.' },
     ],
   },
@@ -217,6 +220,26 @@ const videoCategories = [
       { id: 'G4H1N2Xoo5o', title: '¿Qué es el Calentamiento Global?', desc: 'Explicado de forma sencilla para entender qué le pasa a nuestro planeta.' },
       { id: 'L5XMGsYbNmI', title: '¿Cómo podemos detener el Cambio Climático?', desc: 'Acciones sencillas que todos podemos hacer desde casa.' },
       { id: 'nzgHp1xKmVc', title: 'El Efecto Invernadero Explicado', desc: 'La ciencia detrás del cambio climático, paso a paso.' },
+    ],
+  },
+  {
+    id: 'fauna',
+    title: '🦁 Animales del Mundo',
+    color: '#795548',
+    videos: [
+      { id: 'hE7CQwFV5mM', title: 'Los 5 Felinos Más Grandes del Mundo', desc: 'Jaguares, leones, tigres, leopardos y guepardos.' },
+      { id: 'TQ3nW5pFH20', title: 'Migraciones Increíbles', desc: 'Los animales que viajan miles de kilómetros cada año.' },
+      { id: '9Ax7mRwXQxg', title: 'Vida Marina: Descenso a las Profundidades', desc: 'Los misterios del fondo del océano.' },
+    ],
+  },
+  {
+    id: 'energia',
+    title: '⚡ Energías Limpias',
+    color: '#9c27b0',
+    videos: [
+      { id: 'G4H1N2Xoo5o', title: 'Energía Solar para Niños', desc: 'Cómo funciona la energía del sol.' },
+      { id: 'L5XMGsYbNmI', title: 'Energía Eólica: Los Molinos de Viento', desc: '¿Cómo el viento se convierte en electricidad?' },
+      { id: 'nzgHp1xKmVc', title: 'Futuro Verde: Ciudades Sostenibles', desc: 'Cómo serán las ciudades del futuro.' },
     ],
   },
 ];

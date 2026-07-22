@@ -467,6 +467,11 @@ a {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
+.main-header.header-hidden {
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+}
+
 .header-top {
   background: var(--primary-dark);
   color: white;
@@ -556,6 +561,11 @@ a {
 .logo-container {
   position: relative;
   height: 55px;
+  transition: height 0.3s ease;
+}
+
+.main-header.scrolled .logo-container {
+  height: 38px;
 }
 
 .logo-swapper {
@@ -563,6 +573,12 @@ a {
   width: 200px;
   height: 55px;
   overflow: hidden;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.main-header.scrolled .logo-swapper {
+  width: 140px;
+  height: 38px;
 }
 
 .swapper-logo {
@@ -575,7 +591,11 @@ a {
   object-fit: contain;
   opacity: 0;
   transform: scale(0.8) translateY(5px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition: opacity 0.5s ease, transform 0.5s ease, height 0.3s ease;
+}
+
+.main-header.scrolled .swapper-logo {
+  height: 38px;
 }
 
 .swapper-logo.active {
@@ -599,17 +619,25 @@ a {
   align-items: center;
   gap: 6px;
   background: var(--bg-secondary);
-  border: 2px solid var(--border-color);
-  border-radius: 30px;
-  padding: 8px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
   cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.85rem;
   color: var(--text-primary);
   transition: var(--transition);
 }
 
-.lang-btn:hover { border-color: var(--primary); }
+.lang-btn-text {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lang-btn:hover {
+  border-color: var(--primary);
+}
 
 .lang-btn i.fa-chevron-down {
   font-size: 0.7rem;
@@ -1906,7 +1934,7 @@ a {
 
 .image-placeholder {
   width: 100%;
-  height: 200px;
+  height: 240px;
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   transition: var(--transition);
 }
@@ -2002,13 +2030,13 @@ a {
 }
 
 .horizontal-card .card-image {
-  width: 250px;
+  width: 320px;
   flex-shrink: 0;
 }
 
 .horizontal-card .image-placeholder {
   height: 100%;
-  min-height: 180px;
+  min-height: 240px;
 }
 
 .horizontal-card .card-content {
@@ -2911,51 +2939,84 @@ a {
   cursor: not-allowed;
 }
 
-.breaking-carousel-wrapper {
-  overflow: hidden;
+.fade-carousel-container {
+  max-width: 900px;
+  margin: 20px auto 0;
+  padding: 0 20px;
 }
 
-.breaking-carousel-track {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  padding: 0 20px 20px;
-  scrollbar-width: none;
-}
-
-.breaking-carousel-track::-webkit-scrollbar { display: none; }
-
-.breaking-carousel-card {
-  flex: 0 0 300px;
-  scroll-snap-align: start;
-  background: var(--bg-primary);
-  border-radius: var(--radius-md);
+.fade-carousel-slide {
+  position: relative;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
-  border: 1px solid var(--border-color);
   cursor: pointer;
+  aspect-ratio: 16 / 7;
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-md);
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
 }
 
-.breaking-carousel-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
+.fade-carousel-slide.hidden {
+  opacity: 0;
 }
 
-.breaking-carousel-card .image-placeholder {
-  height: 160px;
+.fade-carousel-slide.visible {
+  opacity: 1;
 }
 
-.breaking-carousel-card .card-content {
-  padding: 16px;
+.fade-carousel-image {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 6s ease;
+  animation: fadeZoomIn 6s ease forwards;
 }
 
-.breaking-carousel-card .card-content h3 {
-  font-size: 1rem;
+.fade-carousel-slide:hover .fade-carousel-image {
+  transform: scale(1.05);
+}
+
+@keyframes fadeZoomIn {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.04); }
+}
+
+.fade-carousel-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 30px 24px 20px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+  color: white;
+}
+
+.fade-carousel-category {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  font-size: 0.7rem;
   font-weight: 700;
-  line-height: 1.4;
+  padding: 3px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.fade-carousel-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+
+.fade-carousel-excerpt {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
   margin-bottom: 8px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -2963,15 +3024,42 @@ a {
   overflow: hidden;
 }
 
-.breaking-carousel-card .card-content p {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  line-height: 1.5;
-  margin-bottom: 10px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.fade-carousel-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.fade-carousel-meta i {
+  margin-right: 4px;
+}
+
+.fade-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.fade-carousel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.fade-carousel-dot.active {
+  background: var(--primary);
+  transform: scale(1.25);
+}
+
+.fade-carousel-dot:hover:not(.active) {
+  background: rgba(26, 92, 26, 0.3);
 }
 
 /* ============================================
@@ -2982,7 +3070,9 @@ a {
   .news-modal-image img { height: 200px; }
   .news-modal-body { padding: 20px; }
   .news-modal-title { font-size: 1.3rem; }
-  .breaking-carousel-card { flex: 0 0 260px; }
+  .fade-carousel-slide { aspect-ratio: 16 / 9; }
+  .fade-carousel-title { font-size: 1.1rem; }
+  .fade-carousel-excerpt { font-size: 0.82rem; }
   .splash-title { font-size: 1.8rem; letter-spacing: 2px; }
   .splash-subtitle { font-size: 1rem; }
   .splash-stats { gap: 16px; }
@@ -2996,12 +3086,5 @@ a {
 }
 
 /* ============================================
-   ANIMAL CURSOR
+   (cursor removed)
    ============================================ */
-*, *::before, *::after {
-  cursor: none !important;
-}
-
-.animal-cursor {
-  will-change: transform;
-}

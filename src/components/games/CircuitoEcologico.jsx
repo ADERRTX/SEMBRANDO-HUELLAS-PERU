@@ -36,11 +36,14 @@ const STATIONS = [
 ]
 
 const ANIMAL_QUESTIONS = [
-  { animal: '🦜', nombre: 'Guacamayo', datos: 'Vive en la Amazonía y tiene plumas de colores brillantes.' },
-  { animal: '🐒', nombre: 'Mono', datos: 'Es un primate que salta entre los árboles de la selva.' },
-  { animal: '🐢', nombre: 'Tortuga', datos: 'Reptil de caparazón duro que vive en ríos amazónicos.' },
-  { animal: '🐆', nombre: 'Jaguar', datos: 'El felino más grande de América, vive en la Amazonía.' },
-  { animal: '🦦', nombre: 'Nutria', datos: 'Mamífero acuático que habita en los ríos de la selva.' },
+  { animal: '🦜', nombre: 'Guacamayo', datos: 'Vive en la Amazonía y tiene plumas de colores brillantes. Puede vivir hasta 80 años.' },
+  { animal: '🐒', nombre: 'Mono Araña', datos: 'Es un primate que salta entre los árboles de la selva usando sus largos brazos.' },
+  { animal: '🐢', nombre: 'Tortuga', datos: 'Reptil de caparazón duro que habita en ríos amazónicos y puede vivir más de 100 años.' },
+  { animal: '🐆', nombre: 'Jaguar', datos: 'El felino más grande de América. Tiene la mordida más fuerte de todos los felinos.' },
+  { animal: '🦦', nombre: 'Nutria Gigante', datos: 'Mamífero acuático que habita en los ríos de la selva. Es una de las más grandes del mundo.' },
+  { animal: '🐊', nombre: 'Caimán Negro', datos: 'El reptil más grande de la Amazonía, puede medir hasta 5 metros de largo.' },
+  { animal: '🦩', nombre: 'Flamenco', datos: 'Ave de plumas rosadas que habita en lagunas costeras. Su color viene de los camarones.' },
+  { animal: '🦋', nombre: 'Morpho Azul', datos: 'Mariposa con alas iridiscentes azul brillante que habita los bosques tropicales.' },
 ]
 
 const ANIMAL_CHOICES = ['🦜', '🐒', '🐢', '🐆', '🦦', '🐊', '🦋', '🐸', '🐟', '🐠', '🐡', '🐙', '🦀', '🦐', '🦑', '🐙']
@@ -97,14 +100,34 @@ const QUESTIONS = [
     correcta: 0,
   },
   {
-    pregunta: '¿Qué significa "Sembrando Huellas Perú"?',
-    opciones: [
-      'Una organización ambiental que educa para conservar la Amazonía',
-      'Una empresa maderera',
-      'Un zoológico',
-      'Una escuela',
-    ],
-    correcta: 0,
+    pregunta: '¿Qué porcentaje del oxígeno mundial produce la Amazonía?',
+    opciones: ['5%', '10%', '20%', '50%'],
+    correcta: 2,
+  },
+  {
+    pregunta: '¿Cuál es el río más caudaloso del mundo?',
+    opciones: ['Río Nilo', 'Río Misisipi', 'Río Amazonas', 'Río Yangtsé'],
+    correcta: 2,
+  },
+  {
+    pregunta: '¿Qué animal está en peligro de extinción en Perú?',
+    opciones: ['El jaguar', 'El cóndor andino', 'Todos los anteriores', 'El perro'],
+    correcta: 2,
+  },
+  {
+    pregunta: '¿Cuántas toneladas de plástico llegan al mar cada año?',
+    opciones: ['500,000', '2 millones', '8 millones', '50 millones'],
+    correcta: 2,
+  },
+  {
+    pregunta: '¿Qué significa "biodiversidad"?',
+    opciones: ['Solo los animales', 'Variedad de seres vivos', 'Los árboles del bosque', 'El agua del río'],
+    correcta: 1,
+  },
+  {
+    pregunta: '¿Cuál es el animal terrestre más rápido del mundo?',
+    opciones: ['El león', 'El guepardo', 'El caballo', 'El leopardo'],
+    correcta: 1,
   },
 ]
 
