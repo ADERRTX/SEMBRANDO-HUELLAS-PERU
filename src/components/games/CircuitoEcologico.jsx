@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { playStationComplete, playStar, playVictory, playError, playConfetti } from '../../utils/sounds'
 
 const STATIONS = [
@@ -569,6 +569,7 @@ export default function CircuitoEcologico() {
   const [totalStars, setTotalStars] = useState(0)
   const [completed, setCompleted] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
+  const [stationTransition, setStationTransition] = useState(null)
 
   const handleStationComplete = useCallback((stationStars) => {
     const newStars = [...stars]
@@ -577,8 +578,13 @@ export default function CircuitoEcologico() {
     const total = newStars.reduce((a, b) => a + b, 0)
     setTotalStars(total)
 
-    if (currentStation < STATIONS.length - 1) {
-      setTimeout(() => setCurrentStation(s => s + 1), 500)
+    const nextStation = currentStation + 1
+    if (nextStation < STATIONS.length) {
+      setStationTransition({ from: STATIONS[currentStation], to: STATIONS[nextStation], stars: stationStars })
+      setTimeout(() => {
+        setStationTransition(null)
+        setCurrentStation(nextStation)
+      }, 1800)
     } else {
       playVictory()
       setCompleted(true)
@@ -597,6 +603,7 @@ export default function CircuitoEcologico() {
     setTotalStars(0)
     setCompleted(false)
     setShowConfetti(false)
+    setStationTransition(null)
   }
 
   if (completed) {
@@ -682,6 +689,64 @@ export default function CircuitoEcologico() {
         <div className="absolute top-0 left-0 w-64 h-64 bg-green-500 rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-0 w-80 h-80 bg-emerald-400 rounded-full blur-3xl" />
       </div>
+
+      <AnimatePresence>
+        {stationTransition && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.1 }}
+            className="absolute inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+          >
+            <div className="text-center">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: [0, 1.3, 1] }}
+                transition={{ duration: 0.5 }}
+                className="text-6xl mb-4"
+              >
+                {stationTransition.stars >= 2 ? '⭐' : '✅'}
+              </motion.div>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="text-green-300 font-bold text-xl mb-2"
+              >
+                {stationTransition.stars >= 3 ? '¡Perfecto!' : stationTransition.stars >= 2 ? '¡Muy bien!' : '¡Completado!'}
+              </motion.p>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                className="text-white/60 text-sm"
+              >
+                {'⭐'.repeat(stationTransition.stars)}
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 }}
+                className="mt-6 flex items-center justify-center gap-3 text-white/80"
+              >
+                <span className="text-2xl">{stationTransition.from.icon}</span>
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+                <span className="text-2xl">{stationTransition.to.icon}</span>
+              </motion.div>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1 }}
+                className="text-white/50 text-xs mt-2"
+              >
+                Siguiente: {stationTransition.to.title}
+              </motion.p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="relative z-10 h-full flex flex-col p-4 md:p-6">
         <ProgressBar current={currentStation} total={STATIONS.length} score={totalStars} />

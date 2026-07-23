@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { playCollect, playHit, playVictory, playLose, playTick } from '../../utils/sounds'
+import { playCollect, playHit, playVictory, playLose, playTick, playStar } from '../../utils/sounds'
 
 const GOOD = [
   { emoji: '🌱', label: 'Árbol', points: 10 },
@@ -10,6 +10,11 @@ const GOOD = [
   { emoji: '🐢', label: 'Tortuga', points: 15 },
   { emoji: '💧', label: 'Gota de agua', points: 5 },
   { emoji: '♻️', label: 'Reciclaje', points: 10 },
+  { emoji: '🦋', label: 'Mariposa', points: 20 },
+  { emoji: '🐸', label: 'Rana', points: 15 },
+  { emoji: '🌺', label: 'Flor', points: 10 },
+  { emoji: '🌻', label: 'Girasol', points: 10 },
+  { emoji: '🪺', label: 'Nido', points: 12 },
 ]
 
 const BAD = [
@@ -18,6 +23,14 @@ const BAD = [
   { emoji: '🚬', label: 'Colilla' },
   { emoji: '🛢️', label: 'Petróleo' },
   { emoji: '🪓', label: 'Hacha' },
+  { emoji: '🏭', label: 'Fábrica' },
+  { emoji: '☁️', label: 'Contaminación' },
+]
+
+const POWERUPS = [
+  { emoji: '🛡️', label: 'Escudo', type: 'shield', duration: 5000 },
+  { emoji: '⭐', label: 'Doble Puntos', type: 'double', duration: 6000 },
+  { emoji: '🧲', label: 'Imán', type: 'magnet', duration: 4000 },
 ]
 
 const GAME_DURATION = 60
@@ -61,6 +74,7 @@ function LeafParticle() {
 
 function FloatingObject({ obj }) {
   const isGood = obj.type === 'good'
+  const isPowerup = obj.type === 'powerup'
   return (
     <motion.div
       className="absolute z-10 select-none pointer-events-none"
@@ -81,6 +95,13 @@ function FloatingObject({ obj }) {
             className="absolute -inset-2 rounded-full border-2 border-green-400/40"
             animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.1, 0.4] }}
             transition={{ duration: 1, repeat: Infinity }}
+          />
+        )}
+        {isPowerup && (
+          <motion.div
+            className="absolute -inset-3 rounded-full border-2 border-yellow-400/60"
+            animate={{ scale: [1, 1.4, 1], opacity: [0.6, 0.2, 0.6] }}
+            transition={{ duration: 0.8, repeat: Infinity }}
           />
         )}
       </div>
@@ -115,6 +136,10 @@ export default function GuardianesAmazonia() {
   const [catcherX, setCatcherX] = useState(50)
   const [particles, setParticles] = useState([])
   const [flash, setFlash] = useState(null)
+  const [streak, setStreak] = useState(0)
+  const [maxStreak, setMaxStreak] = useState(0)
+  const [activePowerup, setActivePowerup] = useState(null)
+  const [comboText, setComboText] = useState(null)
 
   const areaRef = useRef(null)
   const animRef = useRef(null)
@@ -127,23 +152,47 @@ export default function GuardianesAmazonia() {
   const catcherXRef = useRef(50)
   const frameCountRef = useRef(0)
   const difficultyRef = useRef(1)
+  const streakRef = useRef(0)
+  const powerupRef = useRef(null)
+  const powerupTimerRef = useRef(null)
 
   const spawnObject = useCallback(() => {
-    const isGood = Math.random() < 0.65
-    const template = isGood ? random(GOOD) : random(BAD)
-    const size = 30 + Math.random() * 16
-    const speed = BASE_SPEED + Math.random() * SPEED_VARIANCE + (difficultyRef.current - 1) * 3
-    const obj = {
-      id: Date.now() + Math.random(),
-      emoji: template.emoji,
-      label: template.label,
-      type: isGood ? 'good' : 'bad',
-      points: isGood ? template.points : 0,
-      x: 5 + Math.random() * 90,
-      y: -8,
-      size,
-      speed,
+    const rand = Math.random()
+    let obj
+
+    if (rand < 0.08 && !powerupRef.current) {
+      const powerup = POWERUPS[Math.floor(Math.random() * POWERUPS.length)]
+      obj = {
+        id: Date.now() + Math.random(),
+        emoji: powerup.emoji,
+        label: powerup.label,
+        type: 'powerup',
+        powerupType: powerup.type,
+        powerupDuration: powerup.duration,
+        points: 0,
+        x: 5 + Math.random() * 90,
+        y: -8,
+        size: 34,
+        speed: BASE_SPEED * 0.8 + Math.random() * 4,
+      }
+    } else {
+      const isGood = rand < 0.65
+      const template = isGood ? random(GOOD) : random(BAD)
+      const size = 30 + Math.random() * 16
+      const speed = BASE_SPEED + Math.random() * SPEED_VARIANCE + (difficultyRef.current - 1) * 3
+      obj = {
+        id: Date.now() + Math.random(),
+        emoji: template.emoji,
+        label: template.label,
+        type: isGood ? 'good' : 'bad',
+        points: isGood ? template.points : 0,
+        x: 5 + Math.random() * 90,
+        y: -8,
+        size,
+        speed,
+      }
     }
+
     objectsRef.current = [...objectsRef.current, obj]
   }, [])
 
@@ -159,12 +208,33 @@ export default function GuardianesAmazonia() {
     }
   }, [])
 
+  const activatePowerup = useCallback((type, duration) => {
+    powerupRef.current = type
+    setActivePowerup(type)
+    playStar()
+
+    const comboMessages = {
+      shield: '🛡️ ¡Escudo activado!',
+      double: '⭐ ¡Doble puntos!',
+      magnet: '🧲 ¡Imán activo!',
+    }
+    setComboText(comboMessages[type])
+    setTimeout(() => setComboText(null), 1500)
+
+    if (powerupTimerRef.current) clearTimeout(powerupTimerRef.current)
+    powerupTimerRef.current = setTimeout(() => {
+      powerupRef.current = null
+      setActivePowerup(null)
+    }, duration)
+  }, [])
+
   const checkCollisions = useCallback(() => {
     const catcher = getCatcherBounds()
     const remaining = []
     const newParticles = []
     let hitBad = false
     let collected = false
+    let gotPowerup = false
 
     for (const obj of objectsRef.current) {
       if (obj.y >= 78 && obj.y <= 96) {
@@ -172,13 +242,29 @@ export default function GuardianesAmazonia() {
         const objRight = obj.x + 4
         if (objRight > catcher.left && objLeft < catcher.right) {
           if (obj.type === 'good') {
-            scoreRef.current += obj.points
+            const multiplier = powerupRef.current === 'double' ? 2 : 1
+            const streakBonus = streakRef.current >= 5 ? 5 : streakRef.current >= 3 ? 3 : 0
+            const points = obj.points * multiplier + streakBonus
+            scoreRef.current += points
+            streakRef.current++
             collected = true
-            newParticles.push({ x: obj.x, y: obj.y, emoji: '+'+obj.points, xDir: Math.random() > 0.5 ? 1 : -1 })
+            newParticles.push({ x: obj.x, y: obj.y, emoji: '+' + points, xDir: Math.random() > 0.5 ? 1 : -1 })
+            if (streakRef.current >= 3 && streakRef.current % 3 === 0) {
+              newParticles.push({ x: obj.x, y: obj.y - 5, emoji: '🔥', xDir: 0 })
+            }
+          } else if (obj.type === 'powerup') {
+            activatePowerup(obj.powerupType, obj.powerupDuration)
+            gotPowerup = true
+            newParticles.push({ x: obj.x, y: obj.y, emoji: obj.emoji, xDir: 0 })
           } else {
-            livesRef.current = Math.max(0, livesRef.current - 1)
-            hitBad = true
-            newParticles.push({ x: obj.x, y: obj.y, emoji: '💥', xDir: 0 })
+            if (powerupRef.current !== 'shield') {
+              livesRef.current = Math.max(0, livesRef.current - 1)
+              hitBad = true
+              streakRef.current = 0
+              newParticles.push({ x: obj.x, y: obj.y, emoji: '💥', xDir: 0 })
+            } else {
+              newParticles.push({ x: obj.x, y: obj.y, emoji: '🛡️', xDir: 0 })
+            }
           }
           continue
         }
@@ -190,11 +276,13 @@ export default function GuardianesAmazonia() {
     if (newParticles.length > 0) setParticles(prev => [...prev, ...newParticles])
     if (collected) { playCollect(); setFlash('green') }
     if (hitBad) { playHit(); setFlash('red') }
-    if (hitBad || collected) {
+    if (collected || hitBad || gotPowerup) {
       setScore(scoreRef.current)
       setLives(livesRef.current)
+      setStreak(streakRef.current)
+      setMaxStreak(prev => Math.max(prev, streakRef.current))
     }
-  }, [getCatcherBounds])
+  }, [getCatcherBounds, activatePowerup])
 
   const startGame = useCallback(() => {
     scoreRef.current = 0
@@ -205,6 +293,9 @@ export default function GuardianesAmazonia() {
     spawnTimerRef.current = 0
     difficultyRef.current = 1
     frameCountRef.current = 0
+    streakRef.current = 0
+    powerupRef.current = null
+    if (powerupTimerRef.current) clearTimeout(powerupTimerRef.current)
     setScore(0)
     setLives(MAX_LIVES)
     setTimeLeft(GAME_DURATION)
@@ -212,6 +303,10 @@ export default function GuardianesAmazonia() {
     setCatcherX(50)
     setParticles([])
     setFlash(null)
+    setStreak(0)
+    setMaxStreak(0)
+    setActivePowerup(null)
+    setComboText(null)
     setGamePhase('playing')
   }, [])
 
@@ -331,7 +426,7 @@ export default function GuardianesAmazonia() {
             <p className="text-green-200/70 mb-6 text-sm">
               Atrapa los elementos positivos 🌱🦜💧 y evita los contaminantes 🗑️🔥🪓
             </p>
-            <div className="grid grid-cols-2 gap-2 mb-6 text-xs">
+            <div className="grid grid-cols-3 gap-2 mb-6 text-xs">
               <div className="bg-white/5 rounded-xl p-3 border border-green-500/20">
                 <div className="flex flex-wrap gap-1 mb-1 text-lg justify-center">
                   {GOOD.slice(0, 4).map(g => <span key={g.label}>{g.emoji}</span>)}
@@ -343,6 +438,12 @@ export default function GuardianesAmazonia() {
                   {BAD.slice(0, 3).map(b => <span key={b.label}>{b.emoji}</span>)}
                 </div>
                 <p className="text-red-300/80">Resta vidas</p>
+              </div>
+              <div className="bg-white/5 rounded-xl p-3 border border-yellow-500/20">
+                <div className="flex flex-wrap gap-1 mb-1 text-lg justify-center">
+                  {POWERUPS.map(p => <span key={p.label}>{p.emoji}</span>)}
+                </div>
+                <p className="text-yellow-300/80">Poderes</p>
               </div>
             </div>
             <button
@@ -370,7 +471,28 @@ export default function GuardianesAmazonia() {
                 </motion.span>
               ))}
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              {streak >= 3 && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="bg-orange-500/80 backdrop-blur-sm rounded-xl px-3 py-1 border border-orange-400/30"
+                >
+                  <span className="text-white font-bold text-sm">🔥 x{streak}</span>
+                </motion.div>
+              )}
+              {activePowerup && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 0.5, repeat: Infinity }}
+                  className="bg-yellow-500/80 backdrop-blur-sm rounded-xl px-3 py-1 border border-yellow-400/30"
+                >
+                  <span className="text-white font-bold text-sm">
+                    {activePowerup === 'shield' ? '🛡️' : activePowerup === 'double' ? '⭐' : '🧲'}
+                  </span>
+                </motion.div>
+              )}
               <div className="bg-black/40 backdrop-blur-sm rounded-xl px-4 py-1.5 border border-white/10">
                 <span className="text-white font-bold text-lg">{score}</span>
                 <span className="text-white/50 text-xs ml-1">pts</span>
@@ -382,6 +504,21 @@ export default function GuardianesAmazonia() {
               </div>
             </div>
           </div>
+
+          <AnimatePresence>
+            {comboText && (
+              <motion.div
+                initial={{ opacity: 0, y: -20, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20 }}
+                className="absolute top-20 inset-x-0 z-30 text-center"
+              >
+                <span className="text-2xl font-bold text-white bg-black/60 backdrop-blur-sm px-6 py-2 rounded-2xl border border-white/20">
+                  {comboText}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {flash && (
             <motion.div
@@ -464,6 +601,11 @@ export default function GuardianesAmazonia() {
                 <div className="text-center">
                   <span className="text-blue-300 text-xl">{Math.round(score / Math.max(1, GAME_DURATION - timeLeft) * 60)}</span>
                   <p className="text-green-200/50 text-xs">Pts/min</p>
+                </div>
+                <div className="w-px h-8 bg-white/10" />
+                <div className="text-center">
+                  <span className="text-orange-300 text-xl">🔥 {maxStreak}</span>
+                  <p className="text-green-200/50 text-xs">Mejor Racha</p>
                 </div>
               </div>
             </div>

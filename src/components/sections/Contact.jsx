@@ -41,17 +41,8 @@ export default function Contact() {
     }
   };
 
-  const inputStyle = (field) => ({
-    width: '100%',
-    padding: '14px 16px',
-    borderRadius: 'var(--radius-sm)',
-    border: `2px solid ${errors[field] ? '#dc3545' : 'var(--border-color)'}`,
-    background: 'var(--bg-secondary)',
-    color: 'var(--text-primary)',
-    fontSize: '0.95rem',
-    outline: 'none',
-    transition: 'var(--transition)',
-  });
+  const inputClass = (field) =>
+    `contact-input${errors[field] ? ' has-error' : ''}${field === 'message' ? ' contact-textarea' : ''}`;
 
   return (
     <section id="contacto" className="news-section">
@@ -62,47 +53,32 @@ export default function Contact() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
+      <div className="contact-grid">
         {/* Contact Form */}
-        <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)', padding: '30px', border: '1px solid var(--border-color)' }}>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '24px', fontSize: '0.95rem' }}>{t('contact.subtitle')}</p>
+        <div className="contact-form-card">
+          <p className="contact-form-subtitle">{t('contact.subtitle')}</p>
 
           {submitted ? (
-            <div style={{ textAlign: 'center', padding: '40px 0' }}>
-              <i className="fas fa-check-circle" style={{ fontSize: '3rem', color: 'var(--primary)', marginBottom: '16px' }} />
-              <h3 style={{ fontFamily: 'var(--font-primary)', fontSize: '1.3rem', fontWeight: 700, marginTop: '16px' }}>{t('contact.success_title')}</h3>
-              <p style={{ color: 'var(--text-muted)', marginTop: '8px' }}>{t('contact.success_message')}</p>
+            <div className="contact-success">
+              <i className="fas fa-check-circle contact-success-icon" />
+              <h3>{t('contact.success_title')}</h3>
+              <p>{t('contact.success_message')}</p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <form onSubmit={handleSubmit} className="contact-form">
               <div>
-                <input type="text" name="name" placeholder={t('contact.name_placeholder')} value={form.name} onChange={handleChange} style={inputStyle('name')} />
-                {errors.name && <span style={{ color: '#dc3545', fontSize: '0.8rem', marginTop: '4px' }}>{errors.name}</span>}
+                <input type="text" name="name" placeholder={t('contact.name_placeholder')} value={form.name} onChange={handleChange} className={inputClass('name')} />
+                {errors.name && <span className="contact-error">{errors.name}</span>}
               </div>
               <div>
-                <input type="email" name="email" placeholder={t('contact.email_placeholder')} value={form.email} onChange={handleChange} style={inputStyle('email')} />
-                {errors.email && <span style={{ color: '#dc3545', fontSize: '0.8rem', marginTop: '4px' }}>{errors.email}</span>}
+                <input type="email" name="email" placeholder={t('contact.email_placeholder')} value={form.email} onChange={handleChange} className={inputClass('email')} />
+                {errors.email && <span className="contact-error">{errors.email}</span>}
               </div>
               <div>
-                <textarea name="message" placeholder={t('contact.message_placeholder')} value={form.message} onChange={handleChange} rows={5} style={{ ...inputStyle('message'), resize: 'vertical' }} />
-                {errors.message && <span style={{ color: '#dc3545', fontSize: '0.8rem', marginTop: '4px' }}>{errors.message}</span>}
+                <textarea name="message" placeholder={t('contact.message_placeholder')} value={form.message} onChange={handleChange} rows={5} className={inputClass('message')} />
+                {errors.message && <span className="contact-error">{errors.message}</span>}
               </div>
-              <button type="submit" disabled={sending} style={{
-                padding: '14px 32px',
-                background: 'var(--primary)',
-                color: 'white',
-                border: 'none',
-                borderRadius: 'var(--radius-sm)',
-                fontFamily: 'var(--font-primary)',
-                fontWeight: 700,
-                fontSize: '0.95rem',
-                cursor: 'pointer',
-                transition: 'var(--transition)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-              }}>
+              <button type="submit" disabled={sending} className="contact-submit-btn">
                 {sending ? t('contact.sending') : t('contact.send')} <i className="fas fa-paper-plane" />
               </button>
             </form>
@@ -110,44 +86,44 @@ export default function Contact() {
         </div>
 
         {/* Contact Info */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)', padding: '30px', border: '1px solid var(--border-color)' }}>
-            <h3 style={{ fontFamily: 'var(--font-primary)', fontWeight: 700, marginBottom: '20px', fontSize: '1.1rem' }}>{t('contact.title') || 'Contacto'}</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ width: '40px', height: '40px', background: 'var(--primary)', color: 'white', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="contact-info-column">
+          <div className="contact-info-card">
+            <h3>{t('contact.title') || 'Contacto'}</h3>
+            <div className="contact-info-rows">
+              <div className="contact-info-row">
+                <div className="contact-icon-circle">
                   <i className="fas fa-map-marker-alt" />
                 </div>
                 <div>
-                  <p style={{ fontWeight: 600, fontSize: '0.85rem' }}>{t('contact.location_label')}</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{SITE_CONFIG.location}</p>
+                  <p className="contact-info-label">{t('contact.location_label')}</p>
+                  <p className="contact-info-value">{SITE_CONFIG.location}</p>
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ width: '40px', height: '40px', background: 'var(--primary)', color: 'white', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div className="contact-info-row">
+                <div className="contact-icon-circle">
                   <i className="fas fa-envelope" />
                 </div>
                 <div>
-                  <p style={{ fontWeight: 600, fontSize: '0.85rem' }}>{t('contact.email_label')}</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{SITE_CONFIG.email}</p>
+                  <p className="contact-info-label">{t('contact.email_label')}</p>
+                  <p className="contact-info-value">{SITE_CONFIG.email}</p>
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ width: '40px', height: '40px', background: 'var(--primary)', color: 'white', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div className="contact-info-row">
+                <div className="contact-icon-circle">
                   <i className="fas fa-phone" />
                 </div>
                 <div>
-                  <p style={{ fontWeight: 600, fontSize: '0.85rem' }}>{t('contact.phone_label')}</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{SITE_CONFIG.phone}</p>
+                  <p className="contact-info-label">{t('contact.phone_label')}</p>
+                  <p className="contact-info-value">{SITE_CONFIG.phone}</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Social Links */}
-          <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)', padding: '30px', border: '1px solid var(--border-color)' }}>
-            <h3 style={{ fontFamily: 'var(--font-primary)', fontWeight: 700, marginBottom: '16px', fontSize: '1.1rem' }}>{t('contact.social_label') || 'Redes Sociales'}</h3>
-            <div style={{ display: 'flex', gap: '12px' }}>
+          <div className="contact-info-card">
+            <h3>{t('contact.social_label') || 'Redes Sociales'}</h3>
+            <div className="contact-social-icons">
               {[
                 { icon: 'fab fa-facebook-f', href: SITE_CONFIG.social.facebook },
                 { icon: 'fab fa-instagram', href: SITE_CONFIG.social.instagram },
@@ -156,11 +132,7 @@ export default function Contact() {
                 { icon: 'fab fa-twitter', href: SITE_CONFIG.social.twitter },
                 { icon: 'fab fa-whatsapp', href: SITE_CONFIG.social.whatsapp },
               ].map((s, i) => (
-                <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" style={{
-                  width: '44px', height: '44px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)',
-                  borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  transition: 'var(--transition)', color: 'var(--text-primary)', fontSize: '1.1rem',
-                }}>
+                <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" className="contact-social-link">
                   <i className={s.icon} />
                 </a>
               ))}

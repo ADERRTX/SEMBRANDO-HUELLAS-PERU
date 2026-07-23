@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useT, useLanguage } from '../../contexts/LanguageContext';
 import GamesHub from '../games/GamesHub';
 
@@ -150,34 +150,9 @@ function generateWordGrid() {
 }
 
 const TabButton = ({ active, onClick, icon, label, badge }) => (
-  <button
-    onClick={onClick}
-    style={{
-      padding: '10px 20px',
-      borderRadius: '25px',
-      border: '2px solid',
-      borderColor: active ? '#e91e63' : 'var(--border-color)',
-      background: active ? 'linear-gradient(135deg, #e91e63, #9c27b0)' : 'var(--bg-primary)',
-      color: active ? 'white' : 'var(--text-primary)',
-      fontWeight: 700,
-      fontSize: '0.9rem',
-      cursor: 'pointer',
-      transition: 'all 0.3s ease',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '6px',
-      position: 'relative',
-    }}
-  >
+  <button onClick={onClick} className={`kids-tab-btn${active ? ' active' : ''}`}>
     <span>{icon}</span> {label}
-    {badge && (
-      <span style={{
-        position: 'absolute', top: '-6px', right: '-6px',
-        background: '#ff5722', color: 'white', borderRadius: '50%',
-        width: '20px', height: '20px', fontSize: '0.7rem',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700,
-      }}>{badge}</span>
-    )}
+    {badge && <span className="kids-tab-badge">{badge}</span>}
   </button>
 );
 
@@ -321,53 +296,42 @@ function VideosSection() {
   const cat = videoCategories.find((c) => c.id === activeCat);
 
   return (
-    <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)', padding: '28px', border: '1px solid var(--border-color)' }}>
-      <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-        <h3 style={{ fontFamily: 'var(--font-primary)', fontSize: '1.5rem', fontWeight: 800, color: '#e91e63' }}>📺 Videos Educativos</h3>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '6px' }}>Aprende sobre el medio ambiente con estos videos divertidos</p>
+    <div className="kids-panel">
+      <div className="kids-section-header">
+        <h3 className="kids-section-title" style={{ color: '#e91e63' }}>📺 Videos Educativos</h3>
+        <p className="kids-section-subtitle">Aprende sobre el medio ambiente con estos videos divertidos</p>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+      <div className="kids-category-bar">
         {videoCategories.map((c) => (
           <button key={c.id} onClick={() => { setActiveCat(c.id); setPlayingId(null); }}
-            style={{
-              padding: '8px 18px', borderRadius: '20px', fontWeight: 700, fontSize: '0.85rem',
-              border: '2px solid', cursor: 'pointer',
-              borderColor: activeCat === c.id ? c.color : 'var(--border-color)',
-              background: activeCat === c.id ? c.color : 'var(--bg-secondary)',
-              color: activeCat === c.id ? 'white' : 'var(--text-primary)',
-              transition: 'all 0.2s ease',
-            }}>{c.title}</button>
+            className={`kids-category-btn${activeCat === c.id ? ' active' : ''}`}
+            style={activeCat === c.id ? { borderColor: c.color, background: c.color } : {}}>
+            {c.title}
+          </button>
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+      <div className="kids-video-grid">
         {cat.videos.map((v) => (
-          <div key={v.id} style={{
-            background: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)', overflow: 'hidden',
-            border: '1px solid var(--border-color)', transition: 'all 0.3s ease',
-          }}>
+          <div key={v.id} className="kids-video-card">
             {playingId === v.id ? (
-              <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+              <div className="kids-iframe-wrapper">
                 <iframe src={`https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0`}
-                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen title={v.title} />
               </div>
             ) : (
-              <div onClick={() => setPlayingId(v.id)} style={{ cursor: 'pointer', position: 'relative', paddingBottom: '56.25%', background: '#000' }}>
-                <img src={`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`} alt={v.title}
-                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.85 }} />
-                <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(233,30,99,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(233,30,99,0.5)' }}>
-                    <span style={{ fontSize: '1.5rem', marginLeft: '4px' }}>▶</span>
-                  </div>
+              <div onClick={() => setPlayingId(v.id)} className="kids-video-thumb">
+                <img src={`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`} alt={v.title} />
+                <div className="kids-video-play">
+                  <button className="kids-video-play-btn">▶</button>
                 </div>
               </div>
             )}
-            <div style={{ padding: '14px 16px' }}>
-              <h4 style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-primary)', marginBottom: '4px' }}>{v.title}</h4>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>{v.desc}</p>
+            <div className="kids-video-info">
+              <h4>{v.title}</h4>
+              <p>{v.desc}</p>
             </div>
           </div>
         ))}
@@ -405,63 +369,59 @@ function BooksSection() {
   };
 
   return (
-    <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)', padding: '28px', border: '1px solid var(--border-color)' }}>
-      <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-        <h3 style={{ fontFamily: 'var(--font-primary)', fontSize: '1.5rem', fontWeight: 800, color: '#2196f3' }}>📚 Libros Interactivos</h3>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '6px' }}>Lee, aprende y responde preguntas sobre el medio ambiente</p>
+    <div className="kids-panel">
+      <div className="kids-section-header">
+        <h3 className="kids-section-title" style={{ color: '#2196f3' }}>📚 Libros Interactivos</h3>
+        <p className="kids-section-subtitle">Lee, aprende y responde preguntas sobre el medio ambiente</p>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '24px', flexWrap: 'wrap' }}>
+      <div className="kids-category-bar">
         {interactiveBooks.map((b) => (
           <button key={b.id} onClick={() => switchBook(b.id)}
-            style={{
-              padding: '8px 16px', borderRadius: '20px', fontWeight: 700, fontSize: '0.85rem',
-              border: '2px solid', cursor: 'pointer',
-              borderColor: activeBook === b.id ? b.color : 'var(--border-color)',
-              background: activeBook === b.id ? b.color : 'var(--bg-secondary)',
-              color: activeBook === b.id ? 'white' : 'var(--text-primary)',
-              transition: 'all 0.2s ease',
-            }}>{b.icon} {b.title}</button>
+            className={`kids-category-btn${activeBook === b.id ? ' active' : ''}`}
+            style={activeBook === b.id ? { borderColor: b.color, background: b.color } : {}}>
+            {b.icon} {b.title}
+          </button>
         ))}
       </div>
 
       {!showQuiz ? (
         <div>
-          <div style={{ background: 'white', borderRadius: '12px', padding: '24px', border: `2px solid ${book.color}20`, marginBottom: '20px', minHeight: '200px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-              <span style={{ fontSize: '2rem' }}>{book.pages[currentPage].img}</span>
-              <h4 style={{ fontWeight: 800, fontSize: '1.1rem', color: book.color }}>{book.pages[currentPage].heading}</h4>
+          <div className="kids-book-content" style={{ borderColor: `${book.color}20` }}>
+            <div className="kids-book-page-header">
+              <span className="kids-book-page-emoji">{book.pages[currentPage].img}</span>
+              <h4 className="kids-book-page-heading" style={{ color: book.color }}>{book.pages[currentPage].heading}</h4>
             </div>
-            <p style={{ fontSize: '1rem', lineHeight: 1.8, color: '#444' }}>{book.pages[currentPage].text}</p>
+            <p className="kids-book-page-text">{book.pages[currentPage].text}</p>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="kids-book-nav">
             <button onClick={() => setCurrentPage((p) => Math.max(0, p - 1))} disabled={currentPage === 0}
+              className="kids-book-btn"
               style={{
-                padding: '10px 20px', borderRadius: '20px', fontWeight: 700, border: 'none', cursor: currentPage === 0 ? 'default' : 'pointer',
-                background: currentPage === 0 ? '#e0e0e0' : book.color, color: currentPage === 0 ? '#999' : 'white',
-                opacity: currentPage === 0 ? 0.5 : 1, transition: 'all 0.2s ease',
+                background: currentPage === 0 ? '#e0e0e0' : book.color,
+                color: currentPage === 0 ? '#999' : 'white',
+                opacity: currentPage === 0 ? 0.5 : 1,
               }}>← Anterior</button>
 
-            <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+            <div className="kids-page-dots">
               {book.pages.map((_, i) => (
                 <div key={i} onClick={() => setCurrentPage(i)}
-                  style={{
-                    width: currentPage === i ? '24px' : '10px', height: '10px', borderRadius: '5px',
-                    background: currentPage === i ? book.color : '#ddd', cursor: 'pointer', transition: 'all 0.3s ease',
-                  }} />
+                  className={`kids-page-dot${currentPage === i ? ' active' : ''}`}
+                  style={{ background: currentPage === i ? book.color : '#ddd' }} />
               ))}
             </div>
 
             {currentPage < book.pages.length - 1 ? (
               <button onClick={() => setCurrentPage((p) => p + 1)}
-                style={{ padding: '10px 20px', borderRadius: '20px', fontWeight: 700, border: 'none', cursor: 'pointer', background: book.color, color: 'white' }}>
+                className="kids-book-btn"
+                style={{ background: book.color, color: 'white' }}>
                 Siguiente →
               </button>
             ) : (
               <button onClick={() => setShowQuiz(true)}
-                style={{ padding: '10px 20px', borderRadius: '20px', fontWeight: 700, border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #e91e63, #9c27b0)', color: 'white', fontSize: '0.95rem' }}>
-                🧠 ¡ responder Quiz!
+                className="kids-play-btn">
+                🧠 ¡Responder Quiz!
               </button>
             )}
           </div>
@@ -470,22 +430,22 @@ function BooksSection() {
         <div style={{ maxWidth: '600px', margin: '0 auto' }}>
           <h4 style={{ textAlign: 'center', fontWeight: 800, fontSize: '1.2rem', color: book.color, marginBottom: '20px' }}>🧠 Quiz del Libro</h4>
           {book.questions.map((q, qIdx) => (
-            <div key={qIdx} style={{ marginBottom: '20px', padding: '16px', background: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+            <div key={qIdx} className="kids-quiz-card">
               <p style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '10px' }}>{qIdx + 1}. {q.q}</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <div className="kids-quiz-options">
                 {q.options.map((opt, aIdx) => {
                   const answered = quizAnswers[qIdx] !== undefined;
                   const isCorrect = aIdx === q.answer;
                   const isSelected = quizAnswers[qIdx] === aIdx;
                   return (
                     <button key={aIdx} onClick={() => handleQuizAnswer(qIdx, aIdx)} disabled={answered}
-                      style={{
-                        padding: '10px 14px', borderRadius: '8px', fontWeight: 600, fontSize: '0.9rem', border: '2px solid',
-                        borderColor: answered ? (isCorrect ? '#4caf50' : isSelected ? '#f44336' : '#e0e0e0') : '#e0e0e0',
-                        background: answered ? (isCorrect ? '#e8f5e9' : isSelected ? '#ffebee' : 'white') : 'white',
-                        color: answered ? (isCorrect ? '#2e7d32' : isSelected ? '#c62828' : '#999') : 'var(--text-primary)',
-                        cursor: answered ? 'default' : 'pointer', textAlign: 'left', transition: 'all 0.2s ease',
-                      }}>
+                      className={`kids-quiz-option-btn${answered ? (isCorrect ? ' correct' : isSelected ? ' incorrect' : '') : ''}`}
+                      style={answered ? {
+                        borderColor: isCorrect ? '#4caf50' : isSelected ? '#f44336' : '#e0e0e0',
+                        background: isCorrect ? '#e8f5e9' : isSelected ? '#ffebee' : 'white',
+                        color: isCorrect ? '#2e7d32' : isSelected ? '#c62828' : '#999',
+                        cursor: 'default',
+                      } : {}}>
                       {String.fromCharCode(65 + aIdx)}. {opt}
                     </button>
                   );
@@ -495,13 +455,13 @@ function BooksSection() {
           ))}
 
           {Object.keys(quizAnswers).length === book.questions.length && (
-            <div style={{ textAlign: 'center', padding: '24px', background: `linear-gradient(135deg, ${book.color}10, ${book.color}20)`, borderRadius: '12px', border: `2px solid ${book.color}40` }}>
-              <div style={{ fontSize: '3rem', marginBottom: '8px' }}>{quizScore === book.questions.length ? '🏆' : quizScore >= 2 ? '⭐' : '💪'}</div>
-              <p style={{ fontSize: '1.5rem', fontWeight: 800, color: book.color }}>{quizScore} / {book.questions.length}</p>
+            <div className="kids-book-score-box" style={{ background: `linear-gradient(135deg, ${book.color}10, ${book.color}20)`, borderColor: `${book.color}40` }}>
+              <div className="kids-book-score-icon">{quizScore === book.questions.length ? '🏆' : quizScore >= 2 ? '⭐' : '💪'}</div>
+              <p className="kids-book-score-value" style={{ color: book.color }}>{quizScore} / {book.questions.length}</p>
               <p style={{ color: 'var(--text-muted)', marginTop: '4px' }}>
                 {quizScore === book.questions.length ? '¡Excelente! Dominaste el libro' : '¡Sigue leyendo y aprendiendo!'}
               </p>
-              <button onClick={resetBook} style={{ marginTop: '16px', padding: '10px 24px', borderRadius: '20px', background: book.color, color: 'white', fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+              <button onClick={resetBook} className="kids-book-btn" style={{ marginTop: '16px', background: book.color, color: 'white' }}>
                 📖 Leer de Nuevo
               </button>
             </div>
@@ -514,7 +474,6 @@ function BooksSection() {
 
 export default function KidsInfantil() {
   const t = useT();
-  const { lang } = useLanguage();
   const [activeSection, setActiveSection] = useState('games');
 
   return (
@@ -526,26 +485,20 @@ export default function KidsInfantil() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '30px', flexWrap: 'wrap' }}>
-        <TabButton active={activeSection === 'games'} onClick={() => setActiveSection('games')} icon="🎮" label="Minijuegos" />
-        <TabButton active={activeSection === 'videos'} onClick={() => setActiveSection('videos')} icon="📺" label="Videos Educativos" />
-        <TabButton active={activeSection === 'books'} onClick={() => setActiveSection('books')} icon="📚" label="Libros Interactivos" />
-        <TabButton active={activeSection === 'quiz'} onClick={() => setActiveSection('quiz')} icon="🧠" label="Quiz Ambiental" badge="12" />
-        <TabButton active={activeSection === 'memory'} onClick={() => setActiveSection('memory')} icon="🃏" label="Memoria" />
-        <TabButton active={activeSection === 'trivia'} onClick={() => setActiveSection('trivia')} icon="⏱️" label="Trivia Rápida" />
-        <TabButton active={activeSection === 'words'} onClick={() => setActiveSection('words')} icon="🔤" label="Sopa de Letras" />
-        <TabButton active={activeSection === 'color'} onClick={() => setActiveSection('color')} icon="🎨" label="Colorear" />
-        <TabButton active={activeSection === 'facts'} onClick={() => setActiveSection('facts')} icon="🌟" label="Datos Curiosos" />
+      <div className="kids-tab-bar">
+        <TabButton active={activeSection === 'games'} onClick={() => setActiveSection('games')} icon="🎮" label="Juegos" />
+        <TabButton active={activeSection === 'videos'} onClick={() => setActiveSection('videos')} icon="📺" label="Videos" />
+        <TabButton active={activeSection === 'books'} onClick={() => setActiveSection('books')} icon="📚" label="Libros" />
+        <TabButton active={activeSection === 'discover'} onClick={() => setActiveSection('discover')} icon="🌍" label="Descubre" />
+        <TabButton active={activeSection === 'quiz'} onClick={() => setActiveSection('quiz')} icon="🧠" label="Quiz" badge="12" />
+        <TabButton active={activeSection === 'facts'} onClick={() => setActiveSection('facts')} icon="🌟" label="Curiosidades" />
       </div>
 
       {activeSection === 'games' && <GamesHub />}
       {activeSection === 'videos' && <VideosSection />}
       {activeSection === 'books' && <BooksSection />}
+      {activeSection === 'discover' && <DiscoverSection />}
       {activeSection === 'quiz' && <QuizSection />}
-      {activeSection === 'memory' && <MemorySection />}
-      {activeSection === 'trivia' && <TriviaSection />}
-      {activeSection === 'words' && <WordSearchSection />}
-      {activeSection === 'color' && <ColoringSection />}
       {activeSection === 'facts' && <FactsSection funFacts={funFacts} extraFacts={extraFacts} t={t} />}
     </section>
   );
@@ -588,44 +541,36 @@ function QuizSection() {
   const progress = ((quizIndex + (showResult ? 1 : 0)) / allQuizQuestions.length) * 100;
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '24px', alignItems: 'start' }}>
-      <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)', padding: '28px', border: '1px solid var(--border-color)' }}>
+    <div className="kids-game-grid-2">
+      <div className="kids-panel">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <h3 style={{ fontFamily: 'var(--font-primary)', fontSize: '1.4rem', fontWeight: 800, color: '#e91e63' }}>🧠 Quiz Ambiental</h3>
+          <h3 className="kids-section-title" style={{ color: '#e91e63', marginBottom: 0 }}>🧠 Quiz Ambiental</h3>
           <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-muted)' }}>{quizIndex + 1} / {allQuizQuestions.length}</span>
         </div>
 
-        <div style={{ width: '100%', height: '6px', background: '#e0e0e0', borderRadius: '3px', marginBottom: '24px', overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg, #e91e63, #9c27b0)', borderRadius: '3px', transition: 'width 0.4s ease' }} />
+        <div className="kids-progress-bar">
+          <div className="kids-progress-fill" style={{ width: `${progress}%`, background: 'linear-gradient(90deg, #e91e63, #9c27b0)' }} />
         </div>
 
         {quizIndex < allQuizQuestions.length ? (
           <>
-            <p style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '20px', lineHeight: 1.5 }}>{q.q}</p>
+            <p className="kids-question-text">{q.q}</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {q.options.map((opt, idx) => (
                 <button key={idx} onClick={() => handleAnswer(idx)} disabled={showResult}
-                  style={{
-                    width: '100%', textAlign: 'left', padding: '14px 18px', borderRadius: 'var(--radius-sm)',
-                    fontWeight: 600, fontSize: '0.95rem', border: '2px solid',
-                    borderColor: showResult ? (idx === q.answer ? '#4caf50' : idx === selectedAnswer ? '#f44336' : '#e0e0e0') : '#e0e0e0',
-                    background: showResult ? (idx === q.answer ? '#e8f5e9' : idx === selectedAnswer ? '#ffebee' : '#fafafa') : 'white',
-                    color: showResult ? (idx === q.answer ? '#2e7d32' : idx === selectedAnswer ? '#c62828' : '#9e9e9e') : 'var(--text-primary)',
-                    cursor: showResult ? 'default' : 'pointer',
-                    transition: 'all 0.2s ease',
-                  }}>
+                  className={`kids-option-btn${showResult ? (idx === q.answer ? ' correct' : idx === selectedAnswer ? ' incorrect' : ' disabled') : ''}`}>
                   <span style={{ marginRight: '10px', opacity: 0.5 }}>{String.fromCharCode(65 + idx)}.</span> {opt}
                 </button>
               ))}
             </div>
             {showResult && (
-              <div style={{ marginTop: '20px', padding: '16px', borderRadius: 'var(--radius-sm)', background: selectedAnswer === q.answer ? '#e8f5e9' : '#fff3e0', border: `1px solid ${selectedAnswer === q.answer ? '#4caf50' : '#ff9800'}` }}>
-                <p style={{ fontWeight: 700, color: selectedAnswer === q.answer ? '#2e7d32' : '#e65100', marginBottom: '6px' }}>
+              <div className={`kids-result-box${selectedAnswer === q.answer ? ' correct' : ' incorrect'}`}>
+                <p className="kids-result-label" style={{ color: selectedAnswer === q.answer ? '#2e7d32' : '#e65100' }}>
                   {selectedAnswer === q.answer ? '✅ ¡Correcto!' : '💡 ¡Aprende algo nuevo!'}
                 </p>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>{q.explanation}</p>
+                <p className="kids-result-text">{q.explanation}</p>
                 {quizIndex < allQuizQuestions.length - 1 && (
-                  <button onClick={nextQuestion} style={{ marginTop: '12px', padding: '8px 22px', borderRadius: '20px', background: '#e91e63', color: 'white', fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+                  <button onClick={nextQuestion} className="kids-next-btn">
                     Siguiente →
                   </button>
                 )}
@@ -641,37 +586,37 @@ function QuizSection() {
                quizScore >= 8 ? '¡Excelente! Casi perfecto' :
                quizScore >= 5 ? '¡Buen trabajo! Sigue aprendiendo' : '¡Sigue practicando!'}
             </p>
-            <button onClick={restart} style={{ marginTop: '20px', padding: '12px 28px', borderRadius: '25px', background: 'linear-gradient(135deg, #e91e63, #9c27b0)', color: 'white', fontWeight: 700, border: 'none', cursor: 'pointer', fontSize: '1rem' }}>
+            <button onClick={restart} className="kids-play-btn" style={{ marginTop: '20px' }}>
               🔄 Jugar de Nuevo
             </button>
           </div>
         )}
       </div>
 
-      <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)', padding: '20px', border: '1px solid var(--border-color)' }}>
-        <h4 style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '12px' }}>📊 Progreso</h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-            <span style={{ color: 'var(--text-muted)' }}>Correctas</span>
-            <span style={{ fontWeight: 700, color: '#4caf50' }}>{quizScore}</span>
+      <div className="kids-stat-sidebar">
+        <h4>📊 Progreso</h4>
+        <div className="kids-stat-rows">
+          <div className="kids-stat-row">
+            <span className="kids-stat-label">Correctas</span>
+            <span className="kids-stat-value" style={{ color: '#4caf50' }}>{quizScore}</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-            <span style={{ color: 'var(--text-muted)' }}>Incorrectas</span>
-            <span style={{ fontWeight: 700, color: '#f44336' }}>{answered.filter((a) => !a.correct).length}</span>
+          <div className="kids-stat-row">
+            <span className="kids-stat-label">Incorrectas</span>
+            <span className="kids-stat-value" style={{ color: '#f44336' }}>{answered.filter((a) => !a.correct).length}</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-            <span style={{ color: 'var(--text-muted)' }}>Restantes</span>
-            <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{allQuizQuestions.length - quizIndex - (showResult ? 1 : 0)}</span>
+          <div className="kids-stat-row">
+            <span className="kids-stat-label">Restantes</span>
+            <span className="kids-stat-value">{allQuizQuestions.length - quizIndex - (showResult ? 1 : 0)}</span>
           </div>
         </div>
-        <div style={{ marginTop: '16px', padding: '12px', background: '#f5f5f5', borderRadius: '8px', textAlign: 'center' }}>
-          <p style={{ fontSize: '2rem', fontWeight: 800, color: '#e91e63' }}>{allQuizQuestions.length > 0 ? Math.round((quizScore / Math.max(1, answered.length)) * 100) : 0}%</p>
-          <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Precisión</p>
+        <div className="kids-accuracy-box">
+          <p className="kids-accuracy-value">{allQuizQuestions.length > 0 ? Math.round((quizScore / Math.max(1, answered.length)) * 100) : 0}%</p>
+          <p className="kids-accuracy-label">Precisión</p>
         </div>
         {answered.length > 0 && (
-          <div style={{ marginTop: '12px', display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+          <div className="kids-stat-dots">
             {answered.map((a, i) => (
-              <div key={i} style={{ width: '12px', height: '12px', borderRadius: '50%', background: a.correct ? '#4caf50' : '#f44336' }} />
+              <div key={i} className="kids-stat-dot" style={{ background: a.correct ? '#4caf50' : '#f44336' }} />
             ))}
           </div>
         )}
@@ -733,24 +678,17 @@ function MemorySection() {
   const formatTime = (s) => `${Math.floor(s / 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`;
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 250px', gap: '24px', alignItems: 'start' }}>
-      <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)', padding: '24px', border: '1px solid var(--border-color)' }}>
-        <h3 style={{ fontFamily: 'var(--font-primary)', fontSize: '1.3rem', fontWeight: 800, color: '#00bcd4', marginBottom: '4px' }}>🃏 Juego de Memoria</h3>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '20px' }}>Encuentra todos los pares de animales</p>
+    <div className="kids-game-grid-3">
+      <div className="kids-panel">
+        <h3 className="kids-section-title" style={{ color: '#00bcd4', marginBottom: '4px' }}>🃏 Juego de Memoria</h3>
+        <p className="kids-section-subtitle" style={{ marginBottom: '20px' }}>Encuentra todos los pares de animales</p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+        <div className="kids-memory-grid">
           {cards.map((card, idx) => {
             const isFlipped = flipped[idx] || matched[card.pairId];
             return (
               <button key={card.uniqueId} onClick={() => handleCardClick(card, idx)}
-                style={{
-                  aspectRatio: '1', borderRadius: 'var(--radius-sm)', fontSize: '1.8rem', fontWeight: 700,
-                  transition: 'all 0.3s ease', border: '2px solid',
-                  borderColor: isFlipped ? (matched[card.pairId] ? '#4caf50' : '#00bcd4') : '#00bcd4',
-                  background: isFlipped ? (matched[card.pairId] ? '#e8f5e9' : '#e0f7fa') : 'linear-gradient(135deg, #00bcd4, #2196f3)',
-                  color: isFlipped ? 'inherit' : 'white',
-                  cursor: 'pointer', transform: isFlipped ? 'scale(1)' : 'scale(1)',
-                }}>
+                className={`kids-memory-card${isFlipped ? (matched[card.pairId] ? ' matched' : ' flipped') : ' face-down'}`}>
                 {isFlipped ? card.emoji : '?'}
               </button>
             );
@@ -758,33 +696,31 @@ function MemorySection() {
         </div>
 
         {won && (
-          <div style={{ textAlign: 'center', marginTop: '20px', padding: '20px', borderRadius: 'var(--radius-md)', background: 'linear-gradient(135deg, #e8f5e9, #c8e6c9)', border: '2px solid #4caf50' }}>
+          <div className="kids-win-box">
             <div style={{ fontSize: '3rem', marginBottom: '8px' }}>🎉</div>
             <p style={{ fontSize: '1.3rem', fontWeight: 800, color: '#2e7d32' }}>¡Felicidades!</p>
             <p style={{ color: '#4caf50', fontWeight: 600 }}>Completado en {formatTime(timer)} con {moves} movimientos</p>
-            <button onClick={reset} style={{ marginTop: '12px', padding: '8px 22px', borderRadius: '20px', background: '#00bcd4', color: 'white', fontWeight: 700, border: 'none', cursor: 'pointer' }}>🔄 Jugar de Nuevo</button>
+            <button onClick={reset} className="kids-next-btn" style={{ marginTop: '12px', background: '#00bcd4' }}>🔄 Jugar de Nuevo</button>
           </div>
         )}
       </div>
 
-      <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)', padding: '20px', border: '1px solid var(--border-color)' }}>
-        <h4 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '16px' }}>📊 Estadísticas</h4>
+      <div className="kids-stat-sidebar">
+        <h4>📊 Estadísticas</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ textAlign: 'center', padding: '12px', background: '#e0f7fa', borderRadius: '8px' }}>
-            <p style={{ fontSize: '1.8rem', fontWeight: 800, color: '#00bcd4' }}>{formatTime(timer)}</p>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Tiempo</p>
+          <div className="kids-stat-card" style={{ background: '#e0f7fa' }}>
+            <p className="kids-stat-card-value" style={{ color: '#00bcd4' }}>{formatTime(timer)}</p>
+            <p className="kids-stat-card-label">Tiempo</p>
           </div>
-          <div style={{ textAlign: 'center', padding: '12px', background: '#fff3e0', borderRadius: '8px' }}>
-            <p style={{ fontSize: '1.8rem', fontWeight: 800, color: '#ff9800' }}>{moves}</p>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Movimientos</p>
+          <div className="kids-stat-card" style={{ background: '#fff3e0' }}>
+            <p className="kids-stat-card-value" style={{ color: '#ff9800' }}>{moves}</p>
+            <p className="kids-stat-card-label">Movimientos</p>
           </div>
-          <div style={{ textAlign: 'center', padding: '12px', background: '#e8f5e9', borderRadius: '8px' }}>
-            <p style={{ fontSize: '1.8rem', fontWeight: 800, color: '#4caf50' }}>{Object.keys(matched).length}/{memoryPairs.length}</p>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Pares encontrados</p>
+          <div className="kids-stat-card" style={{ background: '#e8f5e9' }}>
+            <p className="kids-stat-card-value" style={{ color: '#4caf50' }}>{Object.keys(matched).length}/{memoryPairs.length}</p>
+            <p className="kids-stat-card-label">Pares encontrados</p>
           </div>
-          <button onClick={reset} style={{ padding: '10px', borderRadius: '8px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', fontWeight: 700, cursor: 'pointer', color: 'var(--text-primary)' }}>
-            🔄 Reiniciar
-          </button>
+          <button onClick={reset} className="kids-restart-btn">🔄 Reiniciar</button>
         </div>
       </div>
     </div>
@@ -835,12 +771,12 @@ function TriviaSection() {
 
   if (finished) {
     return (
-      <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)', padding: '40px', border: '1px solid var(--border-color)', textAlign: 'center', maxWidth: '500px', margin: '0 auto' }}>
+      <div className="kids-panel" style={{ textAlign: 'center', maxWidth: '500px', margin: '0 auto' }}>
         <div style={{ fontSize: '4rem', marginBottom: '16px' }}>{score === triviaQuestions.length ? '🏆' : score >= 4 ? '⭐' : '💪'}</div>
         <h3 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '8px' }}>¡Trivia Completada!</h3>
         <p style={{ fontSize: '1.3rem', fontWeight: 700, color: '#e91e63' }}>{score} / {triviaQuestions.length} correctas</p>
         <p style={{ color: 'var(--text-muted)', marginTop: '8px' }}>Mejor racha: {bestStreak} 🔥</p>
-        <button onClick={reset} style={{ marginTop: '20px', padding: '12px 28px', borderRadius: '25px', background: 'linear-gradient(135deg, #e91e63, #9c27b0)', color: 'white', fontWeight: 700, border: 'none', cursor: 'pointer', fontSize: '1rem' }}>
+        <button onClick={reset} className="kids-play-btn" style={{ marginTop: '20px' }}>
           🔄 Jugar de Nuevo
         </button>
       </div>
@@ -848,62 +784,55 @@ function TriviaSection() {
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 220px', gap: '24px', alignItems: 'start' }}>
-      <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)', padding: '28px', border: '1px solid var(--border-color)' }}>
+    <div className="kids-game-grid-2" style={{ gridTemplateColumns: '1fr 220px' }}>
+      <div className="kids-panel">
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-          <h3 style={{ fontFamily: 'var(--font-primary)', fontSize: '1.3rem', fontWeight: 800, color: '#ff5722' }}>⏱️ Trivia Rápida</h3>
+          <h3 className="kids-section-title" style={{ color: '#ff5722', marginBottom: 0 }}>⏱️ Trivia Rápida</h3>
           <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-muted)' }}>{currentQ + 1} / {triviaQuestions.length}</span>
         </div>
 
-        <div style={{ width: '100%', height: '6px', background: '#e0e0e0', borderRadius: '3px', marginBottom: '24px', overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: `${((currentQ + 1) / triviaQuestions.length) * 100}%`, background: 'linear-gradient(90deg, #ff5722, #ff9800)', borderRadius: '3px', transition: 'width 0.4s ease' }} />
+        <div className="kids-progress-bar">
+          <div className="kids-progress-fill" style={{ width: `${((currentQ + 1) / triviaQuestions.length) * 100}%`, background: 'linear-gradient(90deg, #ff5722, #ff9800)' }} />
         </div>
 
-        <p style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '20px', lineHeight: 1.5 }}>{q.q}</p>
+        <p className="kids-question-text">{q.q}</p>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
           {q.options.map((opt, idx) => (
             <button key={idx} onClick={() => handleAnswer(idx)} disabled={selected !== null}
-              style={{
-                padding: '14px', borderRadius: 'var(--radius-sm)', fontWeight: 600, border: '2px solid',
-                borderColor: selected !== null ? (idx === q.answer ? '#4caf50' : idx === selected ? '#f44336' : '#e0e0e0') : '#e0e0e0',
-                background: selected !== null ? (idx === q.answer ? '#e8f5e9' : idx === selected ? '#ffebee' : 'white') : 'white',
-                color: selected !== null ? (idx === q.answer ? '#2e7d32' : idx === selected ? '#c62828' : '#9e9e9e') : 'var(--text-primary)',
-                cursor: selected !== null ? 'default' : 'pointer',
-                transition: 'all 0.2s ease',
-              }}>
+              className={`kids-option-btn${selected !== null ? (idx === q.answer ? ' correct' : idx === selected ? ' incorrect' : ' disabled') : ''}`}>
               {opt}
             </button>
           ))}
         </div>
 
         {showFun && (
-          <div style={{ marginTop: '16px', padding: '14px', borderRadius: 'var(--radius-sm)', background: selected === q.answer ? '#e8f5e9' : '#fff3e0', border: `1px solid ${selected === q.answer ? '#4caf50' : '#ff9800'}` }}>
-            <p style={{ fontWeight: 700, color: selected === q.answer ? '#2e7d32' : '#e65100', marginBottom: '4px' }}>
+          <div className={`kids-result-box${selected === q.answer ? ' correct' : ' incorrect'}`} style={{ marginTop: '16px' }}>
+            <p className="kids-result-label" style={{ color: selected === q.answer ? '#2e7d32' : '#e65100', marginBottom: '4px' }}>
               {selected === q.answer ? '✅ ¡Correcto!' : '💡 ¡Dato interesante!'}
             </p>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{q.fun}</p>
-            <button onClick={next} style={{ marginTop: '10px', padding: '8px 20px', borderRadius: '20px', background: '#ff5722', color: 'white', fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+            <p className="kids-result-text">{q.fun}</p>
+            <button onClick={next} className="kids-next-btn" style={{ background: '#ff5722' }}>
               Siguiente →
             </button>
           </div>
         )}
       </div>
 
-      <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)', padding: '20px', border: '1px solid var(--border-color)' }}>
-        <h4 style={{ fontWeight: 700, marginBottom: '16px' }}>📊 Marcador</h4>
+      <div className="kids-stat-sidebar">
+        <h4 style={{ marginBottom: '16px' }}>📊 Marcador</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{ textAlign: 'center', padding: '10px', background: '#e8f5e9', borderRadius: '8px' }}>
-            <p style={{ fontSize: '1.8rem', fontWeight: 800, color: '#4caf50' }}>{score}</p>
-            <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Correctas</p>
+          <div className="kids-stat-card" style={{ background: '#e8f5e9' }}>
+            <p className="kids-stat-card-value" style={{ color: '#4caf50' }}>{score}</p>
+            <p className="kids-stat-card-label">Correctas</p>
           </div>
-          <div style={{ textAlign: 'center', padding: '10px', background: '#fff3e0', borderRadius: '8px' }}>
-            <p style={{ fontSize: '1.8rem', fontWeight: 800, color: '#ff9800' }}>{streak} 🔥</p>
-            <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Racha actual</p>
+          <div className="kids-stat-card" style={{ background: '#fff3e0' }}>
+            <p className="kids-stat-card-value" style={{ color: '#ff9800' }}>{streak} 🔥</p>
+            <p className="kids-stat-card-label">Racha actual</p>
           </div>
-          <div style={{ textAlign: 'center', padding: '10px', background: '#fce4ec', borderRadius: '8px' }}>
-            <p style={{ fontSize: '1.8rem', fontWeight: 800, color: '#e91e63' }}>{bestStreak}</p>
-            <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Mejor racha</p>
+          <div className="kids-stat-card" style={{ background: '#fce4ec' }}>
+            <p className="kids-stat-card-value" style={{ color: '#e91e63' }}>{bestStreak}</p>
+            <p className="kids-stat-card-label">Mejor racha</p>
           </div>
         </div>
       </div>
@@ -946,13 +875,13 @@ function WordSearchSection() {
   };
 
   return (
-    <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)', padding: '28px', border: '1px solid var(--border-color)', maxWidth: '700px', margin: '0 auto' }}>
-      <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-        <h3 style={{ fontFamily: 'var(--font-primary)', fontSize: '1.4rem', fontWeight: 800, color: '#ff9800' }}>🔤 Sopa de Letras Ambiental</h3>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '4px' }}>Haz clic en las letras para formar las palabras ({foundWords.length}/{wordSearchWords.length})</p>
+    <div className="kids-panel" style={{ maxWidth: '700px', margin: '0 auto' }}>
+      <div className="kids-section-header">
+        <h3 className="kids-section-title" style={{ color: '#ff9800' }}>🔤 Sopa de Letras Ambiental</h3>
+        <p className="kids-section-subtitle">Haz clic en las letras para formar las palabras ({foundWords.length}/{wordSearchWords.length})</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`, gap: '2px', marginBottom: '24px', maxWidth: '500px', margin: '0 auto 24px' }}>
+      <div className="kids-word-grid" style={{ gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)` }}>
         {wordGrid.grid.map((row, r) =>
           row.map((cell, c) => {
             const isSelected = selectedCells.includes(`${r},${c}`);
@@ -963,16 +892,7 @@ function WordSearchSection() {
             });
             return (
               <button key={`${r}-${c}`} onClick={() => handleCellClick(r, c)}
-                style={{
-                  width: '100%', aspectRatio: '1', borderRadius: '4px',
-                  border: '2px solid',
-                  borderColor: isFound ? '#4caf50' : isHint ? '#ff9800' : isSelected ? '#9c27b0' : 'var(--border-color)',
-                  background: isFound ? '#e8f5e9' : isHint ? '#fff3e0' : isSelected ? '#f3e5f5' : 'var(--bg-secondary)',
-                  fontWeight: 700, fontSize: 'clamp(0.7rem, 2vw, 1rem)',
-                  color: 'var(--text-primary)', cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
+                className={`kids-word-cell${isSelected ? ' selected' : ''}${isFound ? ' found' : ''}${isHint ? ' hint' : ''}`}>
                 {cell}
               </button>
             );
@@ -980,24 +900,13 @@ function WordSearchSection() {
         )}
       </div>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center' }}>
+      <div className="kids-word-tags">
         {wordSearchWords.map((ws) => (
-          <div key={ws.word} style={{
-            padding: '8px 16px', borderRadius: '20px', border: '2px solid',
-            borderColor: foundWords.includes(ws.word) ? '#4caf50' : 'var(--border-color)',
-            background: foundWords.includes(ws.word) ? '#e8f5e9' : 'var(--bg-secondary)',
-            fontWeight: 700, fontSize: '0.85rem',
-            color: foundWords.includes(ws.word) ? '#2e7d32' : 'var(--text-muted)',
-            textDecoration: foundWords.includes(ws.word) ? 'line-through' : 'none',
-            display: 'flex', alignItems: 'center', gap: '8px',
-          }}>
+          <div key={ws.word} className={`kids-word-tag${foundWords.includes(ws.word) ? ' found' : ''}`}>
             <span>{ws.word}</span>
-            <span style={{ fontWeight: 400, fontSize: '0.75rem', opacity: 0.7 }}>({ws.hint})</span>
+            <span className="kids-word-tag-hint">({ws.hint})</span>
             {!foundWords.includes(ws.word) && (
-              <button onClick={(e) => { e.stopPropagation(); showHint(ws.word); }} style={{
-                background: '#ff9800', color: 'white', border: 'none', borderRadius: '50%',
-                width: '18px', height: '18px', fontSize: '0.65rem', cursor: 'pointer', fontWeight: 700,
-              }}>?</button>
+              <button onClick={(e) => { e.stopPropagation(); showHint(ws.word); }} className="kids-hint-btn">?</button>
             )}
           </div>
         ))}
@@ -1035,26 +944,24 @@ function ColoringSection() {
   };
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 200px', gap: '24px', alignItems: 'start', maxWidth: '700px', margin: '0 auto' }}>
-      <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)', padding: '28px', border: '1px solid var(--border-color)' }}>
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-          <h3 style={{ fontFamily: 'var(--font-primary)', fontSize: '1.4rem', fontWeight: 800, color: '#9c27b0' }}>🎨 Zona de Colorear</h3>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '4px' }}>Selecciona un color y haz clic en las formas para colorearlas</p>
+    <div className="kids-game-grid-2" style={{ gridTemplateColumns: '1fr 200px', maxWidth: '700px', margin: '0 auto' }}>
+      <div className="kids-panel">
+        <div className="kids-section-header">
+          <h3 className="kids-section-title" style={{ color: '#9c27b0' }}>🎨 Zona de Colorear</h3>
+          <p className="kids-section-subtitle">Selecciona un color y haz clic en las formas para colorearlas</p>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '20px' }}>
+        <div className="kids-category-bar">
           {colorBookPages.map((p, i) => (
-            <button key={i} onClick={() => setCurrentPage(i)} style={{
-              padding: '6px 16px', borderRadius: '15px', fontWeight: 700, fontSize: '0.85rem',
-              border: '2px solid', cursor: 'pointer',
-              borderColor: currentPage === i ? '#9c27b0' : 'var(--border-color)',
-              background: currentPage === i ? '#9c27b0' : 'var(--bg-secondary)',
-              color: currentPage === i ? 'white' : 'var(--text-primary)',
-            }}>{p.title}</button>
+            <button key={i} onClick={() => setCurrentPage(i)}
+              className={`kids-category-btn${currentPage === i ? ' active' : ''}`}
+              style={currentPage === i ? { borderColor: '#9c27b0', background: '#9c27b0' } : {}}>
+              {p.title}
+            </button>
           ))}
         </div>
 
-        <div style={{ background: 'white', borderRadius: '12px', padding: '16px', border: '2px solid var(--border-color)', display: 'flex', justifyContent: 'center' }}>
+        <div className="kids-coloring-canvas">
           <svg viewBox="0 0 300 200" style={{ width: '100%', maxWidth: '400px', height: 'auto' }}>
             {page.elements.map((el, idx) => {
               const color = coloredElements[`${currentPage}-${idx}`] || el.fill;
@@ -1069,29 +976,24 @@ function ColoringSection() {
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '16px' }}>
-          <button onClick={resetPage} style={{ padding: '8px 20px', borderRadius: '15px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', fontWeight: 700, cursor: 'pointer', color: 'var(--text-primary)' }}>
+          <button onClick={resetPage} className="kids-restart-btn">
             🗑️ Limpiar
           </button>
         </div>
       </div>
 
-      <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)', padding: '20px', border: '1px solid var(--border-color)' }}>
-        <h4 style={{ fontWeight: 700, marginBottom: '12px' }}>🎨 Colores</h4>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+      <div className="kids-stat-sidebar">
+        <h4 style={{ marginBottom: '12px' }}>🎨 Colores</h4>
+        <div className="kids-color-palette">
           {page.colors.map((color) => (
             <button key={color} onClick={() => setSelectedColor(color)}
-              style={{
-                width: '100%', aspectRatio: '1', borderRadius: '8px',
-                background: color, border: '3px solid',
-                borderColor: selectedColor === color ? '#333' : 'transparent',
-                cursor: 'pointer', transition: 'all 0.2s ease',
-                boxShadow: selectedColor === color ? '0 0 0 2px white, 0 0 0 4px #333' : 'none',
-              }} />
+              className={`kids-color-swatch${selectedColor === color ? ' selected' : ''}`}
+              style={{ background: color }} />
           ))}
         </div>
-        <div style={{ marginTop: '12px', textAlign: 'center', padding: '8px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
+        <div className="kids-color-preview">
           <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Color seleccionado</p>
-          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: selectedColor, margin: '6px auto', border: '2px solid var(--border-color)' }} />
+          <div className="kids-color-preview-dot" style={{ background: selectedColor }} />
         </div>
       </div>
     </div>
@@ -1107,12 +1009,12 @@ function FactsSection({ funFacts, extraFacts, t }) {
       <h3 style={{ fontFamily: 'var(--font-primary)', fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', color: '#ff5722', marginBottom: '24px' }}>
         🤩 {t('kids.fun_facts')}
       </h3>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '40px' }}>
+      <div className="kids-facts-grid-4">
         {funFacts.map((fact, i) => (
-          <div key={i} style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)', padding: '20px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>{fact.emoji}</div>
-            <h4 style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: '8px' }}>{t(fact.titleKey)}</h4>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>{t(fact.descKey)}</p>
+          <div key={i} className="kids-fact-card">
+            <div className="kids-fact-emoji">{fact.emoji}</div>
+            <h4>{t(fact.titleKey)}</h4>
+            <p>{t(fact.descKey)}</p>
           </div>
         ))}
       </div>
@@ -1120,29 +1022,134 @@ function FactsSection({ funFacts, extraFacts, t }) {
       <h3 style={{ fontFamily: 'var(--font-primary)', fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', color: '#9c27b0', marginBottom: '24px' }}>
         🧪 Datos Curiosos Extra
       </h3>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+      <div className="kids-facts-grid-3">
         {displayedFacts.map((fact, i) => (
-          <div key={i} style={{
-            background: 'linear-gradient(135deg, rgba(156,39,176,0.05), rgba(233,30,99,0.05))',
-            borderRadius: 'var(--radius-md)', padding: '20px',
-            border: '1px solid rgba(156,39,176,0.2)', textAlign: 'center',
-          }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>{fact.emoji}</div>
-            <h4 style={{ fontWeight: 700, color: '#9c27b0', marginBottom: '8px', fontSize: '0.95rem' }}>{fact.title}</h4>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>{fact.desc}</p>
+          <div key={i} className="kids-extra-fact-card">
+            <div className="kids-fact-emoji">{fact.emoji}</div>
+            <h4>{fact.title}</h4>
+            <p>{fact.desc}</p>
           </div>
         ))}
       </div>
       {!showAll && extraFacts.length > 6 && (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
-          <button onClick={() => setShowAll(true)} style={{
-            padding: '10px 24px', borderRadius: '25px', background: 'linear-gradient(135deg, #9c27b0, #e91e63)',
-            color: 'white', fontWeight: 700, border: 'none', cursor: 'pointer', fontSize: '0.9rem',
-          }}>
+          <button onClick={() => setShowAll(true)} className="kids-show-more-btn">
             Ver más datos curiosos 🧪
           </button>
         </div>
       )}
     </>
+  );
+}
+
+const discoverTopics = [
+  {
+    id: 'animales',
+    title: 'Animales de la Amazonía',
+    emoji: '🦜',
+    color: '#4caf50',
+    description: 'Conoce los animales más increíbles de la selva amazónica.',
+    facts: [
+      { emoji: '🐆', title: 'El Jaguar', text: 'Es el felino más grande de América. Puede nadar y cazará en el agua. Su mordida es la más fuerte de todos los felinos.', img: '🐆' },
+      { emoji: '🦜', title: 'Guacamayo', text: 'Ave de colores brillantes que puede vivir hasta 80 años. Habita en las copas de los árboles de la selva.', img: '🦜' },
+      { emoji: '🦥', title: 'Perezoso', text: 'Duerme hasta 20 horas al día. Se mueve tan lento que crece musgo en su pelaje. Es un excelente nadador.', img: '🦥' },
+      { emoji: '🐒', title: 'Mono Araña', text: 'Salta entre árboles usando sus largos brazos. Puede saltar hasta 9 metros de distancia en un solo brinco.', img: '🐒' },
+      { emoji: '🦦', title: 'Nutria Gigante', text: 'La nutria más grande del mundo. Es social y vive en grupos familiares en los ríos amazónicos.', img: '🦦' },
+      { emoji: '🐢', title: 'Tortuga Charapa', text: 'Reptil que puede vivir más de 100 años. Pone sus huevos en la arena de las playas del río.', img: '🐢' },
+    ],
+  },
+  {
+    id: 'plantas',
+    title: 'Plantas Increíbles',
+    emoji: '🌺',
+    color: '#e91e63',
+    description: 'Descubre las plantas más sorprendentes de la naturaleza.',
+    facts: [
+      { emoji: '🌸', title: 'Victoria Regia', text: 'La water lily más grande del mundo. Sus hojas pueden medir hasta 3 metros y soportar el peso de un niño.', img: '🌸' },
+      { emoji: '🌿', title: 'Cacao', text: 'El chocolate viene de esta planta. Los antiguos incas lo usaban como bebida sagrada y moneda.', img: '🍫' },
+      { emoji: '🌳', title: 'Ceiba', text: 'El árbol sagrado de la Amazonía. Puede alcanzar 70 metros de altura y vivir más de 500 años.', img: '🌳' },
+      { emoji: '🌺', title: 'Heliconia', text: 'Planta tropical con flores coloridas que parecen picos de loro. Atrae colibríes y mariposas.', img: '🌺' },
+      { emoji: '🍃', title: 'Yagé (Ayahuasca)', text: 'Planta medicinal usada por pueblos indígenas durante miles de años para sanación y ceremonias.', img: '🍃' },
+      { emoji: '🌱', title: 'Camu Camu', text: 'Fruta amazónica con más vitamina C que cualquier otra. Crece en las orillas de los ríos.', img: '🍋' },
+    ],
+  },
+  {
+    id: 'agua',
+    title: 'El Mundo del Agua',
+    emoji: '💧',
+    color: '#2196f3',
+    description: 'Aprende sobre el agua y su importancia para la vida.',
+    facts: [
+      { emoji: '💧', title: 'El Agua es Vida', text: 'El cuerpo humano es 60% agua. Sin agua no habría vida en la Tierra. Solo el 3% es agua dulce.', img: '💧' },
+      { emoji: '🌊', title: 'El Ciclo del Agua', text: 'El agua nunca para: evaporación → nubes → lluvia → ríos → mar → evaporación. Es un ciclo infinito.', img: '🌊' },
+      { emoji: '🧊', title: 'Glaciares', text: 'El 70% del agua dulce está congelada en glaciares. Si todos se derritieran, el nivel del mar subiría 60 metros.', img: '🧊' },
+      { emoji: '🐟', title: 'Vida Marina', text: 'Los océanos albergan más del 80% de toda la vida en la Tierra. Hay más especies en el mar que en la tierra.', img: '🐟' },
+      { emoji: '🚿', title: 'Ahorra Agua', text: 'Cerrar el grifo mientras te cepillas ahorra 20 litros al día. ¡Pequeñas acciones hacen grandes cambios!', img: '🚿' },
+      { emoji: '🐠', title: 'Arrecifes de Coral', text: 'Los corales son animales vivos que forman ciudades submarinas. Sostienen el 25% de la vida marina.', img: '🐠' },
+    ],
+  },
+  {
+    id: 'planeta',
+    title: 'Cuidemos el Planeta',
+    emoji: '🌍',
+    color: '#ff9800',
+    description: 'Descubre cómo proteger nuestro planeta Tierra.',
+    facts: [
+      { emoji: '♻️', title: 'Reciclar es Genial', text: 'Reciclar una lata de aluminio ahorra energía suficiente para encender una TV por 3 horas.', img: '♻️' },
+      { emoji: '🌳', title: 'Plantar Árboles', text: 'Un árbol absorbe 22 kg de CO₂ al año y produce oxígeno para 2 personas. ¡Plantar árboles salva vidas!', img: '🌳' },
+      { emoji: '🛍️', title: 'Bolsas de Tela', text: 'Una bolsa de plástico se usa solo 15 minutos pero tarda 500 años en desaparecer. Usa bolsas reutilizables.', img: '👜' },
+      { emoji: '💡', title: 'Energía Limpia', text: 'El sol produce suficiente energía en 1 hora para abastecer al mundo entero por un año.', img: '☀️' },
+      { emoji: '🐘', title: 'Proteger Animales', text: 'Muchos animales están en peligro por la deforestación. Cada especie que desaparece es una pérdida irreparable.', img: '🐘' },
+      { emoji: '🌱', title: 'Compostaje', text: 'Los restos de comida se convierten en abono para las plantas. Es como devolver la comida a la naturaleza.', img: '🌱' },
+    ],
+  },
+]
+
+function DiscoverSection() {
+  const [activeTopic, setActiveTopic] = useState('animales')
+  const topic = discoverTopics.find((t) => t.id === activeTopic)
+
+  return (
+    <div className="kids-panel">
+      <div className="kids-section-header">
+        <h3 className="kids-section-title" style={{ color: '#4caf50' }}>🌍 Descubre el Mundo Natural</h3>
+        <p className="kids-section-subtitle">Explora la naturaleza y aprende cosas increíbles</p>
+      </div>
+
+      <div className="kids-category-bar">
+        {discoverTopics.map((t) => (
+          <button key={t.id} onClick={() => setActiveTopic(t.id)}
+            className={`kids-category-btn${activeTopic === t.id ? ' active' : ''}`}
+            style={activeTopic === t.id ? { borderColor: t.color, background: t.color } : {}}>
+            {t.emoji} {t.title}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+        <span style={{ fontSize: '3rem' }}>{topic.emoji}</span>
+        <p style={{ color: 'var(--text-muted)', marginTop: '8px', fontSize: '0.95rem' }}>{topic.description}</p>
+      </div>
+
+      <div className="kids-discover-grid">
+        {topic.facts.map((fact, i) => (
+          <motion.div
+            key={i}
+            className="kids-discover-card"
+            style={{ borderColor: `${topic.color}30` }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+            whileHover={{ scale: 1.02, y: -4 }}
+          >
+            <div className="kids-discover-card-emoji" style={{ background: `${topic.color}15` }}>
+              {fact.emoji}
+            </div>
+            <h4 className="kids-discover-card-title" style={{ color: topic.color }}>{fact.title}</h4>
+            <p className="kids-discover-card-text">{fact.text}</p>
+          </motion.div>
+        ))}
+      </div>
+    </div>
   );
 }

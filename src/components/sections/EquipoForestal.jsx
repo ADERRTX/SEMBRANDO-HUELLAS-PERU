@@ -55,19 +55,6 @@ export default function EquipoForestal() {
     }
   };
 
-  const inputStyle = {
-    width: '100%',
-    padding: '14px 16px',
-    borderRadius: 'var(--radius-sm)',
-    border: '2px solid var(--border-color)',
-    background: 'var(--bg-secondary)',
-    color: 'var(--text-primary)',
-    fontSize: '0.95rem',
-    outline: 'none',
-    transition: 'var(--transition)',
-    boxSizing: 'border-box',
-  };
-
   return (
     <section className="news-section team-section">
       <div className="section-header">
@@ -138,7 +125,7 @@ export default function EquipoForestal() {
                   placeholder="Nombre del autor"
                   value={form.author}
                   onChange={handleChange}
-                  style={inputStyle}
+                  className="kids-form-input"
                   required
                 />
               </div>
@@ -150,10 +137,10 @@ export default function EquipoForestal() {
                   placeholder="tu@email.com"
                   value={form.email}
                   onChange={handleChange}
-                  style={{ ...inputStyle, borderColor: emailError ? '#dc3545' : 'var(--border-color)' }}
+                  className={`kids-form-input${emailError ? ' contact-input has-error' : ''}`}
                   required
                 />
-                {emailError && <span style={{ color: '#dc3545', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{emailError}</span>}
+                {emailError && <span className="contact-error">{emailError}</span>}
               </div>
               <div>
                 <label>Título de la noticia</label>
@@ -163,7 +150,7 @@ export default function EquipoForestal() {
                   placeholder="Ej: Nueva especie descubierta en la Amazonía"
                   value={form.title}
                   onChange={handleChange}
-                  style={inputStyle}
+                  className="kids-form-input"
                   required
                 />
               </div>
@@ -173,7 +160,7 @@ export default function EquipoForestal() {
                   name="category"
                   value={form.category}
                   onChange={handleChange}
-                  style={inputStyle}
+                  className="kids-form-input"
                   required
                 >
                   <option value="">Selecciona una categoría</option>
@@ -192,7 +179,7 @@ export default function EquipoForestal() {
                   value={form.content}
                   onChange={handleChange}
                   rows={6}
-                  style={{ ...inputStyle, resize: 'vertical' }}
+                  className="kids-form-input contact-textarea"
                   required
                 />
               </div>
