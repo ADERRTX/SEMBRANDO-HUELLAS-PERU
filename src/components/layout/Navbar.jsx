@@ -27,18 +27,10 @@ export default function Navbar() {
 
   useEffect(() => {
     const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 50);
-      setHidden(y > lastScrollY.current && y > 80);
-      lastScrollY.current = y;
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    let lastScrollY = window.scrollY;
-    const onScroll = () => {
       const currentY = window.scrollY;
       setScrolled(currentY > 50);
-      setHidden(currentY > lastScrollY && currentY > 120);
-      lastScrollY = currentY;
+      setHidden(currentY > lastScrollY.current && currentY > 120);
+      lastScrollY.current = currentY;
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -112,7 +104,6 @@ export default function Navbar() {
 
   return (
     <header className={`main-header ${scrolled ? 'scrolled' : ''} ${hidden ? 'header-hidden' : ''}`} id="mainHeader">
-    <header className={`main-header ${scrolled ? 'scrolled' : ''} ${hidden ? 'nav-hidden' : ''}`} id="mainHeader">
       {/* TOP BAR */}
       <div className="header-top">
         <div className="container">
@@ -284,6 +275,11 @@ export default function Navbar() {
             <li>
               <Link to="/contacto" className={isActive('/contacto')}>
                 <i className="fas fa-envelope" /> {t('nav.contacto')}
+              </Link>
+            </li>
+            <li>
+              <Link to="/donar" className={`nav-link donate-nav-link ${isActive('/donar')}`}>
+                <i className="fas fa-hand-holding-heart" /> Donar
               </Link>
             </li>
           </ul>

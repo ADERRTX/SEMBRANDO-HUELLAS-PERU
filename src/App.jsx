@@ -16,6 +16,7 @@ const KidsPage = lazy(() => import('./pages/KidsPage'));
 const GalleryPage = lazy(() => import('./pages/GalleryPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 const AdminPage = lazy(() => import('./pages/AdminPage'));
+const DonatePage = lazy(() => import('./pages/DonatePage'));
 
 function SectionFallback() {
   return (
@@ -51,6 +52,7 @@ function AppRoutes() {
           <Route path="/ninos" element={<KidsPage />} />
           <Route path="/galeria" element={<GalleryPage />} />
           <Route path="/contacto" element={<ContactPage />} />
+          <Route path="/donar" element={<DonatePage />} />
           <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </Suspense>
