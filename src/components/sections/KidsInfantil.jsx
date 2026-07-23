@@ -341,24 +341,54 @@ function VideosSection() {
 }
 
 function BooksSection() {
-  const [activeBook, setActiveBook] = useState('biodiversidad');
+  const [activeBook, setActiveBook] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState({});
   const [quizScore, setQuizScore] = useState(0);
+  const [isOpening, setIsOpening] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const [pageFlip, setPageFlip] = useState(null);
 
-  const book = interactiveBooks.find((b) => b.id === activeBook);
+  const book = activeBook ? interactiveBooks.find((b) => b.id === activeBook) : null;
 
-  const resetBook = () => {
-    setCurrentPage(0);
-    setShowQuiz(false);
-    setQuizAnswers({});
-    setQuizScore(0);
+  const openBook = (id) => {
+    setIsOpening(true);
+    setActiveBook(id);
+    setTimeout(() => setIsOpening(false), 800);
   };
 
-  const switchBook = (id) => {
-    setActiveBook(id);
-    resetBook();
+  const closeBook = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setActiveBook(null);
+      setIsClosing(false);
+      setCurrentPage(0);
+      setShowQuiz(false);
+      setQuizAnswers({});
+      setQuizScore(0);
+    }, 600);
+  };
+
+  const goToPage = (pageNum) => {
+    if (pageNum === currentPage) return;
+    setPageFlip(pageNum > currentPage ? 'next' : 'prev');
+    setTimeout(() => {
+      setCurrentPage(pageNum);
+      setPageFlip(null);
+    }, 300);
+  };
+
+  const nextPage = () => {
+    if (currentPage < book.pages.length - 1) {
+      goToPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 0) {
+      goToPage(currentPage - 1);
+    }
   };
 
   const handleQuizAnswer = (qIdx, aIdx) => {
@@ -368,106 +398,197 @@ function BooksSection() {
     if (aIdx === book.questions[qIdx].answer) setQuizScore((s) => s + 1);
   };
 
+  // Show bookshelf
+  if (!activeBook) {
+    return (
+      <div className="kids-panel">
+        <div className="kids-section-header">
+          <h3 className="kids-section-title" style={{ color: '#2196f3' }}>📚 Biblioteca Amazónica</h3>
+          <p className="kids-section-subtitle">Elige un libro y haz clic para abrirlo</p>
+        </div>
+
+        <div className="kids-bookshelf">
+          <div className="kids-bookshelf-board" />
+          <div className="kids-bookshelf-row">
+            {interactiveBooks.map((b, i) => (
+              <button
+                key={b.id}
+                className={`kids-book-3d ${isOpening ? 'opening' : ''}`}
+                onClick={() => openBook(b.id)}
+                style={{ '--book-color': b.color, '--book-delay': `${i * 0.1}s` }}
+              >
+                <div className="kids-book-3d-spine">
+                  <span>{b.icon}</span>
+                </div>
+                <div className="kids-book-3d-cover">
+                  <div className="kids-book-3d-cover-front">
+                    <span className="kids-book-3d-icon">{b.icon}</span>
+                    <span className="kids-book-3d-title">{b.title}</span>
+                    <span className="kids-book-3d-pages-count">{b.pages.length} páginas</span>
+                  </div>
+                  <div className="kids-book-3d-cover-back" />
+                </div>
+                <div className="kids-book-3d-pages">
+                  <div className="kids-book-3d-page" />
+                  <div className="kids-book-3d-page" />
+                  <div className="kids-book-3d-page" />
+                </div>
+                <div className="kids-book-3d-shadow" />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show open book
   return (
     <div className="kids-panel">
-      <div className="kids-section-header">
-        <h3 className="kids-section-title" style={{ color: '#2196f3' }}>📚 Libros Interactivos</h3>
-        <p className="kids-section-subtitle">Lee, aprende y responde preguntas sobre el medio ambiente</p>
-      </div>
-
-      <div className="kids-category-bar">
-        {interactiveBooks.map((b) => (
-          <button key={b.id} onClick={() => switchBook(b.id)}
-            className={`kids-category-btn${activeBook === b.id ? ' active' : ''}`}
-            style={activeBook === b.id ? { borderColor: b.color, background: b.color } : {}}>
-            {b.icon} {b.title}
+      <div className={`kids-open-book-wrapper ${isClosing ? 'closing' : ''}`}>
+        <div className="kids-open-book-header">
+          <button onClick={closeBook} className="kids-book-back-btn">
+            ← Volver a la Biblioteca
           </button>
-        ))}
-      </div>
+          <h3 style={{ fontWeight: 700, color: book.color, fontSize: '1.1rem' }}>
+            {book.icon} {book.title}
+          </h3>
+        </div>
 
-      {!showQuiz ? (
-        <div>
-          <div className="kids-book-content" style={{ borderColor: `${book.color}20` }}>
-            <div className="kids-book-page-header">
-              <span className="kids-book-page-emoji">{book.pages[currentPage].img}</span>
-              <h4 className="kids-book-page-heading" style={{ color: book.color }}>{book.pages[currentPage].heading}</h4>
+        {!showQuiz ? (
+          <div className="kids-open-book">
+            <div className="kids-book-spread">
+              <div className={`kids-book-page-left ${pageFlip === 'prev' ? 'flipping' : ''}`}>
+                <div className="kids-book-page-content">
+                  {currentPage > 0 ? (
+                    <>
+                      <div className="kids-book-page-header-real">
+                        <span className="kids-book-page-emoji-real">{book.pages[currentPage - 1].img}</span>
+                        <h4 className="kids-book-page-heading-real" style={{ color: book.color }}>
+                          {book.pages[currentPage - 1].heading}
+                        </h4>
+                      </div>
+                      <p className="kids-book-page-text-real">{book.pages[currentPage - 1].text}</p>
+                      <div className="kids-book-page-number">{currentPage}</div>
+                    </>
+                  ) : (
+                    <div className="kids-book-page-blank">
+                      <span className="kids-book-closed-icon">{book.icon}</span>
+                    </div>
+                  )}
+                </div>
+                <div className="kids-book-page-fold" />
+              </div>
+
+              <div className="kids-book-spine-center" />
+
+              <div className={`kids-book-page-right ${pageFlip === 'next' ? 'flipping' : ''}`}>
+                <div className="kids-book-page-content">
+                  <div className="kids-book-page-header-real">
+                    <span className="kids-book-page-emoji-real">{book.pages[currentPage].img}</span>
+                    <h4 className="kids-book-page-heading-real" style={{ color: book.color }}>
+                      {book.pages[currentPage].heading}
+                    </h4>
+                  </div>
+                  <p className="kids-book-page-text-real">{book.pages[currentPage].text}</p>
+                  <div className="kids-book-page-number">{currentPage + 1}</div>
+                </div>
+                <div className="kids-book-page-fold left" />
+              </div>
             </div>
-            <p className="kids-book-page-text">{book.pages[currentPage].text}</p>
+
+            <div className="kids-book-nav-real">
+              <button
+                onClick={prevPage}
+                disabled={currentPage === 0}
+                className="kids-book-nav-btn"
+                style={{
+                  opacity: currentPage === 0 ? 0.3 : 1,
+                  color: currentPage === 0 ? '#999' : book.color,
+                }}
+              >
+                ← Anterior
+              </button>
+
+              <div className="kids-book-dots">
+                {book.pages.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => goToPage(i)}
+                    className={`kids-book-dot ${currentPage === i ? 'active' : ''}`}
+                    style={{ background: currentPage === i ? book.color : '#ddd' }}
+                  />
+                ))}
+              </div>
+
+              {currentPage < book.pages.length - 1 ? (
+                <button onClick={nextPage} className="kids-book-nav-btn" style={{ color: book.color }}>
+                  Siguiente →
+                </button>
+              ) : (
+                <button onClick={() => setShowQuiz(true)} className="kids-book-quiz-btn" style={{ background: book.color }}>
+                  🧠 ¡Quiz!
+                </button>
+              )}
+            </div>
           </div>
+        ) : (
+          <div className="kids-book-quiz-mode">
+            <div className="kids-book-quiz-header">
+              <span style={{ fontSize: '2.5rem' }}>🧠</span>
+              <h4 style={{ fontWeight: 800, fontSize: '1.2rem', color: book.color }}>Quiz del Libro</h4>
+            </div>
 
-          <div className="kids-book-nav">
-            <button onClick={() => setCurrentPage((p) => Math.max(0, p - 1))} disabled={currentPage === 0}
-              className="kids-book-btn"
-              style={{
-                background: currentPage === 0 ? '#e0e0e0' : book.color,
-                color: currentPage === 0 ? '#999' : 'white',
-                opacity: currentPage === 0 ? 0.5 : 1,
-              }}>← Anterior</button>
-
-            <div className="kids-page-dots">
-              {book.pages.map((_, i) => (
-                <div key={i} onClick={() => setCurrentPage(i)}
-                  className={`kids-page-dot${currentPage === i ? ' active' : ''}`}
-                  style={{ background: currentPage === i ? book.color : '#ddd' }} />
+            <div className="kids-book-quiz-list">
+              {book.questions.map((q, qIdx) => (
+                <div key={qIdx} className="kids-quiz-card">
+                  <p style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '10px' }}>
+                    {qIdx + 1}. {q.q}
+                  </p>
+                  <div className="kids-quiz-options">
+                    {q.options.map((opt, aIdx) => {
+                      const answered = quizAnswers[qIdx] !== undefined;
+                      const isCorrect = aIdx === q.answer;
+                      const isSelected = quizAnswers[qIdx] === aIdx;
+                      return (
+                        <button key={aIdx} onClick={() => handleQuizAnswer(qIdx, aIdx)} disabled={answered}
+                          className={`kids-quiz-option-btn${answered ? (isCorrect ? ' correct' : isSelected ? ' incorrect' : '') : ''}`}
+                          style={answered ? {
+                            borderColor: isCorrect ? '#4caf50' : isSelected ? '#f44336' : '#e0e0e0',
+                            background: isCorrect ? '#e8f5e9' : isSelected ? '#ffebee' : 'white',
+                            color: isCorrect ? '#2e7d32' : isSelected ? '#c62828' : '#999',
+                            cursor: 'default',
+                          } : {}}>
+                          {String.fromCharCode(65 + aIdx)}. {opt}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               ))}
             </div>
 
-            {currentPage < book.pages.length - 1 ? (
-              <button onClick={() => setCurrentPage((p) => p + 1)}
-                className="kids-book-btn"
-                style={{ background: book.color, color: 'white' }}>
-                Siguiente →
-              </button>
-            ) : (
-              <button onClick={() => setShowQuiz(true)}
-                className="kids-play-btn">
-                🧠 ¡Responder Quiz!
-              </button>
+            {Object.keys(quizAnswers).length === book.questions.length && (
+              <div className="kids-book-score-box" style={{ background: `linear-gradient(135deg, ${book.color}10, ${book.color}20)`, borderColor: `${book.color}40` }}>
+                <div className="kids-book-score-icon">{quizScore === book.questions.length ? '🏆' : quizScore >= 2 ? '⭐' : '💪'}</div>
+                <p className="kids-book-score-value" style={{ color: book.color }}>{quizScore} / {book.questions.length}</p>
+                <p style={{ color: 'var(--text-muted)', marginTop: '4px' }}>
+                  {quizScore === book.questions.length ? '¡Excelente! Dominaste el libro' : '¡Sigue leyendo y aprendiendo!'}
+                </p>
+                <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '16px' }}>
+                  <button onClick={() => { setShowQuiz(false); setQuizAnswers({}); setQuizScore(0); }}
+                    className="kids-book-btn" style={{ background: book.color, color: 'white' }}>
+                    📖 Leer de Nuevo
+                  </button>
+                  <button onClick={closeBook} className="kids-book-btn" style={{ background: '#e0e0e0', color: '#666' }}>
+                    📚 Otro Libro
+                  </button>
+                </div>
+              </div>
             )}
           </div>
-        </div>
-      ) : (
-        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-          <h4 style={{ textAlign: 'center', fontWeight: 800, fontSize: '1.2rem', color: book.color, marginBottom: '20px' }}>🧠 Quiz del Libro</h4>
-          {book.questions.map((q, qIdx) => (
-            <div key={qIdx} className="kids-quiz-card">
-              <p style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '10px' }}>{qIdx + 1}. {q.q}</p>
-              <div className="kids-quiz-options">
-                {q.options.map((opt, aIdx) => {
-                  const answered = quizAnswers[qIdx] !== undefined;
-                  const isCorrect = aIdx === q.answer;
-                  const isSelected = quizAnswers[qIdx] === aIdx;
-                  return (
-                    <button key={aIdx} onClick={() => handleQuizAnswer(qIdx, aIdx)} disabled={answered}
-                      className={`kids-quiz-option-btn${answered ? (isCorrect ? ' correct' : isSelected ? ' incorrect' : '') : ''}`}
-                      style={answered ? {
-                        borderColor: isCorrect ? '#4caf50' : isSelected ? '#f44336' : '#e0e0e0',
-                        background: isCorrect ? '#e8f5e9' : isSelected ? '#ffebee' : 'white',
-                        color: isCorrect ? '#2e7d32' : isSelected ? '#c62828' : '#999',
-                        cursor: 'default',
-                      } : {}}>
-                      {String.fromCharCode(65 + aIdx)}. {opt}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
-
-          {Object.keys(quizAnswers).length === book.questions.length && (
-            <div className="kids-book-score-box" style={{ background: `linear-gradient(135deg, ${book.color}10, ${book.color}20)`, borderColor: `${book.color}40` }}>
-              <div className="kids-book-score-icon">{quizScore === book.questions.length ? '🏆' : quizScore >= 2 ? '⭐' : '💪'}</div>
-              <p className="kids-book-score-value" style={{ color: book.color }}>{quizScore} / {book.questions.length}</p>
-              <p style={{ color: 'var(--text-muted)', marginTop: '4px' }}>
-                {quizScore === book.questions.length ? '¡Excelente! Dominaste el libro' : '¡Sigue leyendo y aprendiendo!'}
-              </p>
-              <button onClick={resetBook} className="kids-book-btn" style={{ marginTop: '16px', background: book.color, color: 'white' }}>
-                📖 Leer de Nuevo
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
