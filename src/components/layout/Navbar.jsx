@@ -1,11 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useCountry } from '../../contexts/CountryContext';
 import { LANGUAGES } from '../../i18n/translations';
-import { SITE_CONFIG, NACIONALES } from '../../constants';
+import { SITE_CONFIG } from '../../constants';
+import { PAISES_DATA, COUNTRY_LIST } from '../../data/countries';
 
 export default function Navbar() {
   const { language, setLanguage, t } = useLanguage();
+  const { country, setCountry } = useCountry();
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -13,14 +16,23 @@ export default function Navbar() {
   const [langSearch, setLangSearch] = useState('');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [countrySearch, setCountrySearch] = useState('');
   const [theme, setTheme] = useState(() => localStorage.getItem('sh_theme') || 'light');
   const [logoIdx, setLogoIdx] = useState(0);
   const langRef = useRef(null);
   const ddRef = useRef(null);
+  const lastScrollY = useRef(0);
 
   const logos = [SITE_CONFIG.logoFull, SITE_CONFIG.logo];
 
   useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 50);
+      setHidden(y > lastScrollY.current && y > 80);
+      lastScrollY.current = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
     let lastScrollY = window.scrollY;
     const onScroll = () => {
       const currentY = window.scrollY;
@@ -63,14 +75,43 @@ export default function Navbar() {
 
   const filteredLangs = LANGUAGES.filter(
     (l) => l.label.toLowerCase().includes(langSearch.toLowerCase()) ||
-           l.native.toLowerCase().includes(langSearch.toLowerCase())
+           l.native.toLowerCase().includes(langSearch.toLowerCase()) ||
+           l.flag.includes(langSearch)
   );
 
-  const currentLang = LANGUAGES.find((l) => l.code === language) || LANGUAGES[0];
+  const currentLang = LANGUAGES.find((l) => l.label.includes('Perú') && l.code === language)
+    || LANGUAGES.find((l) => l.code === language)
+    || LANGUAGES[0];
 
   const isActive = (path) => location.pathname === path ? 'nav-link active' : 'nav-link';
 
+  const filteredCountries = useMemo(() => {
+    if (!countrySearch) return COUNTRY_LIST;
+    const q = countrySearch.toLowerCase();
+    return COUNTRY_LIST.filter((c) => {
+      const data = PAISES_DATA[c];
+      return c.toLowerCase().includes(q) ||
+        (data?.idiomaNombre && data.idiomaNombre.toLowerCase().includes(q)) ||
+        (data?.bandera && data.bandera.includes(q));
+    });
+  }, [countrySearch]);
+
+  const selectCountry = (name) => {
+    if (country === name) {
+      setCountry(null);
+    } else {
+      setCountry(name);
+      const paisData = PAISES_DATA[name];
+      if (paisData?.idioma) {
+        setLanguage(paisData.idioma);
+      }
+    }
+    setDropdownOpen(false);
+    setCountrySearch('');
+  };
+
   return (
+    <header className={`main-header ${scrolled ? 'scrolled' : ''} ${hidden ? 'header-hidden' : ''}`} id="mainHeader">
     <header className={`main-header ${scrolled ? 'scrolled' : ''} ${hidden ? 'nav-hidden' : ''}`} id="mainHeader">
       {/* TOP BAR */}
       <div className="header-top">
@@ -116,8 +157,8 @@ export default function Navbar() {
             {/* Language Selector */}
             <div className="lang-selector" ref={langRef}>
               <button className="lang-btn" onClick={() => setLangOpen(!langOpen)}>
-                <i className="fas fa-globe" />
-                <span>{currentLang.code.toUpperCase()}</span>
+                <span>{currentLang.flag}</span>
+                <span className="lang-btn-text">{currentLang.label.split('(')[0].trim()}</span>
                 <i className="fas fa-chevron-down" />
               </button>
               <div className={`lang-dropdown ${langOpen ? 'active' : ''}`}>
@@ -130,10 +171,10 @@ export default function Navbar() {
                   />
                 </div>
                 <div className="lang-list">
-                  {filteredLangs.map((lang) => (
+                  {filteredLangs.map((lang, i) => (
                     <div
-                      key={lang.code}
-                      className={`lang-option ${language === lang.code ? 'active' : ''}`}
+                      key={`${lang.code}-${lang.label}`}
+                      className={`lang-option ${language === lang.code && currentLang.label === lang.label ? 'active' : ''}`}
                       onClick={() => { setLanguage(lang.code); setLangOpen(false); setLangSearch(''); }}
                     >
                       <span className="lang-flag">{lang.flag}</span> {lang.label}
@@ -174,9 +215,35 @@ export default function Navbar() {
                 <i className="fas fa-flag" /> {t('nav.nacionales')} <i className="fas fa-chevron-down" />
               </a>
               <div className={`dropdown-menu ${dropdownOpen ? 'active' : ''}`}>
-                {NACIONALES.map((dep) => (
-                  <a key={dep} href="#" onClick={(e) => e.preventDefault()}>{dep}</a>
-                ))}
+                <div className="lang-search">
+                  <input
+                    type="text"
+                    placeholder="Buscar pais..."
+                    value={countrySearch}
+                    onChange={(e) => setCountrySearch(e.target.value)}
+                  />
+                </div>
+                <div className="lang-list">
+                  {filteredCountries.map((name) => {
+                    const data = PAISES_DATA[name];
+                    return (
+                      <a
+                        key={name}
+                        href="#"
+                        className={`lang-option ${country === name ? 'active' : ''}`}
+                        onClick={(e) => { e.preventDefault(); selectCountry(name); }}
+                      >
+                        <span className="lang-flag">{data?.bandera}</span> {name}
+                        <span style={{ fontSize: '0.75em', opacity: 0.6, marginLeft: 6 }}>{data?.idiomaNombre}</span>
+                      </a>
+                    );
+                  })}
+                </div>
+                {country && (
+                  <a href="#" className="lang-option" style={{ color: 'var(--danger)', fontWeight: 600, borderTop: '1px solid var(--border-color)' }} onClick={(e) => { e.preventDefault(); selectCountry(country); }}>
+                    <i className="fas fa-times" /> Quitar filtro
+                  </a>
+                )}
               </div>
             </li>
             <li>

@@ -9,91 +9,113 @@ const ALL_NEWS = [
   ...ECONOMIA_NEWS.map((n) => ({ ...n, section: 'Economía Verde' })),
 ];
 
-const IMPORTANT_NEWS = ALL_NEWS.filter((n) => parseInt(n.views?.replace(/,/g, '') || '0') > 7000).slice(0, 8);
+const IMPORTANT_NEWS = ALL_NEWS
+  .filter((n) => parseInt(n.views?.replace(/,/g, '') || '0') > 7000)
+  .slice(0, 8)
+  .map((n, i) => ({ ...n, uniqueId: `${n.section}-${n.id}-${i}` }));
+
+const HEADER_WORDS = ['Noticias', 'Ultima Hora', 'Flash', 'Breaking'];
+const HEADER_ICONS = ['fa-fire', 'fa-bolt', 'fa-exclamation-triangle', 'fa-broadcast-tower'];
+
+const SLIDE_INTERVAL = 20000;
 
 export default function BreakingNewsCarousel() {
   const [selectedNews, setSelectedNews] = useState(null);
-  const scrollRef = useRef(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-
-  const checkScroll = () => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setCanScrollLeft(el.scrollLeft > 0);
-    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 1);
-  };
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [fadeState, setFadeState] = useState('visible');
+  const [headerIdx, setHeaderIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const intervalRef = useRef(null);
 
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    checkScroll();
-    el.addEventListener('scroll', checkScroll, { passive: true });
-    window.addEventListener('resize', checkScroll);
-    return () => {
-      el.removeEventListener('scroll', checkScroll);
-      window.removeEventListener('resize', checkScroll);
-    };
+    const iv = setInterval(() => {
+      setHeaderIdx((prev) => (prev + 1) % HEADER_WORDS.length);
+    }, 2500);
+    return () => clearInterval(iv);
   }, []);
 
-  const scroll = (dir) => {
-    const el = scrollRef.current;
-    if (!el) return;
-    el.scrollBy({ left: dir * 320, behavior: 'smooth' });
+  const goTo = (idx) => {
+    setFadeState('hidden');
+    setTimeout(() => {
+      setCurrentIdx(idx);
+      setFadeState('visible');
+    }, 300);
   };
+
+  const next = () => goTo((currentIdx + 1) % IMPORTANT_NEWS.length);
+  const prev = () => goTo((currentIdx - 1 + IMPORTANT_NEWS.length) % IMPORTANT_NEWS.length);
+
+  useEffect(() => {
+    if (paused) return;
+    intervalRef.current = setInterval(next, SLIDE_INTERVAL);
+    return () => clearInterval(intervalRef.current);
+  }, [paused, currentIdx]);
 
   if (IMPORTANT_NEWS.length === 0) return null;
 
+  const news = IMPORTANT_NEWS[currentIdx];
+
   return (
-    <section className="news-section breaking-carousel-section">
+    <section
+      className="news-section breaking-carousel-section"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       <div className="container">
         <div className="section-header">
           <div className="section-title-group">
-            <div className="section-icon"><i className="fas fa-fire" /></div>
-            <h2 className="section-title">Noticias Importantes</h2>
+            <div className="section-icon carousel-icon-animated" key={headerIdx}>
+              <i className={`fas ${HEADER_ICONS[headerIdx]}`} />
+            </div>
+            <h2 className="section-title carousel-title-animated">
+              <span className="carousel-title-word" key={headerIdx}>{HEADER_WORDS[headerIdx]}</span>
+              <span className="carousel-title-static"> Importantes</span>
+            </h2>
           </div>
           <div className="carousel-nav-btns">
-            <button
-              className={`carousel-nav-btn ${!canScrollLeft ? 'disabled' : ''}`}
-              onClick={() => scroll(-1)}
-              disabled={!canScrollLeft}
-            >
+            <button className="carousel-nav-btn" onClick={prev} aria-label="Anterior">
               <i className="fas fa-chevron-left" />
             </button>
-            <button
-              className={`carousel-nav-btn ${!canScrollRight ? 'disabled' : ''}`}
-              onClick={() => scroll(1)}
-              disabled={!canScrollRight}
-            >
+            <button className="carousel-nav-btn" onClick={next} aria-label="Siguiente">
               <i className="fas fa-chevron-right" />
             </button>
           </div>
         </div>
       </div>
-      <div className="breaking-carousel-wrapper">
-        <div className="breaking-carousel-track" ref={scrollRef}>
-          {IMPORTANT_NEWS.map((news) => (
-            <article key={news.id} className="breaking-carousel-card" onClick={() => setSelectedNews(news)}>
-              <div className="card-image">
-                <div className="image-placeholder" style={{
-                  backgroundImage: news.image ? `url(${news.image})` : 'linear-gradient(135deg, #1a5c1a 0%, #2d8a2d 100%)',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                }} />
-                <span className="card-category">{news.section}</span>
-              </div>
-              <div className="card-content">
-                <h3>{news.title}</h3>
-                <p>{news.excerpt}</p>
-                <div className="card-meta">
-                  <span><i className="fas fa-user" /> {news.author}</span>
-                  <span><i className="fas fa-eye" /> {news.views}</span>
-                </div>
-              </div>
-            </article>
+
+      <div className="fade-carousel-container">
+        <div className={`fade-carousel-slide ${fadeState}`} onClick={() => setSelectedNews(news)}>
+          <div
+            className="fade-carousel-image"
+            style={{
+              backgroundImage: news.image
+                ? `url(${news.image})`
+                : 'linear-gradient(135deg, #1a5c1a 0%, #2d8a2d 100%)',
+            }}
+          />
+          <div className="fade-carousel-overlay">
+            <span className="fade-carousel-category">{news.section}</span>
+            <h3 className="fade-carousel-title">{news.title}</h3>
+            <p className="fade-carousel-excerpt">{news.excerpt}</p>
+            <div className="fade-carousel-meta">
+              <span><i className="fas fa-user" /> {news.author}</span>
+              <span><i className="fas fa-eye" /> {news.views}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="fade-carousel-dots">
+          {IMPORTANT_NEWS.map((_, i) => (
+            <button
+              key={i}
+              className={`fade-carousel-dot ${i === currentIdx ? 'active' : ''}`}
+              onClick={() => goTo(i)}
+              aria-label={`Slide ${i + 1}`}
+            />
           ))}
         </div>
       </div>
+
       <NewsModal news={selectedNews} onClose={() => setSelectedNews(null)} />
     </section>
   );

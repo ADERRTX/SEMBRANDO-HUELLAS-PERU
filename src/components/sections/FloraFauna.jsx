@@ -1,12 +1,24 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useCountry } from '../../contexts/CountryContext';
 import { FLORA_FAUNA_NEWS } from '../../constants';
+import { PAISES_DATA } from '../../data/countries';
 import { Link } from 'react-router-dom';
 import NewsModal from '../ui/NewsModal';
 
 export default function FloraFauna() {
   const { t } = useLanguage();
+  const { country } = useCountry();
   const [selectedNews, setSelectedNews] = useState(null);
+
+  const newsList = useMemo(() => {
+    if (country && PAISES_DATA[country]) {
+      const flora = PAISES_DATA[country].flora || [];
+      const fauna = PAISES_DATA[country].fauna || [];
+      return [...flora, ...fauna];
+    }
+    return FLORA_FAUNA_NEWS;
+  }, [country]);
 
   const openNews = useCallback((news) => setSelectedNews(news), []);
 
@@ -20,7 +32,7 @@ export default function FloraFauna() {
         <Link to="/flora-fauna" className="section-more">Ver todas <i className="fas fa-arrow-right" /></Link>
       </div>
       <div className="news-grid fauna-grid">
-        {FLORA_FAUNA_NEWS.slice(0, 2).map((news) => (
+        {newsList.slice(0, 2).map((news) => (
           <article key={news.id} className="news-card horizontal-card" onClick={() => openNews(news)}>
             <div className="card-image">
               <div className="image-placeholder" style={{
@@ -41,7 +53,7 @@ export default function FloraFauna() {
           </article>
         ))}
         <div className="side-cards">
-          {FLORA_FAUNA_NEWS.slice(2).map((news) => (
+          {newsList.slice(2, 6).map((news) => (
             <article key={news.id} className="news-card mini-card" onClick={() => openNews(news)}>
               <span className="card-category">{news.category}</span>
               <h4>{news.title}</h4>

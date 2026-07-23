@@ -1,12 +1,20 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useCountry } from '../../contexts/CountryContext';
 import { ECONOMIA_NEWS } from '../../constants';
+import { PAISES_DATA } from '../../data/countries';
 import { Link } from 'react-router-dom';
 import NewsModal from '../ui/NewsModal';
 
 export default function EconomiaVerde() {
   const { t } = useLanguage();
+  const { country } = useCountry();
   const [selectedNews, setSelectedNews] = useState(null);
+
+  const newsList = useMemo(() => {
+    if (country && PAISES_DATA[country]?.economia) return PAISES_DATA[country].economia;
+    return ECONOMIA_NEWS;
+  }, [country]);
 
   const openNews = useCallback((news) => setSelectedNews(news), []);
 
@@ -20,7 +28,7 @@ export default function EconomiaVerde() {
         <Link to="/economia" className="section-more">Ver todas <i className="fas fa-arrow-right" /></Link>
       </div>
       <div className="news-grid eco-grid">
-        {ECONOMIA_NEWS.map((news) => (
+        {newsList.map((news) => (
           <article key={news.id} className="news-card" onClick={() => openNews(news)}>
             <div className="card-image">
               <div className="image-placeholder" style={{

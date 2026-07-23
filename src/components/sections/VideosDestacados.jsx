@@ -1,14 +1,22 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useCountry } from '../../contexts/CountryContext';
 import { VIDEOS_DATA } from '../../constants';
+import { PAISES_DATA } from '../../data/countries';
 import { Link } from 'react-router-dom';
 
 export default function VideosDestacados() {
   const { t } = useLanguage();
+  const { country } = useCountry();
   const [modalVideo, setModalVideo] = useState(null);
 
-  const mainVideo = VIDEOS_DATA[0];
-  const sideVideos = VIDEOS_DATA.slice(1);
+  const videos = useMemo(() => {
+    if (country && PAISES_DATA[country]?.videos) return PAISES_DATA[country].videos;
+    return VIDEOS_DATA;
+  }, [country]);
+
+  const mainVideo = videos[0];
+  const sideVideos = videos.slice(1);
 
   return (
     <>
@@ -71,14 +79,23 @@ export default function VideosDestacados() {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="modal-close" onClick={() => setModalVideo(null)}><i className="fas fa-times" /></button>
             <div className="video-player">
-              <div className="video-placeholder modal-vid" style={{
-                backgroundImage: modalVideo.image ? `url(${modalVideo.image})` : undefined,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                minHeight: 400,
-              }}>
-                <div className="video-play-btn large"><i className="fas fa-play" /></div>
-              </div>
+              {modalVideo.youtubeId ? (
+                <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, borderRadius: '12px', overflow: 'hidden' }}>
+                  <iframe src={`https://www.youtube.com/embed/${modalVideo.youtubeId}?autoplay=1&rel=0`}
+                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen title={modalVideo.title} />
+                </div>
+              ) : (
+                <div className="video-placeholder modal-vid" style={{
+                  backgroundImage: modalVideo.image ? `url(${modalVideo.image})` : undefined,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  minHeight: 400,
+                }}>
+                  <div className="video-play-btn large"><i className="fas fa-play" /></div>
+                </div>
+              )}
             </div>
             <div className="modal-info">
               <h3>{modalVideo.title}</h3>

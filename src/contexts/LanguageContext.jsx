@@ -19,10 +19,16 @@ export function LanguageProvider({ children }) {
     const keys = key.split('.')
     let val = translations[lang]
     for (const k of keys) {
-      if (val == null) return key
+      if (val == null) { val = null; break }
       val = val[k]
     }
-    return val ?? key
+    if (val != null) return val
+    let fallback = translations['es']
+    for (const k of keys) {
+      if (fallback == null) return key
+      fallback = fallback[k]
+    }
+    return fallback ?? key
   }, [lang])
 
   const value = useMemo(() => ({ lang, language: lang, changeLang, setLanguage: changeLang, t, translations }), [lang, changeLang, t])
@@ -46,10 +52,16 @@ export function useT() {
     const keys = key.split('.')
     let val = translations[lang]
     for (const k of keys) {
-      if (val == null) return key
+      if (val == null) { val = null; break }
       val = val[k]
     }
-    return val ?? key
+    if (val != null) return val
+    let fallback = translations['es']
+    for (const k of keys) {
+      if (fallback == null) return key
+      fallback = fallback[k]
+    }
+    return fallback ?? key
   }, [lang])
   return t
 }
