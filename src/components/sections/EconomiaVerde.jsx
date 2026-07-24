@@ -25,7 +25,7 @@ export default function EconomiaVerde() {
           <div className="section-icon"><i className="fas fa-chart-line" /></div>
           <h2 className="section-title">{t('economia.title') || 'Economía Verde'}</h2>
         </div>
-        <Link to="/economia" className="section-more">Ver todas <i className="fas fa-arrow-right" /></Link>
+        <Link to="/economia" className="section-more">{t('common.view_all')} <i className="fas fa-arrow-right" /></Link>
       </div>
       <div className="news-grid eco-grid">
         {newsList.map((news) => (

@@ -245,7 +245,7 @@ export default function EquipoForestal() {
               {emailSent && (
                 <div className="team-email-notification">
                   <i className="fas fa-envelope-open-text" />
-                  <span>Tu cliente de correo se abrió para enviar la noticia a <strong>educaccionyaccionporlaamazonia@gmail.com</strong></span>
+                  <span>Tu cliente de correo se abrió para enviar la noticia a <strong>educacionaccionamazonia@gmail.com</strong></span>
                 </div>
               )}
               <button className="team-contact-btn" onClick={() => { setStep('team'); setSubmitted(false); setEmailSent(false); setForm({ title: '', category: '', content: '', author: '', email: '' }); }}>

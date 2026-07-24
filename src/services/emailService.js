@@ -1,4 +1,4 @@
-const EMAIL_DESTINO = 'educaccionyaccionporlaamazonia@gmail.com';
+const EMAIL_DESTINO = 'educacionaccionamazonia@gmail.com';
 
 export function sendReviewEmail({ name, email, title, category, content }) {
   const subject = encodeURIComponent(`[REVISION] Nueva noticia: ${title}`);

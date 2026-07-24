@@ -43,7 +43,7 @@ export default function OpinionTrends() {
               <span className="trend-number">{String(i + 1).padStart(2, '0')}</span>
               <div className="trend-content">
                 <h4>{item.title}</h4>
-                <span className="trend-tag"><i className="fas fa-arrow-trend-up" /> {item.mentions} menciones</span>
+                <span className="trend-tag"><i className="fas fa-arrow-trend-up" /> {item.mentions} {t('common.mentions')}</span>
               </div>
             </article>
           ))}

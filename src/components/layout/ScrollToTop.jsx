@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 export default function ScrollToTop() {
+  const { t } = useLanguage();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -15,7 +17,7 @@ export default function ScrollToTop() {
     <button
       className="scroll-top visible"
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      aria-label="Volver arriba"
+      aria-label={t('common.back_to_top')}
     >
       <i className="fas fa-arrow-up" />
     </button>

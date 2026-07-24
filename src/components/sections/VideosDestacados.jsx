@@ -26,7 +26,7 @@ export default function VideosDestacados() {
             <div className="section-icon"><i className="fas fa-video" /></div>
             <h2 className="section-title">{t('videos.title') || 'Videos Destacados'}</h2>
           </div>
-          <Link to="/videos" className="section-more">Ver todos <i className="fas fa-arrow-right" /></Link>
+          <Link to="/videos" className="section-more">{t('common.view_all_m')} <i className="fas fa-arrow-right" /></Link>
         </div>
         <div className="video-grid">
           {mainVideo && (
@@ -39,13 +39,13 @@ export default function VideosDestacados() {
                 }} />
                 <div className="video-play-btn"><i className="fas fa-play" /></div>
                 <span className="video-duration">{mainVideo.duration}</span>
-                {mainVideo.isLive && <span className="video-live-badge">EN VIVO</span>}
+                {mainVideo.isLive && <span className="video-live-badge">{t('common.live')}</span>}
               </div>
               <div className="video-info">
                 <h3>{mainVideo.title}</h3>
                 <p>{mainVideo.excerpt}</p>
                 <div className="video-meta">
-                  <span><i className="fas fa-eye" /> {mainVideo.views} vistas</span>
+                   <span><i className="fas fa-eye" /> {mainVideo.views} {t('common.vistas')}</span>
                   <span><i className="fas fa-clock" /> {mainVideo.time}</span>
                 </div>
               </div>
@@ -65,7 +65,7 @@ export default function VideosDestacados() {
               <div className="video-info">
                 <h4>{video.title}</h4>
                 <div className="video-meta">
-                  <span><i className="fas fa-eye" /> {video.views} vistas</span>
+                   <span><i className="fas fa-eye" /> {video.views} {t('common.vistas')}</span>
                 </div>
               </div>
             </div>

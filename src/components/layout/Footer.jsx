@@ -18,10 +18,9 @@ export default function Footer() {
             <Link to="/">
               <img src={SITE_CONFIG.logoFull} alt="Sembrando Huellas" className="footer-logo" />
             </Link>
-            <p>Somos el medio líder en noticias del medio ambiente, flora y fauna en Perú y Latinoamérica. Sembrando huellas para un futuro sostenible.</p>
+            <p>Somos el medio líder en noticias del medio ambiente, flora y fauna en Perú y América Latina.</p>
             <div className="footer-social">
               <a href={SITE_CONFIG.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i className="fab fa-facebook" /></a>
-              <a href={SITE_CONFIG.social.twitter} target="_blank" rel="noopener noreferrer" aria-label="Twitter"><i className="fab fa-twitter" /></a>
               <a href={SITE_CONFIG.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i className="fab fa-instagram" /></a>
               <a href={SITE_CONFIG.social.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i className="fab fa-youtube" /></a>
               <a href={SITE_CONFIG.social.tiktok} target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i className="fab fa-tiktok" /></a>
@@ -31,26 +30,26 @@ export default function Footer() {
           <div className="footer-col">
             <h3>Secciones</h3>
             <ul>
-              <li><Link to="/medioambiente">{t('nav.medioambiente')}</Link></li>
-              <li><Link to="/flora-fauna">{t('nav.flora_fauna')}</Link></li>
-              <li><Link to="/economia">{t('nav.economia')}</Link></li>
-              <li><Link to="/videos">{t('nav.videos')}</Link></li>
-              <li><Link to="/ciencia">{t('nav.ciencia')}</Link></li>
-              <li><Link to="/ninos">{t('nav.kids')}</Link></li>
+              <li><Link to="/medioambiente">Medio Ambiente</Link></li>
+              <li><Link to="/flora-fauna">Flora & Fauna</Link></li>
+              <li><Link to="/economia">Economía Verde</Link></li>
+              <li><Link to="/videos">Videos</Link></li>
+              <li><Link to="/ciencia">Ciencia</Link></li>
+              <li><Link to="/ninos">Niños</Link></li>
             </ul>
           </div>
           <div className="footer-col">
             <h3>Multimedia</h3>
             <ul>
-              <li><Link to="/videos">{t('videos.title') || 'Videos'}</Link></li>
-              <li><Link to="/galeria">{t('nav.galeria')}</Link></li>
+              <li><Link to="/videos">Videos</Link></li>
+              <li><Link to="/galeria">Galería</Link></li>
               <li><a href="#">Podcasts</a></li>
               <li><a href="#">Documentales</a></li>
               <li><a href="#">Infografías</a></li>
             </ul>
           </div>
           <div className="footer-col">
-            <h3>{t('contact.title') || 'Contacto'}</h3>
+            <h3>Contacto</h3>
             <ul className="contact-list">
               <li><i className="fas fa-map-marker-alt" /> {SITE_CONFIG.location}</li>
               <li><i className="fas fa-phone" /> {SITE_CONFIG.phone}</li>

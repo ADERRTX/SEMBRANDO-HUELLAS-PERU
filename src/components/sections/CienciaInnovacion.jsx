@@ -16,9 +16,6 @@ export default function CienciaInnovacion() {
     return CIENCIA_NEWS;
   }, [country]);
 
-  const featured = newsList[0];
-  const others = newsList.slice(1);
-
   const openNews = useCallback((news) => setSelectedNews(news), []);
 
   return (
@@ -28,47 +25,29 @@ export default function CienciaInnovacion() {
           <div className="section-icon"><i className="fas fa-flask" /></div>
           <h2 className="section-title">{t('ciencia.title') || 'Ciencia e Innovación'}</h2>
         </div>
-        <Link to="/ciencia" className="section-more">Ver todas <i className="fas fa-arrow-right" /></Link>
+        <Link to="/ciencia" className="section-more">{t('common.view_all')} <i className="fas fa-arrow-right" /></Link>
       </div>
       <div className="news-grid science-grid">
-        {featured && (
-          <article className="news-card large-card" onClick={() => openNews(featured)}>
+        {newsList.map((news) => (
+          <article key={news.id} className="news-card" onClick={() => openNews(news)}>
             <div className="card-image">
               <div className="image-placeholder" style={{
-                backgroundImage: featured.image ? `url(${featured.image})` : 'linear-gradient(135deg, #4169e1 0%, #6495ed 100%)',
+                backgroundImage: news.image ? `url(${news.image})` : 'linear-gradient(135deg, #4169e1 0%, #6495ed 100%)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }} />
-              <span className="card-category">{featured.category}</span>
+              <span className="card-category">{news.category}</span>
             </div>
             <div className="card-content">
-              <h3>{featured.title}</h3>
-              <p>{featured.excerpt}</p>
+              <h3>{news.title}</h3>
+              <p>{news.excerpt}</p>
               <div className="card-meta">
-                <span><i className="fas fa-user" /> {featured.author}</span>
-                <span><i className="fas fa-clock" /> {featured.time}</span>
+                <span><i className="fas fa-user" /> {news.author}</span>
+                <span><i className="fas fa-clock" /> {news.time}</span>
               </div>
             </div>
           </article>
-        )}
-        <div className="science-side">
-          {others.map((news) => (
-            <article key={news.id} className="news-card horizontal-card" onClick={() => openNews(news)}>
-              <div className="card-image">
-                <div className="image-placeholder" style={{
-                  backgroundImage: news.image ? `url(${news.image})` : 'linear-gradient(135deg, #9370db 0%, #ba55d3 100%)',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                }} />
-              </div>
-              <div className="card-content">
-                <span className="card-category">{news.category}</span>
-                <h4>{news.title}</h4>
-                <span className="card-time"><i className="fas fa-clock" /> {news.time}</span>
-              </div>
-            </article>
-          ))}
-        </div>
+        ))}
       </div>
       <NewsModal news={selectedNews} onClose={() => setSelectedNews(null)} />
     </section>

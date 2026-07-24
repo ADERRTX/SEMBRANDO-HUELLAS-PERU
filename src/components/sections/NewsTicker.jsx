@@ -1,9 +1,11 @@
 import { useMemo } from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { useCountry } from '../../contexts/CountryContext';
 import { TICKER_ITEMS } from '../../constants';
 import { PAISES_DATA } from '../../data/countries';
 
 export default function NewsTicker() {
+  const { t } = useLanguage();
   const { country } = useCountry();
 
   const items = useMemo(() => {
@@ -17,7 +19,7 @@ export default function NewsTicker() {
   return (
     <div className="news-ticker" id="newsTicker">
       <div className="container">
-        <span className="ticker-label"><i className="fas fa-bolt" /> URGENTE</span>
+        <span className="ticker-label"><i className="fas fa-bolt" /> {t('ticker.breaking')}</span>
         <div className="ticker-content">
           <div className="ticker-scroll">
             {items.map((item, i) => (

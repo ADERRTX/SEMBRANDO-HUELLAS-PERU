@@ -156,8 +156,8 @@ export default function About() {
 
   const handleShare = (article) => {
     const shareText = `Sembrando Huellas Perú - "${lang === 'en' ? article.titleEn || article.title : article.title}" (${article.location})`
-    navigator.clipboard.writeText(`${shareText}\nLeído en: ${window.location.href}`)
-    alert('¡Enlace de noticia copiado al portapapeles!')
+    navigator.clipboard.writeText(`${shareText}\n${t('about.share_text')} ${window.location.href}`)
+    alert(t('about.copied'))
   }
 
   return (
@@ -430,7 +430,7 @@ export default function About() {
                   <button
                     onClick={() => setActiveArticle(null)}
                     className="absolute top-4 right-4 p-2 rounded-full bg-black/40 hover:bg-black/60 text-white border border-white/10 transition-colors"
-                    aria-label="Cerrar modal"
+                    aria-label={t('about.close_modal')}
                   >
                     <HiX className="w-6 h-6" />
                   </button>
@@ -485,7 +485,7 @@ export default function About() {
                       className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-green-50 dark:bg-green-950/40 hover:bg-green-100 dark:hover:bg-green-900/30 text-green-700 dark:text-green-400 font-semibold text-sm transition-all"
                     >
                       <HiThumbUp className="w-4 h-4" />
-                      <span>Me Gusta ({activeArticle.likes})</span>
+                      <span>{t('about.like')} ({activeArticle.likes})</span>
                     </button>
                     <button
                       onClick={() => handleShare(activeArticle)}

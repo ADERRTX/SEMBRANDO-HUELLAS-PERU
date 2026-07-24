@@ -20,14 +20,14 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
-    if (!form.name.trim()) newErrors.name = 'Nombre requerido';
-    if (!form.email.trim()) newErrors.email = 'Email requerido';
-    else if (!validateEmail(form.email)) newErrors.email = 'Email inválido';
-    if (!form.message.trim()) newErrors.message = 'Mensaje requerido';
+    if (!form.name.trim()) newErrors.name = t('contact_form.name_required');
+    if (!form.email.trim()) newErrors.email = t('contact_form.email_required');
+    else if (!validateEmail(form.email)) newErrors.email = t('contact_form.email_invalid');
+    if (!form.message.trim()) newErrors.message = t('contact_form.message_required');
     if (Object.keys(newErrors).length > 0) { setErrors(newErrors); return; }
     setSending(true);
     try {
-      const res = await fetch('https://formsubmit.co/ajax/educaccionyaccionporlaamazonia@gmail.com', {
+      const res = await fetch('https://formsubmit.co/ajax/educacionaccionamazonia@gmail.com', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -35,7 +35,7 @@ export default function Contact() {
       if (!res.ok) throw new Error();
       setSubmitted(true);
     } catch {
-      setErrors({ message: 'Error al enviar' });
+      setErrors({ message: t('contact_form.error_sending') });
     } finally {
       setSending(false);
     }
@@ -129,7 +129,6 @@ export default function Contact() {
                 { icon: 'fab fa-instagram', href: SITE_CONFIG.social.instagram },
                 { icon: 'fab fa-youtube', href: SITE_CONFIG.social.youtube },
                 { icon: 'fab fa-tiktok', href: SITE_CONFIG.social.tiktok },
-                { icon: 'fab fa-twitter', href: SITE_CONFIG.social.twitter },
                 { icon: 'fab fa-whatsapp', href: SITE_CONFIG.social.whatsapp },
               ].map((s, i) => (
                 <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" className="contact-social-link">

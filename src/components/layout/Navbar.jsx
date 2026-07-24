@@ -93,10 +93,6 @@ export default function Navbar() {
       setCountry(null);
     } else {
       setCountry(name);
-      const paisData = PAISES_DATA[name];
-      if (paisData?.idioma) {
-        setLanguage(paisData.idioma);
-      }
     }
     setDropdownOpen(false);
     setCountrySearch('');
@@ -108,7 +104,7 @@ export default function Navbar() {
       <div className="header-top">
         <div className="container">
           <div className="header-top-left">
-            <span className="live-badge"><i className="fas fa-circle" /> EN VIVO</span>
+            <span className="live-badge"><i className="fas fa-circle" /> {t('common.live')}</span>
             <span className="current-date">{currentDate}</span>
           </div>
           <div className="header-top-right">
@@ -118,7 +114,6 @@ export default function Navbar() {
             </div>
             <div className="social-links-header">
               <a href={SITE_CONFIG.social.facebook} target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook-f" /></a>
-              <a href={SITE_CONFIG.social.twitter} target="_blank" rel="noopener noreferrer"><i className="fab fa-twitter" /></a>
               <a href={SITE_CONFIG.social.instagram} target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram" /></a>
               <a href={SITE_CONFIG.social.youtube} target="_blank" rel="noopener noreferrer"><i className="fab fa-youtube" /></a>
               <a href={SITE_CONFIG.social.tiktok} target="_blank" rel="noopener noreferrer"><i className="fab fa-tiktok" /></a>
@@ -156,7 +151,7 @@ export default function Navbar() {
                 <div className="lang-search">
                   <input
                     type="text"
-                    placeholder="Buscar idioma..."
+                    placeholder={t('navbar.search_language')}
                     value={langSearch}
                     onChange={(e) => setLangSearch(e.target.value)}
                   />
@@ -203,13 +198,13 @@ export default function Navbar() {
                 className="nav-link"
                 onClick={(e) => { e.preventDefault(); setDropdownOpen(!dropdownOpen); }}
               >
-                <i className="fas fa-flag" /> {t('nav.nacionales')} <i className="fas fa-chevron-down" />
+                <i className="fas fa-flag" /> Nacionales <i className="fas fa-chevron-down" />
               </a>
               <div className={`dropdown-menu ${dropdownOpen ? 'active' : ''}`}>
                 <div className="lang-search">
                   <input
                     type="text"
-                    placeholder="Buscar pais..."
+                    placeholder="Buscar país..."
                     value={countrySearch}
                     onChange={(e) => setCountrySearch(e.target.value)}
                   />

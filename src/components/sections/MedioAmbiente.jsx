@@ -16,9 +16,6 @@ export default function MedioAmbiente() {
     return MEDIO_AMBIENTE_NEWS;
   }, [country]);
 
-  const featured = newsList[0];
-  const others = newsList.slice(1);
-
   const openNews = useCallback((news) => setSelectedNews(news), []);
 
   return (
@@ -28,31 +25,10 @@ export default function MedioAmbiente() {
           <div className="section-icon"><i className="fas fa-leaf" /></div>
           <h2 className="section-title">{t('medioambiente.title') || 'Medio Ambiente'}</h2>
         </div>
-        <Link to="/medioambiente" className="section-more">Ver todas <i className="fas fa-arrow-right" /></Link>
+        <Link to="/medioambiente" className="section-more">{t('common.view_all')} <i className="fas fa-arrow-right" /></Link>
       </div>
       <div className="news-grid env-grid">
-        {featured && (
-          <article className="news-card featured-card" onClick={() => openNews(featured)}>
-            <div className="card-image">
-              <div className="image-placeholder" style={{
-                backgroundImage: featured.image ? `url(${featured.image})` : 'linear-gradient(135deg, #1a5c1a 0%, #2d8a2d 50%, #0a3d0a 100%)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-              }} />
-              <span className="card-category">{featured.category}</span>
-            </div>
-            <div className="card-content">
-              <h3>{featured.title}</h3>
-              <p>{featured.excerpt}</p>
-              <div className="card-meta">
-                <span><i className="fas fa-user" /> {featured.author}</span>
-                <span><i className="fas fa-clock" /> {featured.time}</span>
-                <span><i className="fas fa-eye" /> {featured.views}</span>
-              </div>
-            </div>
-          </article>
-        )}
-        {others.map((news) => (
+        {newsList.map((news) => (
           <article key={news.id} className="news-card" onClick={() => openNews(news)}>
             <div className="card-image">
               <div className="image-placeholder" style={{
@@ -66,6 +42,7 @@ export default function MedioAmbiente() {
               <h3>{news.title}</h3>
               <p>{news.excerpt}</p>
               <div className="card-meta">
+                <span><i className="fas fa-user" /> {news.author}</span>
                 <span><i className="fas fa-clock" /> {news.time}</span>
                 <span><i className="fas fa-eye" /> {news.views}</span>
               </div>

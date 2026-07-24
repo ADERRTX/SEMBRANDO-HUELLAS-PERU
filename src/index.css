@@ -1900,11 +1900,7 @@ a {
 
 .env-grid {
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
-}
-
-.env-grid .featured-card {
-  grid-row: span 2;
+  grid-template-rows: auto;
 }
 
 .fauna-grid {
@@ -1944,11 +1940,6 @@ a {
   height: 240px;
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   transition: var(--transition);
-}
-
-.featured-card .image-placeholder {
-  height: 100%;
-  min-height: 300px;
 }
 
 .news-card:hover .image-placeholder {
@@ -2691,7 +2682,6 @@ a {
   .slide-excerpt { display: none; }
   .slide-content { padding: 30px; }
   .env-grid { grid-template-columns: 1fr; }
-  .env-grid .featured-card { grid-row: span 1; }
   .horizontal-card { flex-direction: column; }
   .horizontal-card .card-image { width: 100%; }
   .newsletter-section { padding: 40px 20px; }

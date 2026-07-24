@@ -68,7 +68,7 @@ export default function Hero() {
             <div className="slide-meta">
               <span><i className="fas fa-user" /> {slide.author}</span>
               <span><i className="fas fa-clock" /> {slide.time}</span>
-              <span><i className="fas fa-eye" /> {slide.views} lecturas</span>
+               <span><i className="fas fa-eye" /> {slide.views} {t('common.views')}</span>
             </div>
             <button className="slide-btn" onClick={() => setSelectedNews(slide)}>
               {t('hero.read_more') || 'Leer Más'} <i className="fas fa-arrow-right" />
