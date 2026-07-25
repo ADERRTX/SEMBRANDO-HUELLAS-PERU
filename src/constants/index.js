@@ -259,7 +259,7 @@ export const FLORA_FAUNA_NEWS = [
 export const VIDEOS_DATA = [
   {
     id: 1,
-    youtubeId: 'KJXhkU8BGB4',
+    youtubeId: 'W4Zy-TkgW3o',
     title: 'Documental: La Última Frontera del Amazonas Brasileño',
     excerpt: 'Un recorrido cinematográfico por las comunidades indígenas que defienden el pulmón del mundo contra la deforestación ilegal.',
     author: 'Carlos Mendoza',
@@ -271,7 +271,7 @@ export const VIDEOS_DATA = [
   },
   {
     id: 2,
-    youtubeId: 'qE3fB0B0mQ4',
+    youtubeId: 'GystZIxWQ3o',
     title: 'El Hielo Ártico se Derrite: Consecuencias para el Mundo',
     excerpt: 'Expertos en climatología analizan el impacto del derretimiento del hielo ártico en el nivel del mar y los patrones climáticos globales.',
     author: 'Dra. Elena Voss',
@@ -283,7 +283,7 @@ export const VIDEOS_DATA = [
   },
   {
     id: 3,
-    youtubeId: 'TQ3nW5pFH20',
+    youtubeId: 'MrTzPOI2BfU',
     title: 'La Migración del Serengeti: El Gran Espectáculo de la Naturaleza',
     excerpt: 'Seguimos a dos millones de ñus, cebras y gacelas en su travesía de 800 kilómetros a través de Tanzania y Kenia.',
     author: 'Dr. James Kimani',
@@ -295,7 +295,7 @@ export const VIDEOS_DATA = [
   },
   {
     id: 4,
-    youtubeId: 'G4H1N2Xoo5o',
+    youtubeId: 'E3iKdV10Ckc',
     title: 'Corales en Peligro: La Lucha por Salvar la Gran Barrera Australiana',
     excerpt: 'Científicos marinos trabajan día y noche para preservar los corales del blanqueamiento masivo que amenaza este patrimonio de la humanidad.',
     author: 'Dra. Sophie Turner',
